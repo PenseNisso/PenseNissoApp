@@ -8,3 +8,4 @@
 ### Teste Commit - Eduardo
 ### Teste Commit Máquina - Riccardo
 ### Teste Commit Máquina - Pedro
+### Teste Commit Máquina - Hayla
