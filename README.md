@@ -6,3 +6,4 @@
 
 ### Teste Commit - Riccardo
 ### Teste Commit - Eduardo
+### Teste Commit Máquina - Riccardo
