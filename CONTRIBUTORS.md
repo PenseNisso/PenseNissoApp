@@ -6,6 +6,4 @@
 
 4 - Pedro Carvalho Cintra (RA247315)
 
-5 - Riccardo Carvalho Sofer (RA247275)
-
-
+5 - Riccardo Carvalho Sofer (RA247362)
