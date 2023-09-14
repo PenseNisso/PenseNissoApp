@@ -7,5 +7,12 @@
         <h3>Descrição</h3>
         <p>{{ company.description }}</p>
     </div>
+    <div>
+        <ul>
+            <li><a href="{% url 'infos:reports' company.id %}">Denúncias</a></li>
+            <li><a href="{% url 'infos:lawsuits' company.id %}">Processos</a></li>
+            <li><a href="{% url 'infos:news' company.id %}">Notícias</a></li>
+        </ul>
+    </div>
 {% endblock %}
 

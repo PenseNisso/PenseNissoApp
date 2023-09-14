@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pense Nisso {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'global/base.css' %}">
+</head>
+<body>
+    <header>
+        <h1><a href="/" class="nav-title">Pense Nisso</a></h1>
+        <ul>
+            <li><a href="{% url 'infos:explorer'%}">Empresas</a></li>
+        </ul>
+    </header>
+    <hr>
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>
