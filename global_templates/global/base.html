@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pense Nisso {% block title %}{% endblock %}</title>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body{
+        background-color: cyan;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    header{
+        margin: 0;
+        padding: 1rem 1.5rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    ul{
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+        list-style-type: none;
+    }
+
+    a.empresa{
+        font-weight: bold;
+        color: black;
+        text-decoration: none;
+        display: inline-block;
+        position: relative;
+    }
+
+    a.empresa:hover{
+        cursor: pointer;
+    }
+
+    a.empresa::after{
+        position: absolute;
+        content: '';
+        display: block;
+        width: 0;
+        height: 2px;
+        background-color: black;
+        transition: width .3s;
+    }
+    
+    a.empresa:hover::after{
+        width: 100%;
+    }
+
+    a.nav-title{
+        font-weight: bold;
+        color: black;
+        text-decoration: none;
+        display: inline-block;
+        position: relative;
+    }
+
+    .container{
+        margin: 2rem 0rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .description{
+        width: 50%;
+        margin-top: 2rem;
+        border: 1px solid black;
+        padding: 1rem;
+    }
+</style>
+<body>
+    <header>
+        <h1><a href="/" class="nav-title">Pense Nisso</a></h1>
+        <ul>
+            <li><a href="{% url 'infos:explorer'%}">Empresas</a></li>
+        </ul>
+    </header>
+    <hr>
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

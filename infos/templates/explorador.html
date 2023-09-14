@@ -1,0 +1,9 @@
+{% extends "global/base.html" %}
+{% block title %} - Explorador {% endblock %}
+{% block content %}
+    <ul>
+    {% for company in companies %}
+    <li><a href="{% url 'infos:company' company.id %}" class="empresa">{{ company.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% endblock %}
