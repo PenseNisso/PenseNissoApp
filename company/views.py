@@ -1,6 +1,8 @@
+# Create your views here.
 from django.shortcuts import get_object_or_404, render
 
-from infos.models import Company, Lawsuit, News, Report
+from .models import Company
+from infos.models import Lawsuit, News, Report
 
 # Create your views here.
 
@@ -8,7 +10,7 @@ def explorer(request):
     context = {
         'companies': Company.objects.all()
     }
-    return render(request, 'explorador.html', context)
+    return render(request, 'companies/explorer.html', context)
 
 def company(request, company_id):
     company = get_object_or_404(Company, pk=company_id)

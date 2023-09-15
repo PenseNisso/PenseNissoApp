@@ -26,5 +26,5 @@ def home(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("",home),
-    path('empresas/',include('infos.urls',namespace='empresas'))
+    path('empresas/',include('company.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
