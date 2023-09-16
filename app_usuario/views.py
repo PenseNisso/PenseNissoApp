@@ -16,7 +16,7 @@ class Cadastro(FormView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('app_usuario:login')
+        return reverse("app_usuario:login")
 
 
 class PaginaUsuario(LoginRequiredMixin, DetailView):
