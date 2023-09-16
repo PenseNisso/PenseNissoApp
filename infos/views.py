@@ -1,4 +1,4 @@
-from .models import Report
+from .models import Report, ReportCategory, Company
 
 from django.shortcuts import render
 from django.views.generic.edit import FormView
@@ -13,19 +13,27 @@ class ReportSucessView(TemplateView):
 
 class ReportFormView(FormView):
     template_name = "report.html"
-    success_url = "/report/success/"
+    form_class = forms.ReportForm
+    success_url = "confirmation/"
 
     def form_valid(self, form):
         data = form.cleaned_data
+        category = ReportCategory(name="categoria")
+        category.save()
+        queried_category = ReportCategory.objects.filter(name="categoria")
+        company = Company(name="Borin Inc")
+        company.save()
+        print(Company.objects.all())
+        queried_company = Company.objects.get(pk=int(data["company_id"]))
         report = Report(
-            "titulo",
-            data["description"],
-            "categoria 1", #categoryId
-            data["link"], 
-            data["company_id"], 
-            #userId
-            "created_at",
-            "updated_at"
+            title="titulo",
+            content=data["description"],
+            category=queried_category.get(),  # categoryId
+            links=data["link"],
+            company=queried_company,
+            user=None,
+            created_at="created_at",
+            updated_at="updated_at",
         )
 
         report.save()
