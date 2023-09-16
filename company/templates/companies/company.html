@@ -1,18 +1,22 @@
-{% extends "global/base.html" %}
-{% block title %} - Empresa {% endblock %}
-{% block content %}
-    <h2>{{ company.name }}</h2>
-    <img src="{{company.logo.url}}" alt="Logo Empresa">
-    <div class="description">
-        <h3>Descrição</h3>
-        <p>{{ company.description }}</p>
-    </div>
-    <div>
-        <ul>
-            <li><a href="{% url 'company:reports' company.id %}">Denúncias</a></li>
-            <li><a href="{% url 'company:lawsuits' company.id %}">Processos</a></li>
-            <li><a href="{% url 'company:news' company.id %}">Notícias</a></li>
-        </ul>
-    </div>
+{% extends "global/base.html" %} {% block title %} - Empresa {% endblock %}
+{%block content %}
+<h2>{{ company.name }}</h2>
+<img src="{{company.logo.url}}" alt="Logo Empresa" />
+<div class="description">
+  <h3>Descrição</h3>
+  <p>{{ company.description }}</p>
+</div>
+<div>
+  <ul class="infos-pages">
+    <!-- 
+        Adicionar chaves 
+            <li><a href="% url 'company:reports' company.id %">Denúncias</a></li>
+            <li><a href="% url 'company:lawsuits' company.id %">Processos</a></li>
+            <li><a href="% url 'company:news' company.id %">Notícias</a></li>  
+    -->
+    <a href="#"><li>Denúncias</li></a>
+    <a href="#"><li>Processos</li></a>
+    <a href="#"><li>Notícias</li></a>
+  </ul>
+</div>
 {% endblock %}
-

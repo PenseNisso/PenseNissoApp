@@ -20,11 +20,13 @@ from django.urls import include, path
 from django.conf.urls.static import static
 from django.conf import settings
 
+
 def home(request):
-    return render(request, 'global/base.html')
+    return render(request, "global/base.html")
+
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path("",home),
-    path('empresas/',include('company.urls')),
+    path("admin/", admin.site.urls),
+    path("", home),
+    path("empresas/", include("company.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

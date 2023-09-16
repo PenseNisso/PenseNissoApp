@@ -1,18 +1,15 @@
-{% extends "global/base.html" %}
-{% block title %} - Noticias {% endblock %}
-{% block content %}
-    <h2>{{ company.name }}</h2>
-    <h3>{{ info_title }}:</h3>
-    <hr>
-    <div class="info-list">
-    {% for info in infos %}
-        {% if info %}
-        <div class="info">
-            <h3>{{ info.title }}</h3>
-            <p>{{ info.content }}</p>
-        </div>
-        <hr>
-        {% endif %}
-    {% endfor %}
-    </div>
+{% extends "global/base.html" %} {% block title %} - Noticias {% endblock %} {%
+block content %}
+<h2>{{ company.name }}</h2>
+<h3>{{ info_title }}:</h3>
+<hr />
+<div class="info-list">
+  {% for info in infos %} {% if info %}
+  <div class="info">
+    <h3>{{ info.title }}</h3>
+    <p>{{ info.content }}</p>
+  </div>
+  <hr />
+  {% endif %} {% endfor %}
+</div>
 {% endblock %}
