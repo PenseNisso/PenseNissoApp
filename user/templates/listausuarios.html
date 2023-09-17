@@ -10,7 +10,7 @@
 <body>
     <h1>Lista de Usuários Cadastrados</h1>
     {% for usuario in object_list %}
-    <a href="{% url 'app_usuario:perfilusuario' usuario.pk %}">
+    <a href="{% url 'user:profile' usuario.pk %}">
         <h2>Usuário {{ usuario.pk }}</h2>
     </a>
     <p><strong>First Name: </strong>{{ usuario.firstname }}</p>

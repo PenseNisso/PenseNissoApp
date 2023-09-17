@@ -7,9 +7,12 @@
         "lastname",
         "listausuario",
         "listausuarios",
+        "pensenisso",
         "perfilusuario",
+        "userregister",
         "usuario",
         "Usuario",
         "usuarios"
     ],
+    "python.analysis.typeCheckingMode": "basic",
 }

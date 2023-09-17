@@ -1,12 +1,12 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
-from .models import Usuario
+from .models import User
 
 
-class CriarContaForm(UserCreationForm):
+class CreateUserForm(UserCreationForm):
     email = forms.EmailField()
 
     class Meta:
-        model = Usuario
+        model = User
         fields = ("username", "email", "password1", "password2")
