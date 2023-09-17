@@ -1,10 +1,11 @@
+from django.contrib.auth import get_user
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.utils import timezone
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 
 from . import forms
-from .models import Company, Report, ReportCategory
+from .models import Report
 
 
 class ReportSucessView(TemplateView):
@@ -16,27 +17,23 @@ class ReportFormView(FormView):
     form_class = forms.ReportForm
     success_url = "confirmation/"
 
-    def form_valid(self, form) -> HttpResponse:
+    def form_valid(self, form: forms.ReportForm) -> HttpResponse:
         data = form.cleaned_data
-        queried_category = ReportCategory.objects.filter(name="categoria")
-        queried_company = Company.objects.get(pk=int(data["company_id"]))
+        current_date = timezone.now().isoformat(timespec="seconds")
+        current_user = get_user(self.request)
+
+        generated_title = (
+            f"{current_date}-{data['company'].name}-{data['category'].name}"
+        )
+
         report = Report(
-            title="titulo",
+            title=generated_title,
             content=data["description"],
-            category=queried_category.get(),  # categoryId
+            category=data["category"],
             links=data["link"],
-            company=queried_company,
-            user=None,
-            created_at="created_at",
-            updated_at="updated_at",
+            company=data["company"],
+            user=current_user,
         )
 
         report.save()
-
         return super().form_valid(form)
-
-    def form_invalid(self, form) -> HttpResponse:
-        errors = form.errors
-        for i in errors:
-            print(i)
-        return super().form_invalid(form)

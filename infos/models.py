@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -7,7 +8,7 @@ class Report(models.Model):
     category = models.ForeignKey("ReportCategory", on_delete=models.SET_NULL, null=True)
     links = models.TextField()
     company = models.ForeignKey("Company", on_delete=models.CASCADE)
-    user = models.ForeignKey("User", on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -17,15 +18,12 @@ class Report(models.Model):
 
 class ReportCategory(models.Model):
     name = models.CharField(max_length=100)
+    formatted_name = models.CharField(max_length=100, default="Categoria")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
-
-
-class User(models.Model):
-    name = models.CharField(max_length=100)
 
 
 class Company(models.Model):
