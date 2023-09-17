@@ -1,10 +1,10 @@
-from .models import Report, ReportCategory, Company
-
+from django.http import HttpResponse
 from django.shortcuts import render
-from django.views.generic.edit import FormView
 from django.views.generic import TemplateView
+from django.views.generic.edit import FormView
 
 from . import forms
+from .models import Company, Report, ReportCategory
 
 
 class ReportSucessView(TemplateView):
@@ -16,14 +16,9 @@ class ReportFormView(FormView):
     form_class = forms.ReportForm
     success_url = "confirmation/"
 
-    def form_valid(self, form):
+    def form_valid(self, form) -> HttpResponse:
         data = form.cleaned_data
-        category = ReportCategory(name="categoria")
-        category.save()
         queried_category = ReportCategory.objects.filter(name="categoria")
-        company = Company(name="Borin Inc")
-        company.save()
-        print(Company.objects.all())
         queried_company = Company.objects.get(pk=int(data["company_id"]))
         report = Report(
             title="titulo",
@@ -39,3 +34,9 @@ class ReportFormView(FormView):
         report.save()
 
         return super().form_valid(form)
+
+    def form_invalid(self, form) -> HttpResponse:
+        errors = form.errors
+        for i in errors:
+            print(i)
+        return super().form_invalid(form)
