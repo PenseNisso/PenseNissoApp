@@ -1,0 +1,18 @@
+{
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "cSpell.words": [
+        "firstname",
+        "lastname",
+        "listausuario",
+        "listausuarios",
+        "pensenisso",
+        "perfilusuario",
+        "userregister",
+        "usuario",
+        "Usuario",
+        "usuarios"
+    ],
+    "python.analysis.typeCheckingMode": "basic",
+}
