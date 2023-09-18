@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+
+    <center>
+    <h1>
+        Denuncie uma Empresa
+    </h1>
+    <p>
+        {% block errors %}
+        {% endblock %}
+    </p>
+    {% block content %}
+    {% endblock %}
+    </center>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{% extends "report_template.html" %}
+
+{% block title %}
+Denuncie - Pense Nisso
+{% endblock title %}
+
+{% block content %}
+    <form action="/info/report/" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Enviar">
+    </form>
+{% endblock content %}
