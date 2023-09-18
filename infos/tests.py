@@ -1,11 +1,9 @@
-from django.contrib.auth import get_user
+from company.models import Company
 from django.test import Client, RequestFactory, TestCase
-from django.urls import reverse
 from django.utils import timezone
 
 from .forms import ReportForm
-from .models import Company, Report, ReportCategory
-from .views import ReportFormView
+from .models import ReportCategory
 
 factory = RequestFactory()
 

@@ -1,7 +1,8 @@
 from django.db.models.base import Model
 from django.forms import ModelChoiceField
 
-from .models import Company, ReportCategory
+from company.models import Company
+from .models import ReportCategory
 
 
 class ReportCategoryModelChoiceField(ModelChoiceField):
