@@ -1,7 +1,8 @@
+from company.models import Company
 from django import forms
 
 from .fields import CompanyModelChoiceField, ReportCategoryModelChoiceField
-from .models import Company, ReportCategory
+from .models import ReportCategory
 
 STRING_COMPANY = "Empresa envolvida:"
 STRING_EMPTY_COMPANY = "Selecione uma empresa"
