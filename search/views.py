@@ -1,5 +1,7 @@
+from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.views.generic import ListView
+
 from company.models import Company
 
 
@@ -8,7 +10,7 @@ class SearchView(ListView):
     template_name = "search.html"
 
     def get_queryset(self, query):
-        object_list = Company.objects.filter(name__icontains=query)
+        object_list = Company.objects.filter(Q(name__icontains=query))
         return object_list
 
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:

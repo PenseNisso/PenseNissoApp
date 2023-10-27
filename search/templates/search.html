@@ -1,7 +1,7 @@
 {% extends "global/base.html" %}
 
 {% block title %}
-Busca - {{ query }} 
+- Busca - {{ query }} 
 {% endblock title %}
 
 {% block content %}
@@ -14,7 +14,7 @@ Busca - {{ query }}
         <div>
             {% for company in company_list %}
                 <li>
-                    {{ company.name }}
+                    <a href="{% url 'company:company' company_id=company.id %}">{{ company.name }}</a>
                 </li>
             {% endfor %}
         </div>
