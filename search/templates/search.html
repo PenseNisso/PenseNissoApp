@@ -1,0 +1,22 @@
+{% extends "global/base.html" %}
+
+{% block title %}
+Busca - {{ query }} 
+{% endblock title %}
+
+{% block content %}
+    <center>
+        <div>
+            <h1>
+                Resultados para {{ query }}
+            </h1>
+        <div>
+        <div>
+            {% for company in company_list %}
+                <li>
+                    {{ company.name }}
+                </li>
+            {% endfor %}
+        </div>
+    </center>
+{% endblock content %}
