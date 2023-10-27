@@ -10,7 +10,9 @@ class SearchView(ListView):
     template_name = "search.html"
 
     def get_queryset(self, query):
-        object_list = Company.objects.filter(Q(name__icontains=query))
+        object_list = (
+            Company.objects.filter(Q(name__icontains=query)) if query != None else None
+        )
         return object_list
 
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:

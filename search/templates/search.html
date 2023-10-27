@@ -8,7 +8,11 @@
     <center>
         <div>
             <h1>
-                Resultados para {{ query }}
+                {% if query is not None %} 
+                    Resultados para "{{ query }}" 
+                {% else %}
+                    Realize uma pesquisa!
+                {% endif %}
             </h1>
         <div>
         <div>
