@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pense Nisso {% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'global/base.css' %}">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 </head>
 <body>
     <header>
@@ -19,6 +22,18 @@
                     name="search" 
                     placeholder="Pesquisar empresas..." 
                     required />
+                <script> 
+                    $( function() { 
+                        var tags = [ 
+                            {% for company in companies %} 
+                                "{{ company.name }}", 
+                            {% endfor %} 
+                        ]; 
+                        $( "#search" ).autocomplete({ 
+                            source: tags 
+                        }); 
+                    } ); 
+                </script> 
                 <input type="submit" value="Pesquisar">
             </form>
         </ul>
