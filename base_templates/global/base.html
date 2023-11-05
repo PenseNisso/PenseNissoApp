@@ -22,16 +22,20 @@
                     name="search" 
                     placeholder="Pesquisar empresas..." 
                     required />
-                <script> 
-                    $( function() { 
-                        var tags = [ 
+                <script>
+                    var tags = [ 
                             {% for company in companies %} 
                                 "{{ company.name }}", 
                             {% endfor %} 
                         ]; 
-                        $( "#search" ).autocomplete({ 
-                            source: tags 
-                        }); 
+                    $( function() {
+                        $( "#search" ).autocomplete({
+                            minLength: 2,
+                            source: function(request, response) {
+                                var results = $.ui.autocomplete.filter(tags, request.term);
+                                response(results.slice(0, 10));
+                            }
+                        });
                     } ); 
                 </script> 
                 <input type="submit" value="Pesquisar">
