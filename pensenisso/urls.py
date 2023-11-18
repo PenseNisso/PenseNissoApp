@@ -32,4 +32,8 @@ urlpatterns = [
     path("info/", include("infos.urls", namespace="infos")),
     path("users/", include("user.urls", namespace="user")),
     path("search/", include("search.urls", namespace="search")),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path("comparator/", include("comparator.urls", namespace="comparator")),
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

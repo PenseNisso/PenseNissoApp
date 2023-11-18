@@ -1,0 +1,58 @@
+{% extends 'global/base.html' %}
+{% block content %}
+Hello, {{ name }}! 
+<div class="grid xl:grid-cols-2 gap-x-20">
+  <div class="card w-96 bg-neutral text-neutral-content static">
+    <div class="card-body items-center text-center">
+      <h2 class="card-title">Cookies!</h2>
+      <p>We are using cookies for no reason.</p>
+      <div class="card-actions justify-end">
+        <button class="btn btn-primary">Accept</button>
+        <button class="btn btn-ghost">Deny</button>
+      </div>
+    </div>
+  </div>
+  <div class="card w-96 bg-base-100 shadow-outline shadow-xl drop-shadow-xl static">
+    <div class="card-body">
+      <h2 class="card-title">Card title!</h2>
+      <p>If a dog chews shoes whose shoes does he choose?</p>
+      <div class="card-actions justify-end">
+        <button class="btn btn-primary">Buy Now</button>
+      </div>
+    </div>
+  </div>
+  <div class="border border-black border-dashed card w-96 bg-base-100 drop-shadow-xl static">
+    <div class="card-body py-0">
+      <div class="card-actions justify-end">
+        <button class="btn btn-square btn-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+      <p>We are using cookies for no reason.</p>
+    </div>
+  </div>
+</div>
+
+<!-- You can open the modal using ID.showModal() method -->
+<button class="btn" onclick="my_modal_3.showModal()">+ Adicionar Empresa</button>
+<dialog id="my_modal_3" class="modal">
+  <div class="modal-box">
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+    </form>
+    <h2 class="font-bold text-xl">Adicionar Empresa</h2>
+    <ul>
+      <li>Empresa 1</li>
+      <li>Empresa 2</li>
+    </ul>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>
+
+<button onclick="my_modal_3.showModal()" class="fixed bottom-5 right-5 btn btn-primary btn-circle">
+  <span class="text-2xl">+</span>
+</button>
+
+{% endblock content %}
