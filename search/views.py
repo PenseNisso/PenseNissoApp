@@ -1,23 +1,31 @@
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.views.generic import ListView
-from trigram import TrigramSearch
 
 from company.models import Company
 
-MIN_SCORE = 3
+from .trigram import TrigramSearch
+
+MIN_SCORE = 2
 
 
 class SearchView(ListView):
     model = Company
     template_name = "search.html"
-
-    def setup_trigram(self):
-        self.trigram = TrigramSearch(MIN_SCORE)
+    trigram = TrigramSearch(MIN_SCORE)
 
     def get_queryset(self, query):
         object_list = (
-            Company.objects.filter(Q(name__icontains=query)) if query != None else None
+            Company.objects.filter(
+                Q(name__icontains=query)
+                | Q(
+                    name__in=self.trigram.filter_set(
+                        query, [company.name for company in Company.objects.all()]
+                    )
+                )
+            )
+            if query != None
+            else None
         )
         return object_list
 

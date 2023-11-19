@@ -6,8 +6,8 @@ class TrigramSearch:
         filtered = []
         for string in set:
             score = 0
-            for i in range(len(string) - 3):
-                if string[i : i + 3] in keyword:
+            for i in range(len(keyword) - 2):
+                if keyword[i : i + 3] in string:
                     score += 1
             if score >= self.min_score:
                 filtered.append(string)
