@@ -1,11 +1,13 @@
+from typing import Any
+
 from django.contrib.auth import get_user
 from django.http import HttpResponse
 from django.utils import timezone
-from django.views.generic import TemplateView
+from django.views.generic import DetailView, TemplateView
 from django.views.generic.edit import FormView
 
 from . import forms
-from .models import Report
+from .models import Lawsuit, News, Report
 
 
 class ReportSucessView(TemplateView):
@@ -37,3 +39,28 @@ class ReportFormView(FormView):
 
         report.save()
         return super().form_valid(form)
+
+
+class InfoDetails(DetailView):
+    template_name = "info_details.html"
+    info_title = None
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["info_title"] = self.info_title
+        return context
+
+
+class ReportDetails(InfoDetails):
+    info_title = "Denúncia"
+    model = Report
+
+
+class NewsDetails(InfoDetails):
+    info_title = "Notícia"
+    model = News
+
+
+class LawsuitDetails(InfoDetails):
+    info_title = "Processo"
+    model = Lawsuit
