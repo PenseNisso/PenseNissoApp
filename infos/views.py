@@ -55,6 +55,11 @@ class ReportDetails(InfoDetails):
     info_title = "Denúncia"
     model = Report
 
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['object'].links = context.get('object').links.split('\r\n')
+        return context
+
 
 class NewsDetails(InfoDetails):
     info_title = "Notícia"

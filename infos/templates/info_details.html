@@ -1,4 +1,5 @@
 {% extends "global/base.html" %}
+{% load info_extras %}
 
 {% block title %}
 - {{ info_title }}
@@ -22,17 +23,17 @@
     {% elif info_title == "Denúncia" %}
         <li><strong>Data: </strong>{{ object.created_at|date:"d/m/Y" }}</li>
         <!-- <li><strong>Gravidade: </strong></li> -->
-        <li><strong>Fonte: </strong><a class="underline text-blue-500 visited:text-purple-600" href="{{ object.links }}">{{ object.links }}</a></li>
+        <li><strong>Fonte(s): </strong>{{ object.links|join:", "|urlize|url_fix }}</li>
     {% elif info_title == "Processo" %}
         <li><strong>Ano de Início: </strong>{{ object.start_year }}</li>
         {% if object.resolution_year %}
         <li><strong>Ano de Resolução: </strong>{{ object.resolution_year }}</li>
         {% endif %}
-        <li><strong>Fonte: </strong><a class="underline text-blue-500 visited:text-purple-600" href="{{ object.source }}">{{ object.source }}</a></li>
+        <li><strong>Fonte: </strong>{{ object.source|urlize|url_fix }}
     {% endif %}
 </ul>
 
-<hr class="w-full border my-2" />
+<div class="divider"></div>
 
 <h2 class="text-2xl font-bold w-11/12 my-1">Detalhes</h2>
 <p class="w-11/12 text-justify leading-tight">{{ object.content|linebreaksbr }}</p>
