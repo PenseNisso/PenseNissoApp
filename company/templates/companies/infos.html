@@ -1,15 +1,47 @@
-{% extends "global/base.html" %} {% block title %} - Noticias {% endblock %} {%
-block content %}
-<h2>{{ company.name }}</h2>
-<h3>{{ info_title }}:</h3>
-<hr />
-<div class="info-list">
-  {% for info in infos %} {% if info %}
-  <div class="info">
-    <h3>{{ info.title }}</h3>
-    <p>{{ info.content }}</p>
-  </div>
-  <hr />
-  {% endif %} {% endfor %}
+{% extends "global/base.html" %}
+
+{% block title %}
+- {{ info_title }}
+{% endblock %}
+
+{% block content %}
+<div class="bg-blue-600 text-white w-full text-center my-6">
+    <h1 class="text-2xl font-bold">{{ info_title }}</h1>
+    <h2 class="text-sm font-semibold">{{ company.name }}</h2>
 </div>
+
+<div class="w-11/12 space-y-5 ">
+    {% for info in infos %}
+    <div class="bg-indigo-100 rounded-xl pt-2 pb-3 px-4 flex flex-row items-center space-x-2.5 cursor-pointer hover:scale-[1.035]"
+        onclick="redirectToDetail('{{ info_title }}', '{% url 'infos:reportdetail' info.id %}', '{% url 'infos:lawsuitdetail' info.id %}', '{% url 'infos:newsdetail' info.id %}')">
+        <div class="grow">
+            {% if info_title == "Denúncias" %}
+            <h3 class="text-lg font-bold">{{ info.category }}</h3>
+            {% else %}
+            <h3 class="font-bold">{{ info.title }}</h3>
+            {% endif %}
+
+            <p class="text-sm text-justify leading-tight">{{ info.content|truncatechars:300 }}</p>
+
+            {% if info_title == "Notícias" %}
+            <p class="text-sm text-neutral-600 mt-1">{{ info.date|date:"d/m/Y" }}</p>
+            {% endif %}
+        </div>
+
+        <ion-icon name="arrow-forward-outline" class="flex-none"></ion-icon>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    function redirectToDetail(info_title, reportUrl, lawsuitUrl, newsUrl) {
+        if (info_title === 'Denúncias') {
+            window.location.href = reportUrl;
+        } else if (info_title === 'Processos') {
+            window.location.href = lawsuitUrl;
+        } else if (info_title === 'Notícias') {
+            window.location.href = newsUrl;
+        }
+    }
+</script>
 {% endblock %}

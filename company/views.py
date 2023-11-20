@@ -1,13 +1,10 @@
-# Create your views here.
 from django.shortcuts import get_object_or_404, render
 from django.views import View
 from django.views.generic import ListView
 
+from infos.models import Lawsuit, News, Report
+
 from .models import Company
-
-# from infos.models import Lawsuit, News, Report
-
-# Create your views here.
 
 
 class ExplorerView(ListView):
@@ -39,14 +36,16 @@ class InfosView(View):
         return render(request, self.template_name, context)
 
 
-# class NewsView(InfosView):
-#     info_title = "Notícias"
-#     model = News
+class NewsView(InfosView):
+    info_title = "Notícias"
+    model = News
 
-# class ReportsView(InfosView):
-#     info_title = "Denúncias"
-#     model = Report
 
-# class LawsuitsView(InfosView):
-#     info_title = "Processos"
-#     model = Lawsuit
+class ReportsView(InfosView):
+    info_title = "Denúncias"
+    model = Report
+
+
+class LawsuitsView(InfosView):
+    info_title = "Processos"
+    model = Lawsuit
