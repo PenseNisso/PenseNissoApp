@@ -2,6 +2,35 @@ from django.test import Client, TestCase
 
 from company.models import Company
 
+from .trigram import TrigramSearch
+
+
+class TrigramTestCase(TestCase):
+    def setUp(self) -> None:
+        self.strings = ["abcdefghijklmnopqrstuvwxyz", "powder", "bee", "cream"]
+        self.trigram = TrigramSearch(2)
+        self.trigram_score_three = TrigramSearch(3)
+
+        return super().setUp()
+
+    def test_basic_match(self) -> None:
+        result = self.trigram.filter_set(keyword="powd", set=self.strings)
+        self.assertListEqual(result, ["powder"])
+
+    def test_basic_match_multiple(self) -> None:
+        result = self.trigram.filter_set(keyword="powd crea", set=self.strings)
+        self.assertListEqual(result, ["powder", "cream"])
+
+    def test_basic_match_none(self) -> None:
+        result = self.trigram.filter_set(keyword="pow", set=self.strings)
+        self.assertListEqual(result, [])
+
+    def test_score_test(self) -> None:
+        result_three_score = self.trigram_score_three.filter_set(
+            keyword="pow", set=self.strings
+        )
+        self.assertListEqual(result_three_score, [])
+
 
 class SearchTestCase(TestCase):
     def setUp(self) -> None:
@@ -17,7 +46,11 @@ class SearchTestCase(TestCase):
         client = Client()
         response = client.get(path="/search/", data={"search": "Company 1"})
         self.assertSequenceEqual(
-            response.context["company_list"], [Company.objects.get(name="Company 1")]
+            response.context["company_list"],
+            [
+                Company.objects.get(name="Company 1"),
+                Company.objects.get(name="Company 2"),
+            ],
         )
 
     def test_narrow_query(self) -> None:
@@ -56,3 +89,22 @@ class SearchTestCase(TestCase):
         client = Client()
         response = client.get(path="/search/")
         self.assertIn("Realize uma pesquisa!", str(response.content))
+
+    def test_spelling_mistake(self) -> None:
+        client = Client()
+        response = client.get(path="/search/", data={"search": "compani"})
+        self.assertSequenceEqual(
+            response.context["company_list"],
+            [
+                Company.objects.get(name="Company 1"),
+                Company.objects.get(name="Company 2"),
+            ],
+        )
+
+    def test_gibberish(self) -> None:
+        client = Client()
+        response = client.get(path="/search/", data={"search": "coamptrajsy"})
+        self.assertSequenceEqual(
+            response.context["company_list"],
+            [],
+        )
