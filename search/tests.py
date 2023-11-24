@@ -2,14 +2,14 @@ from django.test import Client, TestCase
 
 from company.models import Company
 
-from .trigram import TrigramSearch
+from .views import SearchView
 
 
 class TrigramTestCase(TestCase):
     def setUp(self) -> None:
         self.strings = ["abcdefghijklmnopqrstuvwxyz", "powder", "bee", "cream"]
-        self.trigram = TrigramSearch(2)
-        self.trigram_score_three = TrigramSearch(3)
+        self.trigram = SearchView(2)
+        self.trigram_score_three = SearchView(3)
 
         return super().setUp()
 
