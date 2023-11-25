@@ -1,17 +1,7 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>
-        {% block title %}
-        {% endblock %}
-    </title>
-    {% block head %}
-    {% endblock %}
-</head>
-<body>
+{% extends "global/base.html" %}
 
-    <center>
+{% block content %}
+<center>
     <h1>
         Denuncie uma Empresa
     </h1>
@@ -19,8 +9,7 @@
         {% block errors %}
         {% endblock %}
     </p>
-    {% block content %}
+    {% block form_content %}
     {% endblock %}
-    </center>
-</body>
-</html>
+</center>
+{% endblock %}

@@ -2,14 +2,14 @@ from django.test import Client, TestCase
 
 from company.models import Company
 
-from .trigram import TrigramSearch
+from .views import SearchView
 
 
 class TrigramTestCase(TestCase):
     def setUp(self) -> None:
         self.strings = ["abcdefghijklmnopqrstuvwxyz", "powder", "bee", "cream"]
-        self.trigram = TrigramSearch(2)
-        self.trigram_score_three = TrigramSearch(3)
+        self.trigram = SearchView(2)
+        self.trigram_score_three = SearchView(3)
 
         return super().setUp()
 
@@ -40,11 +40,11 @@ class SearchTestCase(TestCase):
         Company.objects.create(name="Enterprise 2")
         Company.objects.create(name="Factory 1")
         Company.objects.create(name="Factory X")
+        client = Client()
         return super().setUp()
 
     def test_perfect_query(self) -> None:
-        client = Client()
-        response = client.get(path="/search/", data={"search": "Company 1"})
+        response = self.client.get(path="/search/", data={"search": "Company 1"})
         self.assertSequenceEqual(
             response.context["company_list"],
             [
@@ -54,8 +54,7 @@ class SearchTestCase(TestCase):
         )
 
     def test_narrow_query(self) -> None:
-        client = Client()
-        response = client.get(path="/search/", data={"search": "Enterprise"})
+        response = self.client.get(path="/search/", data={"search": "Enterprise"})
         self.assertEqual(response.context["company_list"].count(), 2)
         self.assertSequenceEqual(
             response.context["company_list"],
@@ -66,8 +65,7 @@ class SearchTestCase(TestCase):
         )
 
     def test_broad_query(self) -> None:
-        client = Client()
-        response = client.get(path="/search/", data={"search": "1"})
+        response = self.client.get(path="/search/", data={"search": "1"})
         self.assertEqual(response.context["company_list"].count(), 3)
         self.assertSequenceEqual(
             response.context["company_list"],
@@ -79,20 +77,17 @@ class SearchTestCase(TestCase):
         )
 
     def test_empty_query(self) -> None:
-        client = Client()
-        response = client.get(path="/search/", data={"search": ""})
+        response = self.client.get(path="/search/", data={"search": ""})
         self.assertEqual(
             response.context["company_list"].count(), Company.objects.count()
         )
 
     def test_null_query(self) -> None:
-        client = Client()
-        response = client.get(path="/search/")
+        response = self.client.get(path="/search/")
         self.assertIn("Realize uma pesquisa!", str(response.content))
 
     def test_spelling_mistake(self) -> None:
-        client = Client()
-        response = client.get(path="/search/", data={"search": "compani"})
+        response = self.client.get(path="/search/", data={"search": "compani"})
         self.assertSequenceEqual(
             response.context["company_list"],
             [
@@ -102,8 +97,7 @@ class SearchTestCase(TestCase):
         )
 
     def test_gibberish(self) -> None:
-        client = Client()
-        response = client.get(path="/search/", data={"search": "coamptrajsy"})
+        response = self.client.get(path="/search/", data={"search": "coamptrajsy"})
         self.assertSequenceEqual(
             response.context["company_list"],
             [],
