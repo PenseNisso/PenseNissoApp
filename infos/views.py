@@ -41,31 +41,49 @@ class ReportFormView(FormView):
         return super().form_valid(form)
 
 
-class InfoDetails(DetailView):
+class InfoStrategy(DetailView):
     template_name = "info_details.html"
-    info_title = None
+    info_type = ""
+    template_content = ""
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context["info_title"] = self.info_title
+        context["info_type"] = self.info_type
+        context["info_title"] = self.get_info_title()
+        context["template_content"] = self.template_content
         return context
 
+    def get_info_title(self):
+        pass
 
-class ReportDetails(InfoDetails):
-    info_title = "Denúncia"
+
+class ReportStrategy(InfoStrategy):
     model = Report
+    info_type = "Denúncia"
+    template_content = "report_details.html"
+
+    def get_info_title(self):
+        return self.get_object().category
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context['object'].links = context.get('object').links.split('\r\n')
+        context["object"].links = context.get("object").links.split("\r\n")
         return context
 
 
-class NewsDetails(InfoDetails):
-    info_title = "Notícia"
+class NewsStrategy(InfoStrategy):
     model = News
+    info_type = "Notícia"
+    template_content = "news_details.html"
+
+    def get_info_title(self):
+        return self.get_object().title
 
 
-class LawsuitDetails(InfoDetails):
-    info_title = "Processo"
+class LawsuitStrategy(InfoStrategy):
     model = Lawsuit
+    info_type = "Processo"
+    template_content = "lawsuit_details.html"
+
+    def get_info_title(self) -> str:
+        return self.get_object().title

@@ -1,0 +1,5 @@
+{% load info_extras %}
+
+<li><strong>Data: </strong>{{ object.created_at|date:"d/m/Y" }}</li>
+<!-- <li><strong>Gravidade: </strong></li> -->
+<li><strong>Fonte(s): </strong>{{ object.links|join:", "|urlize|url_fix }}</li>

@@ -1,37 +1,19 @@
 {% extends "global/base.html" %}
-{% load info_extras %}
 
 {% block title %}
 - {{ info_title }}
 {% endblock %}
 
 {% block content %}
+<!-- Page Title -->
 <div class="bg-blue-600 text-white w-full text-center my-6">
-    <h1 class="text-2xl font-bold">{{ info_title }}</h1>
+    <h1 class="text-2xl font-bold">{{ info_type }}</h1>
     <p class="text-sm font-semibold">{{ object.company }}</p>
 </div>
 
-{% if info_title == "Denúncia" %}
-    <h1 class="text-3xl font-bold w-11/12">{{ object.category }}</h1>
-{% else %}
-    <h1 class="text-3xl font-bold w-11/12">{{ object.title }}</h1>
-{% endif %}
-<ul class="w-11/12 list-disc list-inside my-1">
-    {% if info_title == "Notícia" %}
-        <li>Data: {{ object.date|date:"d/m/Y" }}</li>
-        <li>Por {{ object.author }}</li>
-    {% elif info_title == "Denúncia" %}
-        <li><strong>Data: </strong>{{ object.created_at|date:"d/m/Y" }}</li>
-        <!-- <li><strong>Gravidade: </strong></li> -->
-        <li><strong>Fonte(s): </strong>{{ object.links|join:", "|urlize|url_fix }}</li>
-    {% elif info_title == "Processo" %}
-        <li><strong>Ano de Início: </strong>{{ object.start_year }}</li>
-        {% if object.resolution_year %}
-        <li><strong>Ano de Resolução: </strong>{{ object.resolution_year }}</li>
-        {% endif %}
-        <li><strong>Fonte: </strong>{{ object.source|urlize|url_fix }}
-    {% endif %}
-</ul>
+<h1 class="text-3xl font-bold w-11/12">{{ info_title }}</h1>
+
+<ul class="w-11/12 list-disc list-inside my-1">{% include template_content %} </ul>
 
 <div class="divider"></div>
 
