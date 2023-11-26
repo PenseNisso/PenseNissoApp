@@ -45,7 +45,7 @@ class InfoStrategy(DetailView):
     info_type = ""
     template_content = ""
 
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+    def get_context_data(self, **kwargs: Any) -> "dict[str, Any]":
         context = super().get_context_data(**kwargs)
         context["info_type"] = self.info_type
         context["info_title"] = self.get_info_title()
