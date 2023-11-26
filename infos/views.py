@@ -1,7 +1,8 @@
+from typing import Any
 from django.contrib.auth import get_user
 from django.http import HttpResponse
 from django.utils import timezone
-from django.views.generic import TemplateView
+from django.views.generic import DetailView, TemplateView
 from django.views.generic.edit import FormView
 
 from . import forms
@@ -37,3 +38,19 @@ class ReportFormView(FormView):
 
         report.save()
         return super().form_valid(form)
+
+
+class InfoStrategy(DetailView):
+    template_name = "info_details.html"
+    info_type = ""
+    template_content = ""
+
+    def get_context_data(self, **kwargs: Any) -> "dict[str, Any]":
+        context = super().get_context_data(**kwargs)
+        context["info_type"] = self.info_type
+        context["info_title"] = self.get_info_title()
+        context["template_content"] = self.template_content
+        return context
+
+    def get_info_title(self):
+        pass
