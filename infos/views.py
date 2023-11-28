@@ -1,4 +1,5 @@
 from typing import Any
+
 from django.contrib.auth import get_user
 from django.http import HttpResponse
 from django.utils import timezone
@@ -54,3 +55,17 @@ class InfoStrategy(DetailView):
 
     def get_info_title(self):
         pass
+
+
+class ReportStrategy(InfoStrategy):
+    model = Report
+    info_type = "Denúncia"
+    template_content = "report_details.html"
+
+    def get_info_title(self):
+        return self.get_object().category
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["object"].links = context.get("object").links.split("\r\n")
+        return context
