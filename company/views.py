@@ -1,13 +1,10 @@
-# Create your views here.
 from django.shortcuts import get_object_or_404, render
 from django.views import View
 from django.views.generic import ListView
 
+from infos.models import Report
+
 from .models import Company
-
-# from infos.models import Lawsuit, News, Report
-
-# Create your views here.
 
 
 class ExplorerView(ListView):
@@ -23,18 +20,20 @@ class CompanyView(View):
         return render(request, "companies/company.html", context)
 
 
-class InfosView(View):
+class InfosList(View):
     template_name = "companies/infos.html"
-    info_title = None
     model = None
+    info_type = ""
+    redirect_page = ""
 
     def get(self, request, company_id):
         company = get_object_or_404(Company, pk=company_id)
         infos = self.model.objects.filter(company__id=company_id)
         context = {
             "company": company,
-            "info_title": self.info_title,
+            "info_type": self.info_type,
             "infos": infos,
+            "redirect_page": self.redirect_page,
         }
         return render(request, self.template_name, context)
 
@@ -43,9 +42,12 @@ class InfosView(View):
 #     info_title = "Notícias"
 #     model = News
 
-# class ReportsView(InfosView):
-#     info_title = "Denúncias"
-#     model = Report
+
+class ReportsList(InfosList):
+    model = Report
+    info_type = "Denúncias"
+    redirect_page = "infos:reportdetail"
+
 
 # class LawsuitsView(InfosView):
 #     info_title = "Processos"
