@@ -34,3 +34,14 @@ class ReportCategory(models.Model):
 
     class Meta:
         verbose_name_plural = "Report categories"
+
+
+class News(InfoBase):
+    company = models.ForeignKey(
+        "company.Company", on_delete=models.CASCADE, related_name="news"
+    )
+    author = models.CharField(max_length=50)
+    date = models.DateField()
+
+    class Meta:
+        verbose_name_plural = "News"
