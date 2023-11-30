@@ -20,13 +20,7 @@
 </div>
 <div>
   <ul class="infos-pages">
-    <!-- 
-        Adicionar chaves 
-            <li><a href="% url 'company:reports' company.id %">Denúncias</a></li>
-            <li><a href="% url 'company:lawsuits' company.id %">Processos</a></li>
-            <li><a href="% url 'company:news' company.id %">Notícias</a></li>  
-    -->
-    <a href="#"><li>Denúncias</li></a>
+    <a href="{% url 'company:reports' company.id %}"><li>Denúncias</li></a>
     <a href="#"><li>Processos</li></a>
     <a href="#"><li>Notícias</li></a>
   </ul>
