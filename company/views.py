@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from django.views import View
 from django.views.generic import ListView
 
-from infos.models import Report
+from infos.models import News, Report
 
 from .models import Company
 
@@ -38,9 +38,10 @@ class InfosList(View):
         return render(request, self.template_name, context)
 
 
-# class NewsView(InfosView):
-#     info_title = "Notícias"
-#     model = News
+class NewsList(InfosList):
+    info_title = "Notícias"
+    model = News
+    redirect_page = "infos:newsdetail"
 
 
 class ReportsList(InfosList):

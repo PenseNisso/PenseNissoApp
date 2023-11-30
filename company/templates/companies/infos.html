@@ -16,9 +16,17 @@
     <div class="bg-indigo-100 rounded-xl pt-2 pb-3 px-4 flex flex-row items-center space-x-2.5 cursor-pointer hover:scale-[1.035]"
         onclick="window.location.href = '{% url redirect_page info.id %}';">
         <div class="grow">
+            {% if info_type == "Denúncias" %}
             <h3 class="text-lg font-bold">{{ info.category }}</h3>
+            {% else %}
+            <h3 class="text-lg font-bold">{{ info.title }}</h3>
+            {% endif %}
 
             <p class="text-sm text-justify leading-tight">{{ info.content|truncatechars:300 }}</p>
+
+            {% if info_type == "Notícias" %}
+            <p class="text-sm text-neutral-600 mt-1">{{ info.date|date:"d/m/Y" }}</p>
+            {% endif %}
         </div>
 
         <ion-icon name="arrow-forward-outline" class="flex-none"></ion-icon>

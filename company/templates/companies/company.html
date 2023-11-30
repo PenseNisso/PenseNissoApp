@@ -22,7 +22,7 @@
   <ul class="infos-pages">
     <a href="{% url 'company:reports' company.id %}"><li>Denúncias</li></a>
     <a href="#"><li>Processos</li></a>
-    <a href="#"><li>Notícias</li></a>
+    <a href="{% url 'company:news' company.id %}"><li>Notícias</li></a>
   </ul>
 </div>
 {% endblock %}
