@@ -5,7 +5,7 @@ from django.utils import timezone
 from company.models import Company
 
 from .forms import ReportForm
-from .models import Report, ReportCategory
+from .models import News, Report, ReportCategory
 
 factory = RequestFactory()
 
@@ -92,11 +92,26 @@ class InfoDetailTestCase(TestCase):
             company=self.company,
             links="https://teste.com",
         )
+        self.news = News.objects.create(
+            title="Test News",
+            content="Test Description",
+            company=self.company,
+            date="2023-01-01",
+            author="Myself",
+        )
 
     def test_report_details_view_status_code(self):
         response = self.client.get(reverse("infos:reportdetail", args=[self.report.id]))
         self.assertEquals(response.status_code, 200)
-    
+
     def test_report_details_view_context(self):
         response = self.client.get(reverse("infos:reportdetail", args=[self.report.id]))
         self.assertEquals(response.context.get("object"), self.report)
+
+    def test_news_details_view_status_code(self):
+        response = self.client.get(reverse("infos:newsdetail", args=[self.news.id]))
+        self.assertEquals(response.status_code, 200)
+
+    def test_news_details_view_context(self):
+        response = self.client.get(reverse("infos:newsdetail", args=[self.news.id]))
+        self.assertEquals(response.context.get("object"), self.news)

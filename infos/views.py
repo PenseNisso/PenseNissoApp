@@ -7,7 +7,7 @@ from django.views.generic import DetailView, TemplateView
 from django.views.generic.edit import FormView
 
 from . import forms
-from .models import Report
+from .models import News, Report
 
 
 class ReportSucessView(TemplateView):
@@ -69,3 +69,12 @@ class ReportStrategy(InfoStrategy):
         context = super().get_context_data(**kwargs)
         context["object"].links = context.get("object").links.split("\r\n")
         return context
+
+
+class NewsStrategy(InfoStrategy):
+    model = News
+    info_type = "Notícia"
+    template_content = "news_details.html"
+
+    def get_info_title(self):
+        return self.get_object().title
