@@ -36,6 +36,15 @@ class ReportCategory(models.Model):
         verbose_name_plural = "Report categories"
 
 
+class Lawsuit(InfoBase):
+    company = models.ForeignKey(
+        "company.Company", on_delete=models.CASCADE, related_name="lawsuits"
+    )
+    source = models.URLField()
+    start_year = models.PositiveSmallIntegerField()
+    resolution_year = models.PositiveSmallIntegerField(null=True, blank=True)
+
+
 class News(InfoBase):
     company = models.ForeignKey(
         "company.Company", on_delete=models.CASCADE, related_name="news"

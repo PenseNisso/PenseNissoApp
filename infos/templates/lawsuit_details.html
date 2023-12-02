@@ -1,0 +1,7 @@
+{% load info_extras %}
+
+<li><strong>Ano de Início: </strong>{{ object.start_year }}</li>
+{% if object.resolution_year %}
+<li><strong>Ano de Resolução: </strong>{{ object.resolution_year }}</li>
+{% endif %}
+<li><strong>Fonte: </strong>{{ object.source|urlize|url_fix }}

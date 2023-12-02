@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from django.views import View
 from django.views.generic import ListView
 
-from infos.models import News, Report
+from infos.models import Lawsuit, News, Report
 
 from .models import Company
 
@@ -39,8 +39,8 @@ class InfosList(View):
 
 
 class NewsList(InfosList):
-    info_title = "Notícias"
     model = News
+    info_type = "Notícias"
     redirect_page = "infos:newsdetail"
 
 
@@ -50,6 +50,7 @@ class ReportsList(InfosList):
     redirect_page = "infos:reportdetail"
 
 
-# class LawsuitsView(InfosView):
-#     info_title = "Processos"
-#     model = Lawsuit
+class LawsuitsList(InfosList):
+    model = Lawsuit
+    info_type = "Processos"
+    redirect_page = "infos:lawsuitdetail"

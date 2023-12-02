@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from infos.models import News, Report, ReportCategory
+from infos.models import Lawsuit, News, Report, ReportCategory
 
 from .models import Company
 
@@ -99,6 +99,21 @@ class InfoListTest(TestCase):
             date="2023-01-01",
             author="myself",
         )
+        Lawsuit.objects.create(
+            title="Test Lawsuit 1",
+            content="Test Description 1",
+            company=self.company,
+            source="https://teste.com",
+            start_year=2023,
+        )
+        Lawsuit.objects.create(
+            title="Test Lawsuit 2",
+            content="Test Description 2",
+            company=self.company,
+            source="https://teste.com",
+            start_year=2022,
+            resolution_year=2023,
+        )
 
     def test_full_report_list(self):
         response = self.client.get(reverse("company:reports", args=[self.company.id]))
@@ -153,3 +168,31 @@ class InfoListTest(TestCase):
         )
         response = self.client.get(reverse("company:news", args=[self.company.id]))
         self.assertIn(news, response.context.get("infos"))
+
+    def test_full_lawsuit_list(self):
+        response = self.client.get(reverse("company:lawsuits", args=[self.company.id]))
+        self.assertSequenceEqual(
+            response.context.get("infos"), list(Lawsuit.objects.all())
+        )
+
+    def test_filtered_lawsuit_list(self):
+        lawsuit = Lawsuit.objects.create(
+            title="Test Lawsuit 3",
+            content="Test Description 3",
+            company=Company.objects.create(name="Other Company"),
+            source="https://teste.com",
+            start_year=2023,
+        )
+        response = self.client.get(reverse("company:lawsuits", args=[self.company.id]))
+        self.assertNotIn(lawsuit, response.context.get("infos"))
+
+    def test_new_lawsuit_in_list(self):
+        lawsuit = Lawsuit.objects.create(
+            title="Test Lawsuit 3",
+            content="Test Description 3",
+            company=self.company,
+            source="https://source.com",
+            start_year=2023,
+        )
+        response = self.client.get(reverse("company:lawsuits", args=[self.company.id]))
+        self.assertIn(lawsuit, response.context.get("infos"))

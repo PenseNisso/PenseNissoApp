@@ -7,7 +7,7 @@ from django.views.generic import DetailView, TemplateView
 from django.views.generic.edit import FormView
 
 from . import forms
-from .models import News, Report
+from .models import Lawsuit, News, Report
 
 
 class ReportSucessView(TemplateView):
@@ -75,6 +75,15 @@ class NewsStrategy(InfoStrategy):
     model = News
     info_type = "Notícia"
     template_content = "news_details.html"
+
+    def get_info_title(self):
+        return self.get_object().title
+
+
+class LawsuitStrategy(InfoStrategy):
+    model = Lawsuit
+    info_type = "Processo"
+    template_content = "lawsuit_details.html"
 
     def get_info_title(self):
         return self.get_object().title
