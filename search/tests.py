@@ -116,15 +116,23 @@ class ExplorerTestCase(TestCase):
         self.client = Client()
         return super().setUp()
 
-    def test_explorer_view_status_code(self) -> None:
+    def test_view_status_code(self) -> None:
         response = self.client.get(path="/search/explorer")
         self.assertEqual(response.status_code, 200)
 
-    def test_explorer_view_template(self) -> None:
+    def test_view_template(self) -> None:
         response = self.client.get(path="/search/explorer")
         self.assertTemplateUsed(response, "explorer.html")
 
-    def test_explorer_view_context(self) -> None:
+    def test_view_context(self) -> None:
         response = self.client.get(path="/search/explorer")
         self.assertEqual(response.context["company_list"].count(), 6)
+        self.assertSequenceEqual(response.context["company_list"], self.companies)
+
+    def test_explorer_update(self) -> None:
+        response = self.client.get(path="/search/explorer")
+        self.assertEqual(response.context["company_list"].count(), 6)
+        self.companies.append(Company.objects.create(name="Factory T"))
+        response = self.client.get(path="/search/explorer")
+        self.assertEqual(response.context["company_list"].count(), 7)
         self.assertSequenceEqual(response.context["company_list"], self.companies)
