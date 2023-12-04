@@ -2,14 +2,14 @@ from django.test import Client, TestCase
 
 from company.models import Company
 
-from .views import SearchView
+from .views import ExplorerView, QueryView, SearchView
 
 
 class TrigramTestCase(TestCase):
     def setUp(self) -> None:
         self.strings = ["abcdefghijklmnopqrstuvwxyz", "powder", "bee", "cream"]
-        self.trigram = SearchView(2)
-        self.trigram_score_three = SearchView(3)
+        self.trigram = QueryView(2)
+        self.trigram_score_three = QueryView(3)
 
         return super().setUp()
 
@@ -40,7 +40,7 @@ class SearchTestCase(TestCase):
         Company.objects.create(name="Enterprise 2")
         Company.objects.create(name="Factory 1")
         Company.objects.create(name="Factory X")
-        client = Client()
+        self.client = Client()
         return super().setUp()
 
     def test_perfect_query(self) -> None:
@@ -102,3 +102,29 @@ class SearchTestCase(TestCase):
             response.context["company_list"],
             [],
         )
+
+
+class ExplorerTestCase(TestCase):
+    def setUp(self) -> None:
+        Company.objects.create(name="Company 1")
+        Company.objects.create(name="Company 2")
+        Company.objects.create(name="Enterprise 1")
+        Company.objects.create(name="Enterprise 2")
+        Company.objects.create(name="Factory 1")
+        Company.objects.create(name="Factory X")
+        self.companies = [company for company in Company.objects.all()]
+        self.client = Client()
+        return super().setUp()
+
+    def test_explorer_view_status_code(self) -> None:
+        response = self.client.get(path="/search/explorer")
+        self.assertEqual(response.status_code, 200)
+
+    def test_explorer_view_template(self) -> None:
+        response = self.client.get(path="/search/explorer")
+        self.assertTemplateUsed(response, "explorer.html")
+
+    def test_explorer_view_context(self) -> None:
+        response = self.client.get(path="/search/explorer")
+        self.assertEqual(response.context["company_list"].count(), 6)
+        self.assertSequenceEqual(response.context["company_list"], self.companies)

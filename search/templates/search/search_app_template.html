@@ -1,0 +1,23 @@
+{% extends "global/base.html" %}
+
+{% block content %}
+    <center>
+        <div class="search">
+            <h1>
+                {% block search_header %}
+                {% endblock %}
+            </h1>
+        </div>
+        <div>
+            <ul>
+                {% for company in company_list %}
+                    <li>
+                        <a href="{% url 'company:company' company_id=company.id %}" class="empresa">
+                            {{ company.name }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </center>
+{% endblock content %}
