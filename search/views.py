@@ -56,11 +56,11 @@ class QueryView(SearchView):
 class ExplorerView(SearchView):
     template_name = "explorer.html"
 
-    def get_queryset(self):
-        object_list = self.model.objects.all()
-        return object_list
+    # def get_queryset(self):
+    #     object_list = self.model.objects.all()
+    #     return object_list
 
-    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        self.object_list = self.get_queryset()
-        context = super().get_context_data(**kwargs)
-        return super().render_to_response(context)
+    # def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+    #     self.object_list = self.get_queryset()
+    #     context = super().get_context_data(**kwargs)
+    #     return super().render_to_response(context)

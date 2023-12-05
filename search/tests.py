@@ -112,7 +112,7 @@ class ExplorerTestCase(TestCase):
         Company.objects.create(name="Enterprise 2")
         Company.objects.create(name="Factory 1")
         Company.objects.create(name="Factory X")
-        self.companies = [company for company in Company.objects.all()]
+        self.companies = list(Company.objects.all())
         self.client = Client()
         return super().setUp()
 
