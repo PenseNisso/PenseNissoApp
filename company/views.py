@@ -7,12 +7,6 @@ from infos.models import Lawsuit, News, Report
 from .models import Company
 
 
-class ExplorerView(ListView):
-    template_name = "companies/explorer.html"
-    model = Company
-    context_object_name = "companies"
-
-
 class CompanyView(View):
     def get(self, request, company_id):
         company = get_object_or_404(Company, pk=company_id)

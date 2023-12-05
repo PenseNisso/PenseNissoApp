@@ -1,26 +1,13 @@
-{% extends "global/base.html" %}
+{% extends "search/search_app_template.html" %}
 
 {% block title %}
-- Busca - {{ query }} 
+- Busca - "{{ query }}"
 {% endblock title %}
 
-{% block content %}
-    <center>
-        <div>
-            <h1>
-                {% if query is not None %} 
-                    Resultados para "{{ query }}" 
-                {% else %}
-                    Realize uma pesquisa!
-                {% endif %}
-            </h1>
-        <div>
-        <div>
-            {% for company in company_list %}
-                <li>
-                    <a href="{% url 'company:company' company_id=company.id %}">{{ company.name }}</a>
-                </li>
-            {% endfor %}
-        </div>
-    </center>
-{% endblock content %}
+{% block search_header %}
+    {% if query is not None %}
+        Resultados para "{{ query }}"                        
+    {% else %}
+        Realize uma pesquisa!
+    {% endif %}
+{% endblock search_header %}
