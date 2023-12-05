@@ -16,6 +16,7 @@ class CompanyModelTest(TestCase):
 
     def test_company_str(self):
         self.assertEqual(str(self.company), "Test Company")
+        print("Teste Company-Model-1: Objeto criado com sucesso.")
 
 
 class CompanyViewTest(TestCase):
@@ -29,14 +30,17 @@ class CompanyViewTest(TestCase):
     def test_company_view_status_code(self):
         response = self.client.get(reverse("company:company", args=[self.company.id]))
         self.assertEqual(response.status_code, 200)
+        print("Teste Company-View-1: Acesso realizado com sucesso (Cód 200).")
 
     def test_company_view_template(self):
         response = self.client.get(reverse("company:company", args=[self.company.id]))
         self.assertTemplateUsed(response, "companies/company.html")
+        print("Teste Company-View-2: Template aplicado com sucesso.")
 
     def test_company_view_context(self):
         response = self.client.get(reverse("company:company", args=[self.company.id]))
         self.assertEqual(response.context["company"], self.company)
+        print("Teste Company-View-3: Variáveis de contexto verificadas com sucesso.")
 
 
 class InfoListTest(TestCase):
@@ -93,6 +97,7 @@ class InfoListTest(TestCase):
         self.assertSequenceEqual(
             response.context.get("infos"), list(Report.objects.all())
         )
+        print("Teste Company-InfoList-1: Denúncias obtidas com sucesso.")
 
     def test_filtered_report_list(self):
         report = Report.objects.create(
@@ -103,6 +108,7 @@ class InfoListTest(TestCase):
         )
         response = self.client.get(reverse("company:reports", args=[self.company.id]))
         self.assertNotIn(report, response.context.get("infos"))
+        print("Teste Company-InfoList-2: Denúncias obtidas com sucesso.")
 
     def test_new_report_in_list(self):
         report = Report.objects.create(
@@ -113,12 +119,14 @@ class InfoListTest(TestCase):
         )
         response = self.client.get(reverse("company:reports", args=[self.company.id]))
         self.assertIn(report, response.context.get("infos"))
+        print("Teste Company-InfoList-3: Denúncias atualizadas com sucesso.")
 
     def test_full_news_list(self):
         response = self.client.get(reverse("company:news", args=[self.company.id]))
         self.assertSequenceEqual(
             response.context.get("infos"), list(News.objects.all())
         )
+        print("Teste Company-InfoList-4: Notícias obtidas com sucesso.")
 
     def test_filtered_news_list(self):
         news = News.objects.create(
@@ -130,6 +138,7 @@ class InfoListTest(TestCase):
         )
         response = self.client.get(reverse("company:news", args=[self.company.id]))
         self.assertNotIn(news, response.context.get("infos"))
+        print("Teste Company-InfoList-5: Notícias obtidas com sucesso.")
 
     def test_new_news_in_list(self):
         news = News.objects.create(
@@ -141,12 +150,14 @@ class InfoListTest(TestCase):
         )
         response = self.client.get(reverse("company:news", args=[self.company.id]))
         self.assertIn(news, response.context.get("infos"))
+        print("Teste Company-InfoList-6: Notícias atualizadas com sucesso.")
 
     def test_full_lawsuit_list(self):
         response = self.client.get(reverse("company:lawsuits", args=[self.company.id]))
         self.assertSequenceEqual(
             response.context.get("infos"), list(Lawsuit.objects.all())
         )
+        print("Teste Company-InfoList-7: Processos obtidos com sucesso.")
 
     def test_filtered_lawsuit_list(self):
         lawsuit = Lawsuit.objects.create(
@@ -158,6 +169,7 @@ class InfoListTest(TestCase):
         )
         response = self.client.get(reverse("company:lawsuits", args=[self.company.id]))
         self.assertNotIn(lawsuit, response.context.get("infos"))
+        print("Teste Company-InfoList-8: Processos obtidos com sucesso.")
 
     def test_new_lawsuit_in_list(self):
         lawsuit = Lawsuit.objects.create(
@@ -169,3 +181,4 @@ class InfoListTest(TestCase):
         )
         response = self.client.get(reverse("company:lawsuits", args=[self.company.id]))
         self.assertIn(lawsuit, response.context.get("infos"))
+        print("Teste Company-InfoList-9: Processos atualizados com sucesso.")
