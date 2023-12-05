@@ -2,35 +2,19 @@
 {% block content %}
 Hello, {{ name }}! 
 <div class="grid xl:grid-cols-2 gap-x-20">
+  <!-- Criar card para cada empresa -->
+  {% for company in selected_companies%}
   <div class="card w-96 bg-neutral text-neutral-content static">
     <div class="card-body items-center text-center">
-      <h2 class="card-title">Cookies!</h2>
-      <p>We are using cookies for no reason.</p>
+      <h2 class="card-title">{{company.name}}</h2>
+      <p>{{company.description}}</p>
       <div class="card-actions justify-end">
         <button class="btn btn-primary">Accept</button>
         <button class="btn btn-ghost">Deny</button>
       </div>
     </div>
   </div>
-  <div class="card w-96 bg-base-100 shadow-outline shadow-xl drop-shadow-xl static">
-    <div class="card-body">
-      <h2 class="card-title">Card title!</h2>
-      <p>If a dog chews shoes whose shoes does he choose?</p>
-      <div class="card-actions justify-end">
-        <button class="btn btn-primary">Buy Now</button>
-      </div>
-    </div>
-  </div>
-  <div class="border border-black border-dashed card w-96 bg-base-100 drop-shadow-xl static">
-    <div class="card-body py-0">
-      <div class="card-actions justify-end">
-        <button class="btn btn-square btn-sm">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-        </button>
-      </div>
-      <p>We are using cookies for no reason.</p>
-    </div>
-  </div>
+  {% endfor %}
 </div>
 
 <!-- You can open the modal using ID.showModal() method -->
@@ -42,8 +26,16 @@ Hello, {{ name }}!
     </form>
     <h2 class="font-bold text-xl">Adicionar Empresa</h2>
     <ul>
-      <li>Empresa 1</li>
-      <li>Empresa 2</li>
+    {% for company in companies%}
+    <li>
+        <form method="post" action="">
+            {% csrf_token %}
+            <label>{{company.name}}</label>
+            <input type="hidden" name="company" value="{{company}}">
+            <button class="btn btn-sm btn-circle btn-ghost absolute">+</button>
+        </form>
+    </li>
+    {% endfor %}
     </ul>
   </div>
   <form method="dialog" class="modal-backdrop">
