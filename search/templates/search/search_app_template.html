@@ -12,7 +12,7 @@
             <ul>
                 {% for company in company_list %}
                     <li>
-                        <a href="{% url 'company:company' company_id=company.id %}" class="empresa">
+                        <a href="{% url 'company:company' company.id %}" class="empresa">
                             {{ company.name }}
                         </a>
                     </li>

@@ -1,35 +1,40 @@
-from django.shortcuts import get_object_or_404, render
-from django.views import View
-from django.views.generic import ListView
+from typing import Any
+
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import get_object_or_404
+from django.views.generic import DetailView, ListView
 
 from infos.models import Lawsuit, News, Report
 
 from .models import Company
 
 
-class CompanyView(View):
-    def get(self, request, company_id):
-        company = get_object_or_404(Company, pk=company_id)
-        context = {"company": company}
-        return render(request, "companies/company.html", context)
+class CompanyView(DetailView):
+    template_name = "companies/company.html"
+    model = Company
 
 
-class InfosList(View):
+class InfosList(ListView):
     template_name = "companies/infos.html"
     model = None
     info_type = ""
     redirect_page = ""
 
-    def get(self, request, company_id):
-        company = get_object_or_404(Company, pk=company_id)
-        infos = self.model.objects.filter(company__id=company_id)
-        context = {
-            "company": company,
-            "info_type": self.info_type,
-            "infos": infos,
-            "redirect_page": self.redirect_page,
-        }
-        return render(request, self.template_name, context)
+    def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        self.company = get_object_or_404(Company, pk=kwargs.get("company_id"))
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs: Any) -> "dict[str, Any]":
+        context = super().get_context_data(**kwargs)
+        context.update(
+            {
+                "company": self.company,
+                "info_type": self.info_type,
+                "infos": self.model.objects.filter(company=self.company),
+                "redirect_page": self.redirect_page,
+            }
+        )
+        return context
 
 
 class NewsList(InfosList):
