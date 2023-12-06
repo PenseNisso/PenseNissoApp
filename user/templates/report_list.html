@@ -13,7 +13,7 @@
 <div class="w-11/12 space-y-5">
     {% for report in report_list %}
     <div class="bg-indigo-100 rounded-xl pt-2 pb-3 px-4 cursor-pointer hover:scale-[1.035]"
-        onclick="window.location.href='{% url 'infos:reportdetail' report.id %}'">
+        onclick="window.location.href='{% url 'user:reportvalidation' report.id %}'">
         <h2 class="text-lg font-bold">{{ report.title }}</h2>
         <div class="flex flex-row justify-between">
             <p>{{ report.category }}</p>

@@ -1,7 +1,13 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 
-from .views import ListaUsuarios, PendingReportList, Register, UserPage
+from .views import (
+    ListaUsuarios,
+    PendingReportList,
+    Register,
+    ReportValidation,
+    UserPage,
+)
 
 app_name = "user"
 
@@ -15,5 +21,10 @@ urlpatterns = [
         "moderation/pending_reports/",
         PendingReportList.as_view(),
         name="pendingreports",
+    ),
+    path(
+        "moderation/pending_reports/<int:pk>",
+        ReportValidation.as_view(),
+        name="reportvalidation",
     ),
 ]
