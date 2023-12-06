@@ -1,6 +1,6 @@
 from typing import Any
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import reverse
 from django.views.generic import DetailView, FormView, ListView
@@ -33,9 +33,10 @@ class ListaUsuarios(LoginRequiredMixin, ListView):
     model = User
 
 
-class PendingReportList(ListView):
+class PendingReportList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = "report_list.html"
     model = Report
+    permission_required = "infos.change_report"
 
     def get_context_data(self, **kwargs: Any) -> "dict[str, Any]":
         context = super().get_context_data(**kwargs)
@@ -43,10 +44,13 @@ class PendingReportList(ListView):
         return context
 
 
-class ReportValidation(FormView, DetailView):
+class ReportValidation(
+    LoginRequiredMixin, PermissionRequiredMixin, FormView, DetailView
+):
     template_name = "report_validation.html"
     model = Report
     form_class = ValidateReportForm
+    permission_required = "infos.change_report"
 
     def get_success_url(self) -> str:
         return reverse("user:pendingreports")
