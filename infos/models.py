@@ -21,6 +21,11 @@ class Report(InfoBase):
     user = models.ForeignKey("user.User", on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    status = models.CharField(
+        max_length=20,
+        choices=[("RE", "Recusado"), ("NV", "Não verificado"), ("AP", "Aprovado")],
+        default="NV",
+    )
 
 
 class ReportCategory(models.Model):

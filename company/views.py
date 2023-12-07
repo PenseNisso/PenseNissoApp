@@ -48,6 +48,11 @@ class ReportsList(InfosList):
     info_type = "Denúncias"
     redirect_page = "infos:reportdetail"
 
+    def get_context_data(self, **kwargs: Any) -> "dict[str, Any]":
+        context = super().get_context_data(**kwargs)
+        context["infos"] = self.model.objects.filter(company=self.company, status="AP")
+        return context
+
 
 class LawsuitsList(InfosList):
     model = Lawsuit
