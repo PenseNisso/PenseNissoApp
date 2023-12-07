@@ -25,4 +25,7 @@
     <li><a href="{% url 'company:news' company.id %}">Notícias</a></li>
   </ul>
 </div>
+<div>
+  <button onclick="window.location.href = '{% url 'infos:report' %}'">Denunciar</button>
+</div>
 {% endblock %}
