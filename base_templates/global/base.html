@@ -1,18 +1,19 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pense Nisso {% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'global/base.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 </head>
 <body>
-    <header>
-        <h1><a href="/" class="nav-title">Pense Nisso</a></h1>
+    {% include "./header.html" %}
+    <div class="max-w-2xl xl:max-w-4xl flex flex-col justify-center items-center mx-auto">
         <ul>
             <form action="{% url 'search:search' %}" method="get">
                 {% csrf_token %}
@@ -21,6 +22,7 @@
                     id="search" 
                     name="search" 
                     placeholder="Pesquisar empresas..." 
+                    class="input"
                     required />
                 <script>
                     var tags = [ 
@@ -42,12 +44,6 @@
                 <input type="submit" value="Pesquisar">
             </form>
         </ul>
-        <ul>
-            <li><a href="{% url 'search:explorer'%}">Empresas</a></li>
-        </ul>
-    </header>
-    <hr>
-    <div class="container">
         {% block content %}
         {% endblock %}
     </div>

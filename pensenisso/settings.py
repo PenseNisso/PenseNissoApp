@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "infos",
     "user",
     "search",
+    "comparator",
     "crispy_forms",
     "crispy_bootstrap5",
 ]

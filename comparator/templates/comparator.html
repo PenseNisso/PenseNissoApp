@@ -1,0 +1,71 @@
+{% extends 'global/base.html' %}
+{% block content %}
+
+<div class="grid xl:grid-cols-2 items-center gap-x-20 gap-y-20 my-10">
+  {% for company in selected_companies%}
+  <div class="indicator">
+      <form method="delete" action="delete">
+        {% csrf_token %}
+        <input type="hidden" name="company" value="{{company}}">
+        <button class="indicator-item badge badge-error text-xl py-4 hover:cursor-pointer hover:bg-red-500">X</button>
+      </form>
+      <div class="indicator card w-128 content">
+          <div class="items-center text-center">
+              <div class="flex flex-row items-center bg-blue-700 bg-opacity-30 w-80 rounded-xl py-3">
+                  <img src={{company.logo.url}} class="mx-4 w-10 h-10" alt="logo">
+                  <h2 class="card-title">{{company.name}}</h2>
+              </div>
+              <div class="mt-4 card-actions justify-end">
+                  <div class="flex w-full items-center">
+                    <div class="grid h-20 flex-grow place-items-center">
+                        <div class="stat-title text-xl">Nota</div>
+                        <a href="{% url 'company:company' company.id %}" class="stat-value btn text-xl bg-yellow-400 hover:bg-yellow-500 bg-opacity-40 rounded-xl p-2">2,7/5,0 →</a>
+                    </div>
+                    <div class="divider divider-horizontal"></div>
+                    <a href="{% url 'company:company' company.id%}" class="grid btn hover:bg-red-300 justify-items-center h-16 flex-grow card bg-red-200 rounded-box place-items-center text-l">
+                        Ver Denúncias →
+                    </a>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  {% endfor %}
+  <button class="p-0 w-80 btn" onclick="my_modal_3.showModal()">+ Adicionar Empresa</button>
+</div>
+
+<dialog id="my_modal_3" class="modal">
+  <div class="modal-box">
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+    </form>
+    <h2 class="font-bold text-xl my-2">Adicionar Empresa</h2>
+    <ul>
+    {% for company in companies%}
+    <li class="my-5">
+        <form method="post" action="">
+            {% csrf_token %}
+            <div class="flex flex-row">
+                <div class="flex flex-row gap-x-4 grow">
+                    <img src={{company.logo.url}} class="mx-4 w-8 h-8" alt="logo">
+                    <label class="text-xl">{{company.name}}</label>
+                    <input type="hidden" name="company" value="{{company}}">
+                </div>
+                <div class="flex flex-row justify-end grow">
+                    <button class="inline btn btn-sm btn-circle btn-ghost self-end text-xl static">+</button>
+                </div>
+            </div>
+        </form>
+    </li>
+    {% endfor %}
+    </ul>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>
+
+<button onclick="my_modal_3.showModal()" class="fixed bottom-5 right-5 btn btn-primary btn-circle">
+  <span class="text-2xl">+</span>
+</button> 
+{% endblock content %}
