@@ -20,11 +20,11 @@ class BooleanFilter(AbstractFilter):
             pass
 
     def get_q(self) -> Q:
-        query = ""
+        type = self.type
         if self.value == "yes":
-            q = Q(pk__in=[report.company.id for report in Report.objects.all()])
+            q = Q(**{"count_" + type + "__gt": 0})
         elif self.value == "no":
-            q = Q()
+            q = Q(**{"count_" + type + "__lte": 0})
         else:
             q = Q()
         return q
