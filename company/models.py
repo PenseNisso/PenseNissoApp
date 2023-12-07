@@ -21,7 +21,7 @@ class Company(models.Model):
             sub_score += math.exp(-2 * age / int(report.gravity))
         score = 5 - min(sub_score, 5)
 
-        return score
+        return round(score, 2)
 
     class Meta:
         verbose_name_plural = "Companies"

@@ -17,6 +17,28 @@ class CompanyModelTest(TestCase):
     def test_company_str(self):
         self.assertEqual(str(self.company), "Test Company")
         print("Teste Company-Model-1: Objeto criado com sucesso.")
+    
+    def test_company_score(self):
+        Report.objects.create(
+            title="Test Report 1",
+            content="Teste Description 1",
+            company=self.company,
+            links="https://teste.com",
+            status="AP",
+            gravity="1",
+            date="2020-09-09"
+        ) 
+        Report.objects.create(
+            title="Test Report 2",
+            content="Teste Description 2",
+            company=self.company,
+            links="https://teste.com",
+            status="AP",
+            gravity="4",
+            date="2018-09-27"
+        )
+        self.assertEquals(self.company.compute_score(), 4.92)
+        print("Teste Company-Model-2: Score calculado com sucesso")
 
 
 class CompanyViewTest(TestCase):
