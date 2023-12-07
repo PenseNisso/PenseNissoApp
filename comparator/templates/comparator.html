@@ -5,11 +5,11 @@
   {% for company in selected_companies%}
   <div class="indicator">
       <form method="delete" action="delete">
-            {% csrf_token %}
-            <input type="hidden" name="company" value="{{company}}">
-            <button class="indicator-item badge badge-error text-xl py-4 hover:cursor-pointer hover:bg-red-500">X</button>
-        </form>
-      <div class="indicator card w-128 static content">
+        {% csrf_token %}
+        <input type="hidden" name="company" value="{{company}}">
+        <button class="indicator-item badge badge-error text-xl py-4 hover:cursor-pointer hover:bg-red-500">X</button>
+      </form>
+      <div class="indicator card w-128 content">
           <div class="items-center text-center">
               <div class="flex flex-row items-center bg-blue-700 bg-opacity-30 w-80 rounded-xl py-3">
                   <img src={{company.logo.url}} class="mx-4 w-10 h-10" alt="logo">
@@ -52,7 +52,7 @@
                     <input type="hidden" name="company" value="{{company}}">
                 </div>
                 <div class="flex flex-row justify-end grow">
-                    <button class="inline btn btn-sm btn-circle btn-ghost self-end text-xl">+</button>
+                    <button class="inline btn btn-sm btn-circle btn-ghost self-end text-xl static">+</button>
                 </div>
             </div>
         </form>
