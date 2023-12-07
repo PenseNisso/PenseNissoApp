@@ -1,6 +1,6 @@
 from django.db import models
-
-# Create your models here.
+from django.utils.timezone import now
+import math
 
 
 class Company(models.Model):
@@ -12,6 +12,16 @@ class Company(models.Model):
 
     def __str__(self):
         return self.name
+
+    def compute_score(self) -> float:
+        reports = self.reports.filter(status="AP")
+        sub_score = 0
+        for report in reports:
+            age = (now().date() - report.date).days / 365
+            sub_score += math.exp(-2 * age / int(report.gravity))
+        score = 5 - min(sub_score, 5)
+
+        return score
 
     class Meta:
         verbose_name_plural = "Companies"
