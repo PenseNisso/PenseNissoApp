@@ -1,5 +1,6 @@
 from django.db.models import Q
 
+from infos.models import Lawsuit, Report, News
 
 class AbstractFilter:
     def get_q(self):
@@ -23,5 +24,9 @@ class BooleanFilter(AbstractFilter):
 
 
 class TextFilter(AbstractFilter):
+    def __init__(self, value, type) -> None:
+        self.type = type
+        self.value = value
     def get_q(self) -> Q:
-        return Q()
+        type = self.type
+        return Q(**{type+"__icontains":self.value})

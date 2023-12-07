@@ -6,6 +6,7 @@ from django.http import HttpRequest, HttpResponse
 from django.views.generic import ListView
 
 from company.models import Company
+from .filters import BooleanFilter, TextFilter
 from .forms import FilterForm
 
 
@@ -63,15 +64,28 @@ class ExplorerView(SearchView):
             filter |= Q()
         return filter
 
+    def build_filters(self, data: dict) -> "list[Q]":
+        filters = []
+        for d in data:
+            if "has_report" in d:
+                filters.append(BooleanFilter(type="num_reports", value=data[d]))
+            elif "has_lawsuit" in d:
+                filters.append(BooleanFilter(type="num_reports", value=data[d]))
+            elif "has_news" in d:
+                filters.append(BooleanFilter(type="num_reports", value=data[d]))
+        return filters
+
     def get_queryset(self, filters):
         # object_list = Company.objects.filter(self.apply_filters(filters))
         object_list = Company.objects.all()
+        print([company.reports.count() for company in Company.objects.all()])
         return object_list
 
     def get_context_data(self, **kwargs: Any) -> "dict[str, Any]":
         self.form = FilterForm()
         context = super().get_context_data(**kwargs)
         context["form"] = self.form
+        print(context.get('company_list')[0].reports)
         return context
 
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
@@ -80,5 +94,4 @@ class ExplorerView(SearchView):
         self.object_list = self.get_queryset([])
         context = self.get_context_data(**kwargs)
         print(form.cleaned_data)
-        # context["query"] = query
         return super().render_to_response(context)
