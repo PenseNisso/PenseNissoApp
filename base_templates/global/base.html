@@ -5,9 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pense Nisso {% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'global/base.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/daisyui@3.9.4/dist/full.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 </head>
 <body>
     {% include "./header.html" %}
@@ -22,11 +24,30 @@
                     placeholder="Pesquisar empresas..." 
                     class="input"
                     required />
+                <script>
+                    var tags = [ 
+                            {% for company in companies %} 
+                                "{{ company.name }}", 
+                            {% endfor %} 
+                        ]; 
+                    $( function() {
+                        $( "#search" ).autocomplete({
+                            minLength: 2,
+                            source: function(request, response) {
+                                var results = $.ui.autocomplete.filter(tags, request.term);
+                                response(results.slice(0, 10));
+                                console.log(results);
+                            }
+                        });
+                    } ); 
+                </script> 
                 <input type="submit" value="Pesquisar">
             </form>
         </ul>
         {% block content %}
         {% endblock %}
     </div>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 </html>
