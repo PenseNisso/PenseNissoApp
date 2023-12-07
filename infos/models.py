@@ -26,6 +26,12 @@ class Report(InfoBase):
         choices=[("RE", "Recusado"), ("NV", "Não verificado"), ("AP", "Aprovado")],
         default="NV",
     )
+    gravity = models.CharField(
+        max_length=20,
+        choices=[("1", "Leve"), ("2", "Moderada"), ("3", "Grave"), ("4", "Gravíssima")],
+        default="1",
+    )
+    date = models.DateField(default="1970-01-01")
 
 
 class ReportCategory(models.Model):

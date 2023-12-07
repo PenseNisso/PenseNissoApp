@@ -152,7 +152,7 @@ class ReportValidationTest(TestCase):
         )
 
     def test_validation_report_valid(self):
-        form = ValidateReportForm(data={"feedback": "1"})
+        form = ValidateReportForm(data={"feedback": "1", "gravity": "1"})
         form.is_valid()
         self.assertDictEqual(form.errors, {})
         print("Teste User-ReportValidation-4: Feedback enviado com sucesso.")
@@ -161,7 +161,7 @@ class ReportValidationTest(TestCase):
         self.client.login(username="Test Moderator", password="moderatorpassword")
         self.client.post(
             reverse("user:reportvalidation", args=[self.report.id]),
-            data={"feedback": "1"},
+            data={"feedback": "1", "gravity": "1"},
         )
         # check if the report's status was changed successfully
         self.report.refresh_from_db()
@@ -181,7 +181,7 @@ class ReportValidationTest(TestCase):
         self.client.login(username="Test Moderator", password="moderatorpassword")
         self.client.post(
             reverse("user:reportvalidation", args=[self.report.id]),
-            data={"feedback": "0"},
+            data={"feedback": "0", "gravity": "1"},
         )
         # check if the report's status was changed successfully
         self.report.refresh_from_db()
