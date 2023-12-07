@@ -34,7 +34,7 @@ class ReportFormView(FormView):
             category=data["category"],
             links=data["link"],
             company=data["company"],
-            user=current_user,
+            user=current_user if current_user.is_authenticated else None,
         )
 
         report.save()
