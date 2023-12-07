@@ -6,6 +6,7 @@ from django.http import HttpRequest, HttpResponse
 from django.views.generic import ListView
 
 from company.models import Company
+from .forms import FilterForm
 
 
 class SearchView(ListView):
@@ -55,3 +56,29 @@ class QueryView(SearchView):
 
 class ExplorerView(SearchView):
     template_name = "explorer.html"
+
+    def apply_filters(self, filters):
+        filter = Q()
+        for applied_filter in filters:
+            filter |= Q()
+        return filter
+
+    def get_queryset(self, filters):
+        # object_list = Company.objects.filter(self.apply_filters(filters))
+        object_list = Company.objects.all()
+        return object_list
+
+    def get_context_data(self, **kwargs: Any) -> "dict[str, Any]":
+        self.form = FilterForm()
+        context = super().get_context_data(**kwargs)
+        context["form"] = self.form
+        return context
+
+    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        form = FilterForm(request.GET)
+        form.is_valid()
+        self.object_list = self.get_queryset([])
+        context = self.get_context_data(**kwargs)
+        print(form.cleaned_data)
+        # context["query"] = query
+        return super().render_to_response(context)

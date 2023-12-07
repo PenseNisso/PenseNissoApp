@@ -9,6 +9,10 @@
             </h1>
         </div>
         <div>
+            {% block filter_box %}
+            {% endblock filter_box %}
+        </div>
+        <div>
             <ul>
                 {% for company in company_list %}
                     <li>
