@@ -13,7 +13,7 @@ class CompanyView(DetailView):
     template_name = "companies/company.html"
     model = Company
 
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+    def get_context_data(self, **kwargs: Any) -> "dict[str, Any]":
         context = super().get_context_data(**kwargs)
         context["score"] = self.get_object().compute_score()
         return context
