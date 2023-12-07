@@ -63,9 +63,10 @@ class ReportValidation(
     def form_valid(self, form: Any) -> HttpResponse:
         data = form.cleaned_data
         report = self.get_object()
+        report.gravity = data.get("gravity")
         if data.get("feedback") == "1":
             report.status = "AP"
         else:
             report.status = "RE"
-        report.save(update_fields=["status"])
+        report.save(update_fields=["status", "gravity"])
         return super().form_valid(form)

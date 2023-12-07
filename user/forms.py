@@ -18,6 +18,10 @@ class ValidateReportForm(forms.Form):
         label="Ação:",
         widget=forms.RadioSelect,
     )
+    gravity = forms.ChoiceField(
+        choices=(("1", "Leve"), ("2", "Moderada"), ("3", "Grave"), ("4", "Gravíssima")),
+        label="Gravidade:",
+    )
 
     class Meta:
-        fields = ("feedback",)
+        fields = ("feedback", "gravity")
