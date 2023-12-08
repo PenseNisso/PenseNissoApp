@@ -11,9 +11,9 @@
       <img class="w-20 h-20" src="{{company.logo.url}}" alt="Logo Empresa" />
       {% if user.is_authenticated %}
         {% if user in company.favorites.all %}
-        <button class="btn"><ion-icon class="text-yellow-700" name="star"></ion-icon>Favoritado</button>
+        <a class="btn" href="{% url "company:favorite" company.id%}"><ion-icon class="text-yellow-700" name="star"></ion-icon>Favoritada</a>
         {% else %}
-        <button class="btn"><ion-icon class="text-yellow-700" name="star-outline"></ion-icon>Favoritar</button>
+        <a class="btn" href="{% url "company:favorite" company.id%}"><ion-icon class="text-yellow-700" name="star-outline"></ion-icon>Favoritar</a>
         {% endif %} 
       {% else %}
       <a href="{% url 'user:register' %}" class="btn"><ion-icon class="text-yellow-700" name="star-outline"></ion-icon>Favoritar</a>
@@ -53,15 +53,8 @@
   </ul>
 </div>
 
-<div class="my-8 flex flex-row justify-around items-center">
-  <button class="py-4 px-2 w-30 flex flex-row items-center gap-2 bg-red-600 bg-opacity-60 rounded-[10px] text-lg font-bold" 
-          onclick="window.location.href = '{% url 'infos:report' %}'">
-    <ion-icon name="megaphone"></ion-icon> Denunciar
-  </button>
-  <button class="py-4 px-3 w-30 flex flex-row items-center gap-2 bg-blue-700 bg-opacity-20 rounded-[10px] text-lg font-bold" 
-          onclick="window.location.href = '{% url 'comparator:comparator' %}'">
-    <ion-icon name="git-compare"></ion-icon> Compare
-  </button>
+<div>
+  <button onclick="window.location.href = '{% url 'infos:report' %}'">Denunciar</button>
 </div>
 
 {% endblock %}

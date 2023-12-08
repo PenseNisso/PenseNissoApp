@@ -1,7 +1,7 @@
 from typing import Any
 
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import DetailView, ListView
 
 from infos.models import Lawsuit, News, Report
@@ -17,7 +17,15 @@ class CompanyView(DetailView):
         context = super().get_context_data(**kwargs)
         context["score"] = self.get_object().compute_score()
         return context
-    
+
+
+def favorite_company(request: HttpRequest, company_id: int) -> HttpResponse:
+    company = get_object_or_404(Company, pk=company_id)
+    if company in request.user.favorite_companies.all():
+        request.user.favorite_companies.remove(company)
+    else:
+        request.user.favorite_companies.add(company)
+    return redirect("company:company", pk=company_id)
 
 
 class InfosList(ListView):
