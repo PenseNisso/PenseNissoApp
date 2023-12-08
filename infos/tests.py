@@ -26,6 +26,7 @@ class ReportTestCase(TestCase):
             "link": "https://teste.com",
             "description": "teste teste",
             "contact_permission": True,
+            "date": "2023-03-09",
         }
         response = client.post("/info/report/", data=data)
         self.assertEqual(response.status_code, 200)
@@ -39,6 +40,7 @@ class ReportTestCase(TestCase):
                 "link": "https://teste.com",
                 "description": "teste teste",
                 "contact_permission": True,
+                "date": "2023-03-09",
             }
         )
         form.is_valid()
@@ -53,6 +55,7 @@ class ReportTestCase(TestCase):
                 "link": "https://teste.com",
                 "description": "teste teste",
                 "contact_permission": True,
+                "date": "2023-03-09",
             }
         )
         form.is_valid()
@@ -67,6 +70,7 @@ class ReportTestCase(TestCase):
                 "link": "https://a",
                 "description": "teste teste",
                 "contact_permission": True,
+                "date": "2023-03-09",
             }
         )
         form.is_valid()
@@ -81,11 +85,26 @@ class ReportTestCase(TestCase):
                 "link": "https://teste.com",
                 "description": "",
                 "contact_permission": True,
+                "date": "2023-03-09",
             }
         )
         form.is_valid()
         self.assertEquals(list(form.errors.keys())[0], "description")
         print("Teste Infos-Report-5: Descrição inválida negada com sucesso.")
+
+    def test_validation_date_in_form(self):
+        form = ReportForm(
+            data={
+                "company": self.company,
+                "category": self.category,
+                "link": "https://teste.com",
+                "description": "teste teste",
+                "contact_permission": True,
+            }
+        )
+        form.is_valid()
+        self.assertEquals(list(form.errors.keys())[0], "date")
+        print("Teste Infos-Report-6: Data inválida negada com sucesso.")
 
 
 class InfoDetailTestCase(TestCase):
