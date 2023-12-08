@@ -96,7 +96,6 @@ class ExplorerView(SearchView):
         form = FilterForm(request.GET)
         form.is_valid()
         filters = self.build_filters(form.cleaned_data)
-        print(filters)
         self.object_list = self.get_queryset(filters)
         context = self.get_context_data(**kwargs)
         return super().render_to_response(context)
