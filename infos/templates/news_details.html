@@ -1,2 +1,6 @@
+{% extends "info_details.html" %}
+
+{% block metadata %}
 <li>Data: {{ object.date|date:"d/m/Y" }}</li>
 <li>Por {{ object.author }}</li>
+{% endblock %}

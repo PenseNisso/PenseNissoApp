@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from company.models import Company
+from user.models import User
 
 from .forms import ReportForm
 from .models import Lawsuit, News, Report, ReportCategory
@@ -105,6 +106,19 @@ class ReportTestCase(TestCase):
         form.is_valid()
         self.assertEquals(list(form.errors.keys())[0], "date")
         print("Teste Infos-Report-6: Data inválida negada com sucesso.")
+
+    def test_report_linked_to_user(self):
+        user = User.objects.create_user(username="Test User", password="testpassword")
+        report = Report.objects.create(
+            title="Test Report",
+            content="Test Description",
+            company=self.company,
+            links="https://teste.com",
+            user=user,
+        )
+        user.refresh_from_db()
+        self.assertIn(report, user.reports_sent.all())
+        print("Teste Infos-Report-7: Denúncia associada ao usuário com sucesso.")
 
 
 class InfoDetailTestCase(TestCase):
