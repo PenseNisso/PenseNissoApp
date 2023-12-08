@@ -6,20 +6,21 @@
 {% endblock %}
 
 {% block content %}
-<header
-    class="min-h-screen bg-black bg-opacity-75 bg-blend-overlay showcase border-gray-600 border-b-8 flex justify-center items-center bg-no-repeat">
-    <div class="z-10 h-full py-32 md:py-0 text-gray-100 text-center flex items-center flex-col">
+<header class="my-28 flex justify-center items-center">
+    <div class="text-center flex items-center flex-col">
+        <h2 class="text-xl mb-6">Faça login para continuar</h2>
         <form method="post">
             {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Faça Login para continuar</legend>
-                {{ form|crispy }}
-            </fieldset>
-            <button class="bg-red-600 py-1 my-2 px-3 w-full text-white md:text-lg rounded-md" type="submit">Fazer
-                Login</button>
+            {{ form|crispy }}
+            <button
+                class="bg-blue-700 bg-opacity-30 py-1 px-3 font-semibold rounded-md cursor-pointer hover:scale-[1.035] mt-2"
+                type="submit">
+                Fazer Login
+            </button>
         </form>
-        <small>
-            Não tem uma conta ainda? <p><a href="{% url 'user:register' %}">Clique aqui para criar uma conta</a>
+        <small class="mt-4">
+            Não tem uma conta ainda?
+            <p><a href="{% url 'user:register' %}" class="underline text-blue-500">Clique aqui para criar uma conta</a>
             </p>
         </small>
     </div>
