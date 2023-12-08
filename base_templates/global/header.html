@@ -1,17 +1,18 @@
 <header>
-    <div class="navbar bg-base-100">
-    <div class="navbar-start">
-    <div class="drawer">
-    <input id="my-drawer" type="checkbox" class="drawer-toggle" />
-    <div class="drawer-content">
-    <!-- Page content here -->
-      <label for="my-drawer" class="btn btn-square btn-ghost">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-5 h-5 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-      </label>
-    </div> 
-    <div class="drawer-side z-10">
-      <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
-      <ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content gap-12">
+  <div class="navbar bg-base-100">
+  <div class="navbar-start">
+  <div class="drawer">
+  <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+  <div class="drawer-content">
+  <!-- Page content here -->
+    <label for="my-drawer" class="btn btn-square btn-ghost">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-5 h-5 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+    </label>
+  </div> 
+  <div class="drawer-side z-10">
+    <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+    <div class="menu p-4 w-80 min-h-full bg-base-200 text-base-content flex flex-col">
+      <div class="flex flex-col grow gap-12">
         <!-- Sidebar content here -->
         <button onclick="closeDrawer()" class="btn btn-square btn-ghost text-2xl font-bold">X</button>
         <li class="group text-2xl font-bold">
@@ -46,23 +47,45 @@
             before:transition before:ease-in-out before:duration-300"><ion-icon name="megaphone"></ion-icon> Denuncie</span>
           </a>
         </li>
-      </ul>
+      </div>
+      <div class="flex flex-col justify-end grow">
+        {% if user.is_authenticated %}
+        <li class="group text-2xl font-bold">
+          <a href="{% url 'user:profile' user.id %}">
+            <span class="group-hover:text-sky-700 relative before:content-[''] before:absolute before:block before:w-full before:h-[2px] 
+            before:bottom-0 before:left-0 before:bg-sky-700
+            before:group-hover:scale-x-100 before:scale-x-0 before:origin-top-left
+            before:transition before:ease-in-out before:duration-300"><ion-icon name="person-circle"></ion-icon> Seu perfil</span>
+          </a>
+        </li>
+        {% else %}
+        <li class="group text-xl font-bold">
+          <a href="{% url 'user:login' %}">
+            <span class="group-hover:text-sky-700 relative before:content-[''] before:absolute before:block before:w-full before:h-[2px] 
+            before:bottom-0 before:left-0 before:bg-sky-700
+            before:group-hover:scale-x-100 before:scale-x-0 before:origin-top-left
+            before:transition before:ease-in-out before:duration-300">Fazer login</span>
+          </a>
+        </li>
+        {% endif %}
+      </div>
     </div>
-    </div>
-  </div>  
-  <div class="navbar-center">
-    <a href="/" class="font-bold text-2xl">PenseNisso</a>
   </div>
-  <div class="navbar-end">
-    <button class="btn btn-square btn-ghost text-2xl">
-      <ion-icon name="volume-medium-outline"></ion-icon>
-    </button>
   </div>
+</div>  
+<div class="navbar-center">
+  <a href="/" class="font-bold text-2xl">PenseNisso</a>
+</div>
+<div class="navbar-end">
+  <button class="btn btn-square btn-ghost text-2xl">
+    <ion-icon name="volume-medium-outline"></ion-icon>
+  </button>
+</div>
 </div>
 </header>
 
 <script>
-  let closeDrawer = () => {
-    document.getElementById("my-drawer").checked = false;
-  }
+let closeDrawer = () => {
+  document.getElementById("my-drawer").checked = false;
+}
 </script>
