@@ -1,6 +1,7 @@
+import math
+
 from django.db import models
 from django.utils.timezone import now
-import math
 
 
 class Company(models.Model):

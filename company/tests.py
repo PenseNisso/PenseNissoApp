@@ -1,5 +1,8 @@
+from datetime import timedelta
+
 from django.test import TestCase
 from django.urls import reverse
+from django.utils.timezone import now
 
 from infos.models import Lawsuit, News, Report, ReportCategory
 
@@ -20,15 +23,15 @@ class CompanyModelTest(TestCase):
             links="https://teste.com",
             status="AP",
             gravity="1",
-            date="2023-09-09"
+            date=now() - timedelta(days=15),
         )
 
     def test_company_str(self):
         self.assertEqual(str(self.company), "Test Company")
         print("Teste Company-Model-1: Objeto criado com sucesso.")
-    
+
     def test_company_score(self):
-        self.assertEquals(self.company.compute_score(), 4.39)
+        self.assertEquals(self.company.compute_score(), 4.08)
         print("Teste Company-Model-2: Score calculado com sucesso")
 
     def test_update_company_score(self):
@@ -39,12 +42,11 @@ class CompanyModelTest(TestCase):
             links="https://teste.com",
             status="AP",
             gravity="4",
-            date="2018-09-27"
+            date=now() - timedelta(days=1200),
         )
-        self.assertEquals(self.company.compute_score(), 4.31)
+        self.assertEquals(self.company.compute_score(), 3.89)
         print("Teste Company-Model-3: Score atualizado com sucesso")
 
-        
 
 class CompanyViewTest(TestCase):
     def setUp(self):
