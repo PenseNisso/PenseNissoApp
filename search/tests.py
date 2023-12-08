@@ -131,12 +131,19 @@ class SearchTestCase(TestCase):
 
 class ExplorerTestCase(TestCase):
     def setUp(self) -> None:
-        Company.objects.create(name="Company 1")
-        Company.objects.create(name="Company 2")
-        Company.objects.create(name="Enterprise 1")
+        self.company_1 = Company.objects.create(name="Company 1")
+        self.company_2 = Company.objects.create(name="Company 2")
+        self.enterprise_1 = Company.objects.create(name="Enterprise 1")
         Company.objects.create(name="Enterprise 2")
         Company.objects.create(name="Factory 1")
         Company.objects.create(name="Factory X")
+        self.company_1.reports.create(title="Report1", content="", links="a.com")
+        self.company_2.news.create(
+            title="News1", content="", date="2023-01-01", author="M"
+        )
+        self.enterprise_1.lawsuits.create(
+            title="Lawsuit1", content="", source="a.com", start_year=2000
+        )
         self.companies = list(Company.objects.all())
         self.client = Client()
         return super().setUp()
@@ -167,3 +174,41 @@ class ExplorerTestCase(TestCase):
         self.assertEqual(response.context["company_list"].count(), 7)
         self.assertSequenceEqual(response.context["company_list"], self.companies)
         print("Teste Search-Explorer-4: Explorador atualizado com sucesso.")
+
+    def test_explorer_filter_report(self) -> None:
+        response = self.client.get(path="/search/explorer", data={"has_reports": "yes"})
+        self.assertEqual(response.context["company_list"].count(), 1)
+        self.assertSequenceEqual(response.context["company_list"], [self.company_1])
+        response = self.client.get(path="/search/explorer", data={"has_reports": "no"})
+        self.assertEqual(response.context["company_list"].count(), 5)
+        self.assertSequenceEqual(
+            response.context["company_list"],
+            [c for c in self.companies if c != self.company_1],
+        )
+        print("Teste Search-Explorer-5: Filtro aplicado com sucesso.")
+
+    def test_explorer_filter_news(self) -> None:
+        response = self.client.get(path="/search/explorer", data={"has_news": "yes"})
+        self.assertEqual(response.context["company_list"].count(), 1)
+        self.assertSequenceEqual(response.context["company_list"], [self.company_2])
+        response = self.client.get(path="/search/explorer", data={"has_news": "no"})
+        self.assertEqual(response.context["company_list"].count(), 5)
+        self.assertSequenceEqual(
+            response.context["company_list"],
+            [c for c in self.companies if c != self.company_2],
+        )
+        print("Teste Search-Explorer-6: Filtro aplicado com sucesso.")
+
+    def test_explorer_filter_lawsuit(self) -> None:
+        response = self.client.get(
+            path="/search/explorer", data={"has_lawsuits": "yes"}
+        )
+        self.assertEqual(response.context["company_list"].count(), 1)
+        self.assertSequenceEqual(response.context["company_list"], [self.enterprise_1])
+        response = self.client.get(path="/search/explorer", data={"has_lawsuits": "no"})
+        self.assertEqual(response.context["company_list"].count(), 5)
+        self.assertSequenceEqual(
+            response.context["company_list"],
+            [c for c in self.companies if c != self.enterprise_1],
+        )
+        print("Teste Search-Explorer-7: Filtro aplicado com sucesso.")

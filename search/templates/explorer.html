@@ -6,3 +6,11 @@
 
 {% block search_header %}
 {% endblock search_header %}
+
+{% block filter_box %}
+    <form action="{% url 'search:explorer' %}" method="get">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Aplicar filtros">
+    </form>
+{% endblock filter_box %}
