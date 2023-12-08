@@ -1,32 +1,67 @@
 {% extends "global/base.html" %} {% block title %} - Empresa {% endblock %}
 {%block content %}
 
-<div>
-  <h2>{{ company.name }}</h2>
-
-  {% if user.is_authenticated %} 
-    {% if user in company.favorites.all %}
-    <button class="btn-done">Favoritado</button>
-    {% else %}
-    <button class="btn-default">Favoritar</button>
-    {% endif %} 
-  {% endif %}
-  <p> Nota: {{ score }}</p>
+<div class="flex flex-column justify-center items-center bg-blue-600 text-white w-full h-10 text-center my-6">
+  <h1 class="text-2xl font-bold">{{ company.name }}</h1>
 </div>
 
-<img src="{{company.logo.url}}" alt="Logo Empresa" />
-<div class="description">
-  <h3>Descrição</h3>
+<div>
+  <div class="flex w-full mb-6">
+    <div class="flex flex-col items-center gap-4 place-items-center">
+      <img class="w-20 h-20" src="{{company.logo.url}}" alt="Logo Empresa" />
+      {% if user.is_authenticated %}
+        {% if user in company.favorites.all %}
+        <button class="btn"><ion-icon class="text-yellow-700" name="star"></ion-icon>Favoritado</button>
+        {% else %}
+        <button class="btn"><ion-icon class="text-yellow-700" name="star-outline"></ion-icon>Favoritar</button>
+        {% endif %} 
+      {% else %}
+      <a href="{% url 'user:register' %}" class="btn"><ion-icon class="text-yellow-700" name="star-outline"></ion-icon>Favoritar</a>
+      {% endif %}
+    </div>
+    <div class="mx-10 divider divider-horizontal"></div>
+    <div class="grid h-20 flex-grow place-items-center">
+      <div class="stat-title text-xl">Nota</div>
+      <div class="stat-value text-xl
+      {% if score > 3.75 %}
+       bg-green-400 
+      {% elif score > 2.5 %}
+       bg-yellow-400 
+      {% else %}
+       bg-red-400 
+      {% endif %}
+      bg-opacity-40 rounded-xl p-2">
+        {{score}}/5
+      </div>
+    </div>
+  </div>
+
+<div class="description px-4 py-2 w-80 bg-blue-700 bg-opacity-20 rounded-[10px] my-6">
+  <h3 class="flex flex-row items-center gap-2 text-lg font-bold"><ion-icon name="chatbox-ellipses"></ion-icon> Sobre a empresa</h3>
   <p>{{ company.description }}</p>
 </div>
+
+<div class="top-report px-4 py-2 w-80 bg-red-200 rounded-[10px] my-6">
+  <h3 class="flex flex-row items-center gap-2 text-lg font-bold"><ion-icon class="text-red-600" name="alert-circle"></ion-icon> Principal Denuncia</h3>
+</div>
+
 <div>
-  <ul class="infos-pages">
-    <li><a href="{% url 'company:reports' company.id %}">Denúncias</a></li>
-    <li><a href="{% url 'company:lawsuits' company.id %}">Processos</a></li>
-    <li><a href="{% url 'company:news' company.id %}">Notícias</a></li>
+  <ul class="my-8 infos-pages flex flex-row justify-around items-center">
+    <li><a href="{% url 'company:reports' company.id %}" class="btn">Denúncias</a></li>
+    <li><a href="{% url 'company:lawsuits' company.id %}" class="btn">Processos</a></li>
+    <li><a href="{% url 'company:news' company.id %}" class="btn">Notícias</a></li>
   </ul>
 </div>
-<div>
-  <button onclick="window.location.href = '{% url 'infos:report' %}'">Denunciar</button>
+
+<div class="my-8 flex flex-row justify-around items-center">
+  <button class="py-4 px-2 w-30 flex flex-row items-center gap-2 bg-red-600 bg-opacity-60 rounded-[10px] text-lg font-bold" 
+          onclick="window.location.href = '{% url 'infos:report' %}'">
+    <ion-icon name="megaphone"></ion-icon> Denunciar
+  </button>
+  <button class="py-4 px-3 w-30 flex flex-row items-center gap-2 bg-blue-700 bg-opacity-20 rounded-[10px] text-lg font-bold" 
+          onclick="window.location.href = '{% url 'comparator:comparator' %}'">
+    <ion-icon name="git-compare"></ion-icon> Compare
+  </button>
 </div>
+
 {% endblock %}
