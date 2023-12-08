@@ -38,6 +38,7 @@ class Report(InfoBase):
         default="1",
     )
     date = models.DateField(default="1970-01-01")
+    feedback = models.TextField(blank=True)
 
 
 class ReportCategory(models.Model):

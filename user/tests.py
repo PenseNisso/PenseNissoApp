@@ -152,16 +152,34 @@ class ReportValidationTest(TestCase):
         )
 
     def test_validation_report_valid(self):
-        form = ValidateReportForm(data={"feedback": "1", "gravity": "1"})
+        form = ValidateReportForm(data={"action": "1", "gravity": "1", "feedback": "."})
         form.is_valid()
         self.assertDictEqual(form.errors, {})
         print("Teste User-ReportValidation-4: Feedback enviado com sucesso.")
+
+    def test_validation_action_in_form(self):
+        form = ValidateReportForm(data={"gravity": "1", "feedback": "."})
+        form.is_valid()
+        self.assertIn("action", form.errors)
+        print("Teste User-ReportValidation-5: Ação inválida negada com sucesso.")
+
+    def test_validation_gravity_in_form(self):
+        form = ValidateReportForm(data={"action": "1", "feedback": "."})
+        form.is_valid()
+        self.assertIn("gravity", form.errors)
+        print("Teste User-ReportValidation-6: Gravidade inválida negada com sucesso.")
+
+    def test_validation_feedback_in_form(self):
+        form = ValidateReportForm(data={"action": "1", "gravity": "1"})
+        form.is_valid()
+        self.assertIn("feedback", form.errors)
+        print("Teste User-ReportValidation-6: Feedback inválido negada com sucesso.")
 
     def test_can_approve_report(self):
         self.client.login(username="Test Moderator", password="moderatorpassword")
         self.client.post(
             reverse("user:reportvalidation", args=[self.report.id]),
-            data={"feedback": "1", "gravity": "1"},
+            data={"action": "1", "gravity": "1", "feedback": "."},
         )
         # check if the report's status was changed successfully
         self.report.refresh_from_db()
@@ -175,13 +193,13 @@ class ReportValidationTest(TestCase):
             self.report,
             response.context.get("infos"),
         )
-        print("Teste User-ReportValidation-5: Denúncia aprovada com sucesso.")
+        print("Teste User-ReportValidation-8: Denúncia aprovada com sucesso.")
 
     def test_can_deny_report(self):
         self.client.login(username="Test Moderator", password="moderatorpassword")
         self.client.post(
             reverse("user:reportvalidation", args=[self.report.id]),
-            data={"feedback": "0", "gravity": "1"},
+            data={"action": "0", "gravity": "1", "feedback": "."},
         )
         # check if the report's status was changed successfully
         self.report.refresh_from_db()
@@ -195,4 +213,4 @@ class ReportValidationTest(TestCase):
             self.report,
             response.context.get("infos"),
         )
-        print("Teste User-ReportValidation-6: Denúncia recusada com sucesso.")
+        print("Teste User-ReportValidation-9: Denúncia recusada com sucesso.")

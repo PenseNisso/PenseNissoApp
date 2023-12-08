@@ -13,15 +13,16 @@ class CreateUserForm(UserCreationForm):
 
 
 class ValidateReportForm(forms.Form):
-    feedback = forms.ChoiceField(
-        choices=(("1", "Aprovar"), ("0", "Recusar")),
-        label="Ação:",
-        widget=forms.RadioSelect,
-    )
     gravity = forms.ChoiceField(
         choices=(("1", "Leve"), ("2", "Moderada"), ("3", "Grave"), ("4", "Gravíssima")),
         label="Gravidade:",
     )
+    action = forms.ChoiceField(
+        choices=(("1", "Aprovar"), ("0", "Recusar")),
+        label="Ação:",
+        widget=forms.RadioSelect,
+    )
+    feedback = forms.CharField(label="Feedback:", widget=forms.Textarea)
 
     class Meta:
-        fields = ("feedback", "gravity")
+        fields = ("gravity", "action", "feedback")
