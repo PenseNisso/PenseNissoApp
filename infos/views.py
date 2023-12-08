@@ -42,15 +42,13 @@ class ReportFormView(FormView):
 
 
 class InfoStrategy(DetailView):
-    template_name = "info_details.html"
     info_type = ""
-    template_content = ""
 
     def get_context_data(self, **kwargs: Any) -> "dict[str, Any]":
         context = super().get_context_data(**kwargs)
-        context["info_type"] = self.info_type
-        context["info_title"] = self.get_info_title()
-        context["template_content"] = self.template_content
+        context.update(
+            {"info_type": self.info_type, "info_title": self.get_info_title()}
+        )
         return context
 
     def get_info_title(self):
@@ -60,7 +58,7 @@ class InfoStrategy(DetailView):
 class ReportStrategy(InfoStrategy):
     model = Report
     info_type = "Denúncia"
-    template_content = "report_details.html"
+    template_name = "report_details.html"
 
     def get_info_title(self):
         return self.get_object().category
@@ -74,7 +72,7 @@ class ReportStrategy(InfoStrategy):
 class NewsStrategy(InfoStrategy):
     model = News
     info_type = "Notícia"
-    template_content = "news_details.html"
+    template_name = "news_details.html"
 
     def get_info_title(self):
         return self.get_object().title
@@ -83,7 +81,7 @@ class NewsStrategy(InfoStrategy):
 class LawsuitStrategy(InfoStrategy):
     model = Lawsuit
     info_type = "Processo"
-    template_content = "lawsuit_details.html"
+    template_name = "lawsuit_details.html"
 
     def get_info_title(self):
         return self.get_object().title
