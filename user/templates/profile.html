@@ -16,6 +16,12 @@
     <li><a href="{% url 'company:company' company.pk %}">{{ company.name }}</a></li>
     {% endfor %}
 </ul>
+<p><strong>Denúncias enviadas:</strong></p>
+<ul>
+    {% for report in object.reports_sent.all %}
+    <li><a href="{% url 'infos:reportdetail' report.pk %}">{{ report.title }}</a></li>
+    {% endfor %}
+</ul>
 <a href="{% url 'user:logout' %}">
     <button>
         Sair da Conta

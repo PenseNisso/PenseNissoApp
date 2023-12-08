@@ -19,7 +19,11 @@ class Report(InfoBase):
     category = models.ForeignKey("ReportCategory", on_delete=models.SET_NULL, null=True)
     links = models.TextField()
     user = models.ForeignKey(
-        "user.User", on_delete=models.SET_NULL, null=True, blank=True
+        "user.User",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="reports_sent",
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -34,6 +38,7 @@ class Report(InfoBase):
         default="1",
     )
     date = models.DateField(default="1970-01-01")
+    feedback = models.TextField(blank=True)
 
 
 class ReportCategory(models.Model):

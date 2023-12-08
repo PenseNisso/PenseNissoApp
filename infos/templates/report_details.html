@@ -1,4 +1,29 @@
+{% extends "info_details.html" %}
 {% load info_extras %}
 
-<li><strong>Data: </strong>{{ object.created_at|date:"d/m/Y" }}</li>
+{% block metadata %}
+<li><strong>Data: </strong>{{ object.date|date:"d/m/Y" }}</li>
 <li><strong>Fonte(s): </strong>{{ object.links|join:", "|urlize|url_fix }}</li>
+{% endblock %}
+
+{% block extra %}
+{% if report.user and report.user == user %}
+<div class="divider"></div>
+
+<p>
+    <strong>Status: </strong>
+    {% if report.status == "AP" %}
+    Aprovado &#9989;
+    {% elif report.status == "RE" %}
+    Recusado &#10060;
+    {% else %}
+    Aguardando Validação
+    {% endif %}
+</p>
+
+{% if report.status == "RE" %}
+<p><strong>Feedback dos moderadores: </strong>{{ report.feedback }}</p>
+{% endif %}
+
+{% endif %}
+{% endblock %}

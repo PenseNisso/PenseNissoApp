@@ -1,11 +1,14 @@
 from typing import Any
 
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.db.models.query import QuerySet
 from django.http import HttpRequest, HttpResponse
 from django.views.generic import ListView
 
 from company.models import Company
+
+from .filters import AbstractFilter, BooleanFilter, TextFilter
+from .forms import FilterForm
 
 
 class SearchView(ListView):
@@ -55,3 +58,44 @@ class QueryView(SearchView):
 
 class ExplorerView(SearchView):
     template_name = "explorer.html"
+
+    def apply_filters(self, filters: "list[AbstractFilter]"):
+        filter = Q()
+        for applied_filter in filters:
+            filter &= applied_filter.get_q()
+        return filter
+
+    def build_filters(self, data: dict) -> "list[Q]":
+        filters = []
+        for d in data:
+            if "has_report" in d:
+                filters.append(BooleanFilter(type="reports", value=data[d]))
+            elif "has_lawsuit" in d:
+                filters.append(BooleanFilter(type="lawsuits", value=data[d]))
+            elif "has_news" in d:
+                filters.append(BooleanFilter(type="news", value=data[d]))
+        return filters
+
+    def get_queryset(self, filters):
+        object_list = (
+            Company.objects.annotate(count_reports=Count("reports"))
+            .annotate(count_lawsuits=Count("lawsuits"))
+            .annotate(count_news=Count("news"))
+            .filter(self.apply_filters(filters))
+        )
+
+        return object_list
+
+    def get_context_data(self, **kwargs: Any) -> "dict[str, Any]":
+        self.form = FilterForm()
+        context = super().get_context_data(**kwargs)
+        context["form"] = self.form
+        return context
+
+    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        form = FilterForm(request.GET)
+        form.is_valid()
+        filters = self.build_filters(form.cleaned_data)
+        self.object_list = self.get_queryset(filters)
+        context = self.get_context_data(**kwargs)
+        return super().render_to_response(context)
