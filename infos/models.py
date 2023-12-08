@@ -18,7 +18,13 @@ class Report(InfoBase):
     )
     category = models.ForeignKey("ReportCategory", on_delete=models.SET_NULL, null=True)
     links = models.TextField()
-    user = models.ForeignKey("user.User", on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(
+        "user.User",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="reports_sent",
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(
