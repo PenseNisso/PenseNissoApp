@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="w-full text-justify space-y-1">
+<div class="w-full text-justify space-y-1 mt-4">
     <h2 class="text-2xl font-bold">{{ report.title }}</h2>
     <p><strong>Empresa envolvida: </strong>{{ report.company }}</p>
     <p><strong>Categoria da denúncia: </strong>{{ report.category }}</p>
@@ -18,9 +18,10 @@
 
 <div class="divider"></div>
 
-<form method="post">
+<form method="post" class="flex flex-col mb-6">
     {% csrf_token %}
     {{ form|crispy }}
-    <input type="submit" value="Enviar feedback" class="btn normal-case bg-slate-300">
+    <input type="submit" value="Enviar feedback"
+        class="bg-blue-700 bg-opacity-30 py-1 px-3 font-semibold rounded-md cursor-pointer hover:scale-[1.035] mt-2">
 </form>
 {% endblock %}
