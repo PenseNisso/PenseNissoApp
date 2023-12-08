@@ -7,7 +7,7 @@ from django.views.generic import ListView
 
 from company.models import Company
 
-from .filters import BooleanFilter, TextFilter, AbstractFilter
+from .filters import AbstractFilter, BooleanFilter, TextFilter
 from .forms import FilterForm
 
 
