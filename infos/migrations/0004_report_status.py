@@ -4,15 +4,22 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('infos', '0003_lawsuit'),
+        ("infos", "0003_lawsuit"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='report',
-            name='status',
-            field=models.CharField(choices=[('RE', 'Recusado'), ('NV', 'Não verificado'), ('AP', 'Aprovado')], default='NV', max_length=20),
+            model_name="report",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    ("RE", "Recusado"),
+                    ("NV", "Não verificado"),
+                    ("AP", "Aprovado"),
+                ],
+                default="NV",
+                max_length=20,
+            ),
         ),
     ]

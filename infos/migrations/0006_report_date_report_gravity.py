@@ -4,20 +4,28 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('infos', '0005_merge_0004_alter_report_user_0004_report_status'),
+        ("infos", "0005_merge_0004_alter_report_user_0004_report_status"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='report',
-            name='date',
-            field=models.DateField(default='1970-01-01'),
+            model_name="report",
+            name="date",
+            field=models.DateField(default="1970-01-01"),
         ),
         migrations.AddField(
-            model_name='report',
-            name='gravity',
-            field=models.CharField(choices=[('1', 'Leve'), ('2', 'Moderada'), ('3', 'Grave'), ('4', 'Gravíssima')], default='1', max_length=20),
+            model_name="report",
+            name="gravity",
+            field=models.CharField(
+                choices=[
+                    ("1", "Leve"),
+                    ("2", "Moderada"),
+                    ("3", "Grave"),
+                    ("4", "Gravíssima"),
+                ],
+                default="1",
+                max_length=20,
+            ),
         ),
     ]

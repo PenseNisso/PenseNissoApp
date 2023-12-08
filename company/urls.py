@@ -1,6 +1,7 @@
 from django.urls import path
 
-from .views import CompanyView, LawsuitsList, NewsList, ReportsList, favorite_company
+from .views import (CompanyView, LawsuitsList, NewsList, ReportsList,
+                    favorite_company)
 
 app_name = "company"
 urlpatterns = [

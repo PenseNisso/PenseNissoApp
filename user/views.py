@@ -1,6 +1,7 @@
 from typing import Any
 
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import (LoginRequiredMixin,
+                                        PermissionRequiredMixin)
 from django.http import HttpResponse
 from django.shortcuts import reverse
 from django.views.generic import DetailView, FormView, ListView
