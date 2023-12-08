@@ -1,4 +1,7 @@
+{% extends "info_details.html" %}
 {% load info_extras %}
 
-<li><strong>Data: </strong>{{ object.created_at|date:"d/m/Y" }}</li>
+{% block metadata %}
+<li><strong>Data: </strong>{{ object.date|date:"d/m/Y" }}</li>
 <li><strong>Fonte(s): </strong>{{ object.links|join:", "|urlize|url_fix }}</li>
+{% endblock %}
