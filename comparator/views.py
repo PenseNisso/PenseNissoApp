@@ -1,6 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views import View
-from django.shortcuts import redirect
 
 from company.models import Company
 

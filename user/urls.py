@@ -1,13 +1,8 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 
-from .views import (
-    ListaUsuarios,
-    PendingReportList,
-    Register,
-    ReportValidation,
-    UserPage,
-)
+from .views import (ListaUsuarios, PendingReportList, Register,
+                    ReportValidation, UserPage)
 
 app_name = "user"
 

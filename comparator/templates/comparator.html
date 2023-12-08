@@ -19,10 +19,21 @@
                   <div class="flex w-full items-center">
                     <div class="grid h-20 flex-grow place-items-center">
                         <div class="stat-title text-xl">Nota</div>
-                        <a href="{% url 'company:company' company.id %}" class="stat-value btn text-xl bg-yellow-400 hover:bg-yellow-500 bg-opacity-40 rounded-xl p-2">2,7/5,0 →</a>
+                        <a href="{% url 'company:company' company.id %}" 
+                          class="stat-value btn text-xl
+                          {% if company.compute_score > 3.75 %}
+                          bg-green-400 hover:bg-green-500
+                          {% elif company.compute_score > 2.5 %}
+                          bg-yellow-400 hover:bg-yellow-500  
+                          {% else %}
+                          bg-red-400 hover:bg-red-500
+                          {% endif %} 
+                          bg-opacity-40 hover:bg-opacity-60 rounded-xl p-2">
+                          {{company.compute_score}}/5,0 →
+                        </a>
                     </div>
                     <div class="divider divider-horizontal"></div>
-                    <a href="{% url 'company:company' company.id%}" class="grid btn hover:bg-red-300 justify-items-center h-16 flex-grow card bg-red-200 rounded-box place-items-center text-l">
+                    <a href="{% url 'company:reports' company.id%}" class="grid btn hover:bg-red-300 justify-items-center h-16 flex-grow card bg-red-200 rounded-box place-items-center text-l">
                         Ver Denúncias →
                     </a>
                   </div>
@@ -65,7 +76,7 @@
   </form>
 </dialog>
 
-<button onclick="my_modal_3.showModal()" class="fixed bottom-5 right-5 btn btn-primary btn-circle">
+<button onclick="my_modal_3.showModal()" class="fixed bottom-5 right-5 btn btn-primary  btn-circle">
   <span class="text-2xl">+</span>
 </button> 
 {% endblock content %}

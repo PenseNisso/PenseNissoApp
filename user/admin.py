@@ -3,10 +3,15 @@ from django.contrib.auth.admin import UserAdmin
 
 from .models import User
 
-# Include "favorite_companies" field in admin view.
-fields = list(UserAdmin.fieldsets)
-fields.append(("Empresas favoritas:", {"fields": ("favorite_companies",)}))
-UserAdmin.fieldsets = tuple(fields)
 
-# Register your models here.
-admin.site.register(User, UserAdmin)
+class CompaniesInline(admin.TabularInline):
+    model = User.favorite_companies.through
+    extra = 1
+
+
+@admin.register(User)
+class CustomUserAdmin(UserAdmin):
+    inlines = (CompaniesInline,)
+    base_fields = list(UserAdmin.fieldsets)
+    base_fields.append(("Empresas favoritas:", {"fields": ("favorite_companies",)}))
+    fieldsets = tuple(base_fields)
