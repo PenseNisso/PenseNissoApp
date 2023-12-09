@@ -3,7 +3,7 @@ from typing import Any
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import reverse
-from django.views.generic import DetailView, FormView, ListView
+from django.views.generic import DetailView, FormView, ListView, UpdateView
 
 from infos.models import Report
 
@@ -71,3 +71,12 @@ class ReportValidation(
         report.feedback = data.get("feedback")
         report.save(update_fields=["status", "gravity", "feedback"])
         return super().form_valid(form)
+
+
+class EditProfile(LoginRequiredMixin, UpdateView):
+    template_name = "edit_profile.html"
+    model = User
+    fields = ["first_name", "last_name", "username", "email"]
+
+    def get_success_url(self) -> str:
+        return reverse("user:profile", args=[self.request.user.id])
