@@ -1,5 +1,5 @@
-from django.contrib.auth.views import LoginView, LogoutView
-from django.urls import path
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
+from django.urls import path, reverse_lazy
 
 from .views import (
     ListaUsuarios,
@@ -26,5 +26,13 @@ urlpatterns = [
         "moderation/pending_reports/<int:pk>",
         ReportValidation.as_view(),
         name="reportvalidation",
+    ),
+    path(
+        "changepassword",
+        PasswordChangeView.as_view(
+            template_name="password_change.html",
+            success_url=reverse_lazy("user:login"),
+        ),
+        name="changepassword",
     ),
 ]
