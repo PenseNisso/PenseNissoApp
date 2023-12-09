@@ -2,27 +2,29 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-- PenseNisso - Fazer Login
+- Fazer Login
 {% endblock %}
 
 {% block content %}
-<header class="my-28 flex justify-center items-center">
-    <div class="text-center flex items-center flex-col">
-        <h2 class="text-xl mb-6">Faça login para continuar</h2>
+<div class="min-h-screen absolute bottom-0 flex justify-center items-center">
+    <div class="h-full text-center flex items-center flex-col self-center">
         <form method="post">
             {% csrf_token %}
-            {{ form|crispy }}
-            <button
-                class="bg-blue-700 bg-opacity-30 py-1 px-3 font-semibold rounded-md cursor-pointer hover:scale-[1.035] mt-2"
-                type="submit">
-                Fazer Login
-            </button>
+            <fieldset class="form-group">
+                <legend class="text-xl mb-6 border-b-2 border-black w-full text-center">
+                    Faça Login para continuar
+                </legend>
+                {{ form|crispy }}
+            </fieldset>
+            <input type="submit" value="Fazer Login"
+                class="bg-blue-700 bg-opacity-30 w-full py-1.5 px-3 font-semibold rounded-md cursor-pointer hover:scale-[1.035] mt-2">
         </form>
         <small class="mt-4">
             Não tem uma conta ainda?
-            <p><a href="{% url 'user:register' %}" class="underline text-blue-500">Clique aqui para criar uma conta</a>
+            <p>
+                <a href="{% url 'user:register' %}" class="underline text-blue-500">Clique aqui para criar uma conta</a>
             </p>
         </small>
     </div>
-</header>
+</div>
 {% endblock %}

@@ -5,16 +5,22 @@
 {% endblock %}
 
 {% block content %}
-<div class="my-32 flex justify-center items-center">
-    <div class="text-center flex items-center flex-col">
-        <h2 class="text-2xl mb-3">Você saiu da sua conta</h2>
-        <div class="flex flex-nowrap justify-center space-x-5 p-5">
-            <a href="{% url 'user:login' %}"><button
-                    class="bg-blue-700 bg-opacity-30 py-1 px-3 font-semibold rounded-md hover:scale-[1.035]">Fazer
-                    Login</button></a>
-            <a href="{% url 'user:register' %}"><button
-                    class="bg-blue-700 bg-opacity-30 py-1 px-3 font-semibold rounded-md hover:scale-[1.035]">Criar uma
-                    Conta</button></a>
+<div class="min-h-screen absolute bottom-0 flex justify-center items-center">
+    <div class="h-full flex justify-center items-center">
+        <div class="text-center flex items-center flex-col">
+            <h2 class="text-2xl">Você saiu da sua conta</h2>
+            <div class="flex flex-nowrap justify-center space-x-5 p-12">
+                <a href="{% url 'user:login' %}">
+                    <button class="bg-blue-700 bg-opacity-30 py-1.5 px-3 font-semibold rounded-md hover:scale-[1.035]">
+                        Fazer Login
+                    </button>
+                </a>
+                <a href="{% url 'user:register' %}">
+                    <button class="bg-blue-700 bg-opacity-30 py-1.5 px-3 font-semibold rounded-md hover:scale-[1.035]">
+                        Criar uma Conta
+                    </button>
+                </a>
+            </div>
         </div>
     </div>
 </div>
