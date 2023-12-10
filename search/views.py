@@ -1,6 +1,6 @@
 from typing import Any
 
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Value
 from django.db.models.query import QuerySet
 from django.http import HttpRequest, HttpResponse
 from django.views.generic import ListView
@@ -8,7 +8,7 @@ from django.views.generic import ListView
 from company.models import Company
 
 from .filters import AbstractFilter, BooleanFilter, TextFilter
-from .forms import FilterForm
+from .forms import FilterForm, SortingForm
 
 
 class SearchView(ListView):
@@ -76,26 +76,47 @@ class ExplorerView(SearchView):
                 filters.append(BooleanFilter(type="news", value=data[d]))
         return filters
 
-    def get_queryset(self, filters):
+    def apply_sorting(self, set, option: str):
+        if option == "alphabetical_descending":
+            set = set.order_by("-name")
+        elif option == "most_reports":
+            set = set.order_by("-count_reports")
+        elif option == "least_reports":
+            set = set.order_by("count_reports")
+        elif option == "highest_score":
+            set = sorted(set, key=lambda company: company.compute_score(), reverse=True)
+        elif option == "lowest_score":
+            set = sorted(set, key=lambda company: company.compute_score())
+        else:
+            set = set.order_by("name")
+        return set
+
+    def get_queryset(self, filters, sorting_option):
         object_list = (
             Company.objects.annotate(count_reports=Count("reports"))
             .annotate(count_lawsuits=Count("lawsuits"))
             .annotate(count_news=Count("news"))
             .filter(self.apply_filters(filters))
         )
-
-        return object_list
+        return self.apply_sorting(object_list, sorting_option)
 
     def get_context_data(self, **kwargs: Any) -> "dict[str, Any]":
-        self.form = FilterForm()
+        self.form_filter = FilterForm()
+        self.form_sorting = SortingForm()
         context = super().get_context_data(**kwargs)
-        context["form"] = self.form
+        context["form_filter"] = self.form_filter
+        context["form_sorting"] = self.form_sorting
+        context["company_list"] = self.object_list
         return context
 
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        form = FilterForm(request.GET)
-        form.is_valid()
-        filters = self.build_filters(form.cleaned_data)
-        self.object_list = self.get_queryset(filters)
+        form_filter = FilterForm(request.GET)
+        form_sorting = SortingForm(request.GET)
+        form_filter.is_valid()
+        form_sorting.is_valid()
+        filters = self.build_filters(form_filter.cleaned_data)
+        self.object_list = self.get_queryset(
+            filters=filters, sorting_option=form_sorting.cleaned_data["sorting"]
+        )
         context = self.get_context_data(**kwargs)
         return super().render_to_response(context)

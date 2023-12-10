@@ -137,14 +137,21 @@ class ExplorerTestCase(TestCase):
         Company.objects.create(name="Enterprise 2")
         Company.objects.create(name="Factory 1")
         Company.objects.create(name="Factory X")
-        self.company_1.reports.create(title="Report1", content="", links="a.com")
+        self.company_1.reports.create(
+            title="Report1",
+            content="",
+            links="a.com",
+            date="2023-01-01",
+            gravity="4",
+            status="AP",
+        )
         self.company_2.news.create(
             title="News1", content="", date="2023-01-01", author="M"
         )
         self.enterprise_1.lawsuits.create(
             title="Lawsuit1", content="", source="a.com", start_year=2000
         )
-        self.companies = list(Company.objects.all())
+        self.companies = list(Company.objects.all().order_by("name"))
         self.client = Client()
         return super().setUp()
 
@@ -170,6 +177,7 @@ class ExplorerTestCase(TestCase):
         response = self.client.get(path="/search/explorer")
         self.assertEqual(response.context["company_list"].count(), 6)
         self.companies.append(Company.objects.create(name="Factory T"))
+        self.companies.sort(key=lambda company: company.name)
         response = self.client.get(path="/search/explorer")
         self.assertEqual(response.context["company_list"].count(), 7)
         self.assertSequenceEqual(response.context["company_list"], self.companies)
@@ -212,3 +220,81 @@ class ExplorerTestCase(TestCase):
             [c for c in self.companies if c != self.enterprise_1],
         )
         print("Teste Search-Explorer-7: Filtro aplicado com sucesso.")
+
+    def test_explorer_sorting_default(self) -> None:
+        response = self.client.get(path="/search/explorer")
+        company_list = list(response.context["company_list"])
+        self.assertTrue(
+            all(
+                company_list[i].name <= company_list[i + 1].name
+                for i in range(len(company_list) - 1)
+            )
+        )
+        print("Teste Search-Explorer-8: Ordenação aplicada com sucesso.")
+
+    def test_explorer_sorting_alphabetical_descending(self) -> None:
+        response = self.client.get(
+            path="/search/explorer", data={"sorting": "alphabetical_descending"}
+        )
+        company_list = list(response.context["company_list"])
+        self.assertTrue(
+            all(
+                company_list[i].name >= company_list[i + 1].name
+                for i in range(len(company_list) - 1)
+            )
+        )
+        print("Teste Search-Explorer-9: Ordenação aplicada com sucesso.")
+
+    def test_explorer_sorting_most_reports(self) -> None:
+        response = self.client.get(
+            path="/search/explorer", data={"sorting": "most_reports"}
+        )
+        company_list = list(response.context["company_list"])
+        self.assertTrue(
+            all(
+                company_list[i].reports.count() >= company_list[i + 1].reports.count()
+                for i in range(len(company_list) - 1)
+            )
+        )
+        print("Teste Search-Explorer-10: Ordenação aplicada com sucesso.")
+
+    def test_explorer_sorting_least_reports(self) -> None:
+        response = self.client.get(
+            path="/search/explorer", data={"sorting": "least_reports"}
+        )
+        company_list = list(response.context["company_list"])
+        self.assertTrue(
+            all(
+                company_list[i].reports.count() <= company_list[i + 1].reports.count()
+                for i in range(len(company_list) - 1)
+            )
+        )
+        print("Teste Search-Explorer-11: Ordenação aplicada com sucesso.")
+
+    def test_explorer_sorting_highest_score(self) -> None:
+        response = self.client.get(
+            path="/search/explorer", data={"sorting": "highest_score"}
+        )
+        company_list = list(response.context["company_list"])
+        self.assertTrue(
+            all(
+                company_list[i].compute_score() >= company_list[i + 1].compute_score()
+                for i in range(len(company_list) - 1)
+            )
+        )
+        print("Teste Search-Explorer-12: Ordenação aplicada com sucesso.")
+
+    def test_explorer_sorting_lowest_score(self) -> None:
+        response = self.client.get(
+            path="/search/explorer", data={"sorting": "lowest_score"}
+        )
+        company_list = list(response.context["company_list"])
+        self.assertTrue(
+            all(
+                company_list[i].compute_score() <= company_list[i + 1].compute_score()
+                for i in range(len(company_list) - 1)
+            )
+        )
+
+        print([(c.compute_score(), c.name, c.reports.all()) for c in company_list])
+        print("Teste Search-Explorer-13: Ordenação aplicada com sucesso.")

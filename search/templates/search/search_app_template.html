@@ -1,7 +1,7 @@
 {% extends "global/base.html" %}
 
 {% block content %}
-    <center>
+    <center class="flex flex-col space-y-4">
         <div class="search">
             <h1>
                 {% block search_header %}
@@ -12,6 +12,9 @@
             {% block filter_box %}
             {% endblock filter_box %}
         </div>
+        <div>
+            <hr>
+        <div>
         <div>
             <ul>
                 {% for company in company_list %}
