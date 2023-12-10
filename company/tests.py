@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.utils.timezone import now
 
 from infos.models import Lawsuit, News, Report, ReportCategory
+from user.models import User
 
 from .models import Company
 
@@ -55,6 +56,8 @@ class CompanyViewTest(TestCase):
             description="Test Description",
             logo="company/logo/21/09/16/test_logo.png",
         )
+        self.user = User.objects.create_user(username="testuser", password="12345")
+        login = self.client.login(username="testuser", password="12345")
 
     def test_company_view_status_code(self):
         response = self.client.get(reverse("company:company", args=[self.company.id]))
@@ -70,6 +73,23 @@ class CompanyViewTest(TestCase):
         response = self.client.get(reverse("company:company", args=[self.company.id]))
         self.assertEqual(response.context["company"], self.company)
         print("Teste Company-View-3: Variáveis de contexto verificadas com sucesso.")
+
+    def test_user_favorite_company(self):
+        response = self.client.post(
+            reverse("company:favorite", args=[self.company.id]),
+            {"company": self.company.id},
+        )
+        self.assertIn(self.company, self.user.favorite_companies.all())
+        print("Teste Company-View-4: Empresa favoritada com sucesso.")
+
+    def test_user_defavorite_company(self):
+        self.user.favorite_companies.add(self.company)
+        response = self.client.post(
+            reverse("company:favorite", args=[self.company.id]),
+            {"company": self.company.id},
+        )
+        self.assertNotIn(self.company, self.user.favorite_companies.all())
+        print("Teste Company-View-5: Empresa desfavoritada com sucesso.")
 
 
 class InfoListTest(TestCase):

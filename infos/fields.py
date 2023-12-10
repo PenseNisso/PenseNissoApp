@@ -1,5 +1,6 @@
-from company.models import Company
 from django.forms import ModelChoiceField
+
+from company.models import Company
 
 from .models import ReportCategory
 
