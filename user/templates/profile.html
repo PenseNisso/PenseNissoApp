@@ -5,26 +5,66 @@
 {% endblock %}
 
 {% block content %}
-<h1>Seu perfil</h1>
-<p><strong>Primeiro nome: </strong>{{ object.firstname }}</p>
-<p><strong>Último nome: </strong>{{ object.lastname }}</p>
-<p><strong>Username: </strong>{{ object.username }}</p>
-<p><strong>Email: </strong>{{ object.email }}</p>
-<p><strong>Empresas favoritas:</strong></p>
-<ul>
-    {% for company in object.favorite_companies.all %}
-    <li><a href="{% url 'company:company' company.pk %}">{{ company.name }}</a></li>
-    {% endfor %}
-</ul>
-<p><strong>Denúncias enviadas:</strong></p>
-<ul>
-    {% for report in object.reports_sent.all %}
-    <li><a href="{% url 'infos:reportdetail' report.pk %}">{{ report.title }}</a></li>
-    {% endfor %}
-</ul>
-<a href="{% url 'user:logout' %}">
-    <button>
-        Sair da Conta
-    </button>
-</a>
+<div class="bg-blue-600 text-white w-full text-center my-6 py-1">
+    <h1 class="text-2xl font-bold">Perfil de Usuário</h1>
+</div>
+
+<div class="w-11/12 flex flex-row">
+    <div class="w-full flex flex-col space-y-8 justify-start">
+        <div>
+            <h2 class="text-xl font-bold mb-1.5">Informações do Usuário</h2>
+            <ul>
+                <li><strong>Nome: </strong>{{ object.first_name }}</li>
+                <li><strong>Sobrenome: </strong>{{ object.last_name }}</li>
+                <li><strong>Username: </strong>{{ object.username }}</li>
+                <li><strong>Email: </strong>{{ object.email }}</li>
+            </ul>
+        </div>
+
+        <div>
+            <h2 class="text-xl font-bold mb-1.5">Empresas favoritas</h2>
+            {% if request.user.favorite_companies.count > 0 %}
+            <ul>
+                {% for company in object.favorite_companies.all %}
+                <li><a class="underline text-blue-500 visited:text-purple-600"
+                        href="{% url 'company:company' company.pk %}">{{ company.name }}</a></li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-sm">Você ainda não favoritou nenhuma empresa.</p>
+            {% endif %}
+        </div>
+
+        <div>
+            <h2 class="text-xl font-bold mb-1.5">Denúncias enviadas</h2>
+            {% if request.user.reports_sent.count > 0 %}
+            <ul>
+                {% for report in object.reports_sent.all %}
+                <li><a class="underline text-blue-500 visited:text-purple-600"
+                        href="{% url 'infos:reportdetail' report.pk %}">{{ report.title }}</a></li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-sm">Você ainda não enviou nenhum denúncia.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if user == request.user %}
+    <div class="w-1/5 flex flex-col space-y-8">
+        <a href="{% url 'user:editprofile' request.user.id %}">
+            <button
+                class="bg-blue-700 bg-opacity-30 w-full py-1.5 px-3 font-semibold rounded-md cursor-pointer hover:scale-[1.035]">
+                Editar Perfil
+            </button>
+        </a>
+        <a href="{% url 'user:logout' %}">
+            <button
+                class="bg-blue-700 bg-opacity-30 w-full py-1.5 px-3 font-semibold rounded-md cursor-pointer hover:scale-[1.035]">
+                Sair da Conta
+            </button>
+        </a>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}
