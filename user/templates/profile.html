@@ -1,5 +1,7 @@
 {% extends "global/base.html" %}
 
+{% load has_group %}
+
 {% block title %}
 - Perfil do Usuário
 {% endblock %}
@@ -9,7 +11,25 @@
     <h1 class="text-2xl font-bold">Perfil de Usuário</h1>
 </div>
 
-<div class="w-11/12 flex flex-row">
+<div class="w-11/12 flex flex-col md:flex-row-reverse">
+
+    <div class="w-full md:w-60 flex flex-col space-y-6 justify-center md:justify-start mb-5">
+        <a href="{% url 'user:editprofile' request.user.id %}">
+            <button
+                class="bg-blue-700 bg-opacity-30 w-full py-1.5 px-3 font-semibold rounded-md cursor-pointer hover:scale-[1.035]
+                flex flex-row items-center justify-center gap-1">
+                <ion-icon name="pencil"></ion-icon> Editar Perfil
+            </button>
+        </a>
+        <a href="{% url 'user:logout' %}">
+            <button
+                class="bg-red-700 bg-opacity-30 w-full py-1.5 px-3 font-semibold rounded-md cursor-pointer hover:scale-[1.035]
+                flex flex-row items-center justify-center gap-1">
+                <ion-icon name="log-out"></ion-icon> Sair da Conta
+            </button>
+        </a>
+    </div>
+
     <div class="w-full flex flex-col space-y-8 justify-start">
         <div>
             <h2 class="text-xl font-bold mb-1.5">Informações do Usuário</h2>
@@ -20,6 +40,22 @@
                 <li><strong>Email: </strong>{{ object.email }}</li>
             </ul>
         </div>
+
+        {% if request.user|has_group:"Moderator" %} 
+            <div>
+                <h2 class="text-xl font-bold mb-3">Área de Moderador</h2>
+                <ul>
+                    <li>
+                        <a href="{% url 'user:pendingreports' %}">
+                            <button
+                                class="bg-blue-700 bg-opacity-30 py-3 w-fit py-1.5 px-3 font-semibold rounded-md cursor-pointer hover:scale-[1.035]">
+                                Denúncias Não Verificadas
+                            </button>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        {% endif %}
 
         <div>
             <h2 class="text-xl font-bold mb-1.5">Empresas favoritas</h2>
@@ -48,21 +84,8 @@
             <p class="text-sm">Você ainda não enviou nenhum denúncia.</p>
             {% endif %}
         </div>
+
     </div>
 
-    <div class="w-1/5 flex flex-col space-y-8">
-        <a href="{% url 'user:editprofile' request.user.id %}">
-            <button
-                class="bg-blue-700 bg-opacity-30 w-full py-1.5 px-3 font-semibold rounded-md cursor-pointer hover:scale-[1.035]">
-                Editar Perfil
-            </button>
-        </a>
-        <a href="{% url 'user:logout' %}">
-            <button
-                class="bg-blue-700 bg-opacity-30 w-full py-1.5 px-3 font-semibold rounded-md cursor-pointer hover:scale-[1.035]">
-                Sair da Conta
-            </button>
-        </a>
-    </div>
 </div>
 {% endblock %}
