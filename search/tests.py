@@ -137,7 +137,14 @@ class ExplorerTestCase(TestCase):
         Company.objects.create(name="Enterprise 2")
         Company.objects.create(name="Factory 1")
         Company.objects.create(name="Factory X")
-        self.company_1.reports.create(title="Report1", content="", links="a.com")
+        self.company_1.reports.create(
+            title="Report1",
+            content="",
+            links="a.com",
+            date="2023-01-01",
+            gravity="4",
+            status="AP",
+        )
         self.company_2.news.create(
             title="News1", content="", date="2023-01-01", author="M"
         )
@@ -263,3 +270,31 @@ class ExplorerTestCase(TestCase):
             )
         )
         print("Teste Search-Explorer-11: Ordenação aplicada com sucesso.")
+
+    def test_explorer_sorting_highest_score(self) -> None:
+        response = self.client.get(
+            path="/search/explorer", data={"sorting": "highest_score"}
+        )
+        company_list = list(response.context["company_list"])
+        self.assertTrue(
+            all(
+                company_list[i].compute_score() >= company_list[i + 1].compute_score()
+                for i in range(len(company_list) - 1)
+            )
+        )
+        print("Teste Search-Explorer-12: Ordenação aplicada com sucesso.")
+
+    def test_explorer_sorting_lowest_score(self) -> None:
+        response = self.client.get(
+            path="/search/explorer", data={"sorting": "lowest_score"}
+        )
+        company_list = list(response.context["company_list"])
+        self.assertTrue(
+            all(
+                company_list[i].compute_score() <= company_list[i + 1].compute_score()
+                for i in range(len(company_list) - 1)
+            )
+        )
+
+        print([(c.compute_score(), c.name, c.reports.all()) for c in company_list])
+        print("Teste Search-Explorer-13: Ordenação aplicada com sucesso.")

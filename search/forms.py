@@ -31,6 +31,8 @@ class SortingForm(forms.Form):
         ("alphabetical_descending", "Z-A"),
         ("most_reports", "Mais Denúncias"),
         ("least_reports", "Menos Denúncias"),
+        ("highest_score", "Maior Nota"),
+        ("lowest_score", "Menor Nota"),
     ]
 
     sorting = forms.ChoiceField(

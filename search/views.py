@@ -76,13 +76,17 @@ class ExplorerView(SearchView):
                 filters.append(BooleanFilter(type="news", value=data[d]))
         return filters
 
-    def apply_sorting(self, set: QuerySet[Company], option: str) -> QuerySet[Company]:
+    def apply_sorting(self, set, option: str):
         if option == "alphabetical_descending":
             set = set.order_by("-name")
         elif option == "most_reports":
             set = set.order_by("-count_reports")
         elif option == "least_reports":
             set = set.order_by("count_reports")
+        elif option == "highest_score":
+            set = sorted(set, key=lambda company: company.compute_score(), reverse=True)
+        elif option == "lowest_score":
+            set = sorted(set, key=lambda company: company.compute_score())
         else:
             set = set.order_by("name")
         return set
@@ -102,6 +106,7 @@ class ExplorerView(SearchView):
         context = super().get_context_data(**kwargs)
         context["form_filter"] = self.form_filter
         context["form_sorting"] = self.form_sorting
+        context["company_list"] = self.object_list
         return context
 
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
