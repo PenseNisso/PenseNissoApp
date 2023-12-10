@@ -22,7 +22,7 @@ class ValidateReportForm(forms.Form):
         label="Ação:",
         widget=forms.RadioSelect,
     )
-    feedback = forms.CharField(label="Feedback:", widget=forms.Textarea)
+    feedback = forms.CharField(label="Feedback:", widget=forms.Textarea(attrs = {"cols": "45", "rows": "8"}))
 
     class Meta:
         fields = ("gravity", "action", "feedback")
