@@ -83,7 +83,7 @@ class EditProfile(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = User
     fields = ["first_name", "last_name", "username", "email"]
 
-    def test_func(self) -> bool | None:
+    def test_func(self) -> "bool | None":
         return self.request.get_full_path().split("/")[3] == str(self.request.user.id)
 
     def get_success_url(self) -> str:
@@ -93,7 +93,7 @@ class EditProfile(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 class ChangePassword(LoginRequiredMixin, UserPassesTestMixin, PasswordChangeView):
     template_name = "password_change.html"
 
-    def test_func(self) -> bool | None:
+    def test_func(self) -> "bool | None":
         return self.request.get_full_path().split("/")[3] == str(self.request.user.id)
 
     def get_success_url(self) -> str:
