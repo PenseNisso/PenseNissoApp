@@ -28,9 +28,12 @@ class Register(FormView):
         return reverse("user:login")
 
 
-class UserPage(LoginRequiredMixin, DetailView):
+class UserPage(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     template_name = "profile.html"
     model = User
+
+    def test_func(self) -> "bool | None":
+        return self.request.get_full_path().split("/")[3] == str(self.request.user.id)
 
 
 class ListaUsuarios(LoginRequiredMixin, ListView):
