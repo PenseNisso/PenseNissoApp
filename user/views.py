@@ -1,6 +1,11 @@
 from typing import Any
 
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    PermissionRequiredMixin,
+    UserPassesTestMixin,
+)
+from django.contrib.auth.views import PasswordChangeView
 from django.http import HttpResponse
 from django.shortcuts import reverse
 from django.views.generic import DetailView, FormView, ListView, UpdateView
@@ -73,10 +78,23 @@ class ReportValidation(
         return super().form_valid(form)
 
 
-class EditProfile(LoginRequiredMixin, UpdateView):
+class EditProfile(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = "edit_profile.html"
     model = User
     fields = ["first_name", "last_name", "username", "email"]
 
+    def test_func(self) -> bool | None:
+        return self.request.get_full_path().split("/")[3] == str(self.request.user.id)
+
     def get_success_url(self) -> str:
         return reverse("user:profile", args=[self.request.user.id])
+
+
+class ChangePassword(LoginRequiredMixin, UserPassesTestMixin, PasswordChangeView):
+    template_name = "password_change.html"
+
+    def test_func(self) -> bool | None:
+        return self.request.get_full_path().split("/")[3] == str(self.request.user.id)
+
+    def get_success_url(self) -> str:
+        return reverse("user:login")

@@ -13,12 +13,13 @@
 <form method="post">
     {% csrf_token %}
     <fieldset class="form-group">
-        <legend class="text-xl mb-6 border-b-2 border-black w-full text-center">Altere os campos abaixo para editar seu
-            perfil</legend>
+        <legend class="text-xl mb-6 border-b-2 border-black w-full text-center">
+            Altere os campos abaixo para editar seu perfil
+        </legend>
         {{ form|crispy }}
     </fieldset>
     <div class="flex flex-nowrap justify-center space-x-10 mt-2 w-full">
-        <button type="button" onclick="window.location.href='{% url 'user:profile' user.id %}'"
+        <button type="button" onclick="window.location.href='{% url 'user:profile' request.user.id %}'"
             class="bg-blue-700 bg-opacity-30 w-1/3 py-1.5 px-3 font-semibold rounded-md cursor-pointer hover:scale-[1.035]">
             Voltar
         </button>
@@ -30,6 +31,6 @@
 </form>
 <small class="mt-6">
     Quer mudar sua senha?
-    <a href="{% url 'user:changepassword' user.id %}" class="underline text-blue-500">Clique aqui</a>
+    <a href="{% url 'user:changepassword' request.user.id %}" class="underline text-blue-500">Clique aqui</a>
 </small>
 {% endblock %}

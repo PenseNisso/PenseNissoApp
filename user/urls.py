@@ -1,7 +1,8 @@
-from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
-from django.urls import path, reverse_lazy
+from django.contrib.auth.views import LoginView, LogoutView
+from django.urls import path
 
 from .views import (
+    ChangePassword,
     EditProfile,
     ListaUsuarios,
     PendingReportList,
@@ -30,10 +31,7 @@ urlpatterns = [
     ),
     path(
         "profile/<int:pk>/edit/password",
-        PasswordChangeView.as_view(
-            template_name="password_change.html",
-            success_url=reverse_lazy("user:login"),
-        ),
+        ChangePassword.as_view(),
         name="changepassword",
     ),
     path("profile/<int:pk>/edit/", EditProfile.as_view(), name="editprofile"),

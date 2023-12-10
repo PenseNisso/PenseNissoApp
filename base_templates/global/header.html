@@ -49,9 +49,9 @@
         </li>
       </div>
       <div class="flex flex-col justify-end grow">
-        {% if user.is_authenticated %}
+        {% if request.user.is_authenticated %}
         <li class="group text-2xl font-bold">
-          <a href="{% url 'user:profile' user.id %}">
+          <a href="{% url 'user:profile' request.user.id %}">
             <span class="group-hover:text-sky-700 relative before:content-[''] before:absolute before:block before:w-full before:h-[2px] 
             before:bottom-0 before:left-0 before:bg-sky-700
             before:group-hover:scale-x-100 before:scale-x-0 before:origin-top-left
