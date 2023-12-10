@@ -15,6 +15,9 @@ from infos.models import Report
 from .forms import CreateUserForm, ValidateReportForm
 from .models import User
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+
 
 class Register(FormView):
     template_name = "register.html"
@@ -101,3 +104,8 @@ class ChangePassword(LoginRequiredMixin, UserPassesTestMixin, PasswordChangeView
 
     def get_success_url(self) -> str:
         return reverse("user:login")
+
+
+@login_required
+def account_redirect(request):
+    return redirect("user:profile", pk=request.user.pk)

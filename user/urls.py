@@ -9,6 +9,7 @@ from .views import (
     Register,
     ReportValidation,
     UserPage,
+    account_redirect,
 )
 
 app_name = "user"
@@ -35,4 +36,5 @@ urlpatterns = [
         name="changepassword",
     ),
     path("profile/<int:pk>/edit/", EditProfile.as_view(), name="editprofile"),
+    path("profile", account_redirect, name="account-redirect"),
 ]
