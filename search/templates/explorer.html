@@ -10,7 +10,8 @@
 {% block filter_box %}
     <form action="{% url 'search:explorer' %}" method="get">
         {% csrf_token %}
-        {{ form }}
+        <div>{{ form_filter }}</div>
+        <div>{{ form_sorting }}</div>
         <input type="submit" value="Aplicar filtros">
     </form>
 {% endblock filter_box %}
