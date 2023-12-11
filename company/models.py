@@ -48,4 +48,4 @@ class Rate(models.Model):
     user = models.ForeignKey(
         "user.User", on_delete=models.CASCADE, related_name="rated_companies"
     )
-    score = models.DecimalField(max_digits=3, decimal_places=2)
+    score = models.IntegerField()

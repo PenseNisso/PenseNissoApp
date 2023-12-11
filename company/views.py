@@ -12,10 +12,10 @@ from infos.models import Lawsuit, News, Report
 from .models import Company, Rate
 
 
-class CompanyView(DetailView, FormView):
+class CompanyView(DetailView):
     template_name = "companies/company.html"
     model = Company
-    form_class = forms.EvaluateForm
+    # form_class = forms.EvaluateForm
 
     def get_context_data(self, form="defaullt", **kwargs: Any) -> "dict[str, Any]":
         context = super().get_context_data(**kwargs)
@@ -31,17 +31,27 @@ class CompanyView(DetailView, FormView):
         context["score"] = object.compute_score()
         return context
 
-    def form_valid(self, form: forms.EvaluateForm) -> HttpResponse:
+    def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         self.object = self.get_object()
-
-        data = form.cleaned_data
-        current_user = get_user(self.request)
-        company = super().get_context_data()["company"]
-        print("------------------------------------------", super().get_context_data())
-        rate = Rate(company=company, user=current_user, score=data["score"])
-
+        query = self.request.POST.get("rate")
+        context = self.get_context_data(form="default", **kwargs)
+        print(request.user)
+        rate = Rate(company=context["company"], user=request.user, score=int(query))
+        
         rate.save()
-        return self.render_to_response(self.get_context_data(form=form))
+        return super().render_to_response(context)
+    
+    # def form_valid(self, form: forms.EvaluateForm) -> HttpResponse:
+    #     self.object = self.get_object()
+
+    #     data = form.cleaned_data
+    #     current_user = get_user(self.request)
+    #     company = super().get_context_data()["company"]
+    #     print("------------------------------------------", super().get_context_data())
+    #     rate = Rate(company=company, user=current_user, score=data["score"])
+
+    #     rate.save()
+    #     return self.render_to_response(self.get_context_data(form=form))
 
 def change_rate(request: HttpRequest, company_id: int) -> HttpResponse:
     company = get_object_or_404(Company, pk=company_id)

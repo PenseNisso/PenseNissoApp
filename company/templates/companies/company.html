@@ -49,7 +49,7 @@
        bg-red-400 
       {% endif %}
       bg-opacity-40 rounded-xl p-2">
-        {{score_users}}
+        {{score_users}}/5
       </div>
       
       
@@ -60,20 +60,20 @@
         {% else %}
           <form method="post">
             {% csrf_token %}
-            {{ form }}
+
             <!-- {% for field in form.visible_fields %}
               {% render_field field class="mask mask-star-2 bg-orange-400" %}
             {% endfor %} -->
             
 
             <!-- sm -->
-            <!-- <div class="rating rating-sm">
-              <input type="radio" name="score" class="mask mask-star-2 bg-orange-400" value="1"/>
-              <input type="radio" name="score" class="mask mask-star-2 bg-orange-400" value="2" checked />
-              <input type="radio" name="score" class="mask mask-star-2 bg-orange-400" value="3"/>
-              <input type="radio" name="score" class="mask mask-star-2 bg-orange-400" value="4"/>
-              <input type="radio" name="score" class="mask mask-star-2 bg-orange-400" value="5"/>
-            </div> -->
+            <div class="rating rating-sm">
+              <input type="radio" name="rate" class="mask mask-star-2 bg-orange-400" value="1"/>
+              <input type="radio" name="rate" class="mask mask-star-2 bg-orange-400" value="2" checked />
+              <input type="radio" name="rate" class="mask mask-star-2 bg-orange-400" value="3"/>
+              <input type="radio" name="rate" class="mask mask-star-2 bg-orange-400" value="4"/>
+              <input type="radio" name="rate" class="mask mask-star-2 bg-orange-400" value="5"/>
+            </div>
           
             <input type="submit" value="Avaliar" class="btn normal-case bg-slate-300">
           </form>
