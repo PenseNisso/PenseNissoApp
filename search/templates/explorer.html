@@ -4,6 +4,8 @@
 - Explorador de Empresas
 {% endblock title %}
 
+{% block page_title %}Explorador de Empresas{% endblock page_title %}
+
 {% block search_header %}
 {% endblock search_header %}
 
@@ -24,9 +26,10 @@
 
 {% block list %}
     {% for company in company_list %}
-    <li>
-        <a href="{% url 'company:company' company.id %}" class="empresa">
-            {{ company.name }}
+    <li >
+        <a class="btn h-20 bg-blue-700 bg-opacity-20 hover:bg-blue-700 hover:bg-opacity-50 flex flex-row justify-between" href="{% url 'company:company' company.id %}" class="empresa">
+            <div class="flex flex-row items-center gap-4 text-xl"><img class="w-10 h-10"src="{{company.logo.url}} " /> {{ company.name }}</div>  
+            <div><ion-icon name="arrow-forward"></ion-icon></div>
         </a>
     </li>
     {% endfor %}

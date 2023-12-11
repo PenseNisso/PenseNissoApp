@@ -8,6 +8,8 @@
     {% endif %}
 {% endblock title %}
 
+{% block page_title %}Busca{% endblock page_title %}
+
 {% block search_header %}
     {% if query is not None %}
         Resultados para "{{ query }}":                        
@@ -30,11 +32,12 @@
 {% block list %}
     {% if query is not None %}
         {% for company in company_list %}
-        <li>
-            <a href="{% url 'company:company' company.id %}" class="empresa">
-                {{ company.name }}
-            </a>
-        </li>
+            <li >
+                <a class="btn h-20 bg-blue-700 bg-opacity-20 hover:bg-blue-700 hover:bg-opacity-50 flex flex-row justify-between" href="{% url 'company:company' company.id %}" class="empresa">
+                    <div class="flex flex-row items-center gap-4 text-xl"><img class="w-10 h-10"src="{{company.logo.url}} " /> {{ company.name }}</div>  
+                    <div><ion-icon name="arrow-forward"></ion-icon></div>
+                </a>
+            </li>
         {% endfor %}
     {% endif %}
 {% endblock list %}
