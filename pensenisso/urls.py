@@ -19,15 +19,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.shortcuts import render
 from django.urls import include, path
-
-
-def home(request):
-    return render(request, "global/base.html")
+from home.views import HomeView
 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", home),
+    path("", HomeView.as_view(), name="home"),
     path("empresas/", include("company.urls")),
     path("info/", include("infos.urls", namespace="infos")),
     path("users/", include("user.urls", namespace="user")),

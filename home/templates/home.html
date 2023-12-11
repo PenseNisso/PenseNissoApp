@@ -1,0 +1,178 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pense Nisso</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+    <style>
+        .prev,
+        .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            margin-top: -22px;
+            padding: 16px;
+            color: #222428;
+            font-weight: bold;
+            font-size: 30px;
+            transition: .6s ease;
+            border-radius: 0 3px 3px 0
+        }
+
+        .next {
+            right: -50px;
+            border-radius: 3px 3px 3px 3px
+        }
+
+        .prev {
+            left: -50px;
+            border-radius: 3px 3px 3px 3px
+        }
+
+        .prev:hover,
+        .next:hover {
+            color: #f2f2f2;
+            background-color: rgba(0, 0, 0, 0.8)
+        }
+
+        .text {
+            color: #f2f2f2;
+            font-size: 15px;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            background-color: #222428
+        }
+
+        .dot {
+            cursor: pointer;
+            height: 15px;
+            width: 15px;
+            margin: 0 2px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color .6s ease
+        }
+
+        .active,
+        .dot:hover {
+            background-color: #717171
+        }
+    </style>
+</head>
+
+<body style="background: linear-gradient(180deg, rgba(34, 81, 202, 0.20) 0%, rgba(34, 81, 202, 0.00) 73.96%);">
+    {% include "global/header.html" %}
+    <main class="max-w-2xl xl:max-w-4xl flex flex-col justify-center items-center mx-auto space-y-16">
+        <!-- Logo do Pense Nisso -->
+        <div class="w-full flex flex-row space-x-5 justify-center items-center mt-10">
+            <img class="w-36 h-36" src="{% static 'images/pensenisso.png' %}">
+            <h1 class="text-6xl font-bold" style="text-shadow: 0px 5px 5px rgba(0, 0, 0, 0.35)">Pense<br>Nisso</h1>
+        </div>
+
+        {% include "global/searchbar.html" %}
+
+        <!-- Carrosel de Notícias -->
+        <section>
+            <h2 class="text-xl font-bold mb-1.5">Últimas Notícias:</h2>
+            <div class="w-[500px] relative m-auto">
+                <div class="slideshow-inner">
+                    {% for image in images %}
+                    <div class="hidden h-[200px] border border-black mySlides">
+                        <img class="w-full h-full" src="{% static image %}" alt="sally lightfoot crab" />
+                        <div class="text">Sally Lightfoot Crab</div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <a class="prev" onclick='plusSlides(-1)'>&#10094;</a>
+                <a class="next" onclick='plusSlides(1)'>&#10095;</a>
+            </div>
+            <br />
+
+            <div class="text-center">
+                <span class="dot" onclick='currentSlide(1)'></span>
+                <span class="dot" onclick='currentSlide(2)'></span>
+                <span class="dot" onclick='currentSlide(3)'></span>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        var slideIndex = 1;
+        var myTimer;
+        var slideshowContainer;
+
+        window.addEventListener("load", function () {
+            showSlides(slideIndex);
+            myTimer = setInterval(function () { plusSlides(1) }, 4000);
+            slideshowContainer = document.getElementsByClassName('slideshow-inner')[0];
+            slideshowContainer.addEventListener('mouseenter', pause)
+            slideshowContainer.addEventListener('mouseleave', resume)
+        })
+
+        // NEXT AND PREVIOUS CONTROL
+        function plusSlides(n) {
+            clearInterval(myTimer);
+            if (n < 0) {
+                showSlides(slideIndex -= 1);
+            } else {
+                showSlides(slideIndex += 1);
+            }
+
+            if (n === -1) {
+                myTimer = setInterval(function () { plusSlides(n + 2) }, 4000);
+            } else {
+                myTimer = setInterval(function () { plusSlides(n + 1) }, 4000);
+            }
+        }
+
+        //Controls the current slide and resets interval if needed
+        function currentSlide(n) {
+            clearInterval(myTimer);
+            myTimer = setInterval(function () { plusSlides(n + 1) }, 4000);
+            showSlides(slideIndex = n);
+        }
+
+        function showSlides(n) {
+            var i;
+            var slides = document.getElementsByClassName("mySlides");
+            var dots = document.getElementsByClassName("dot");
+            if (n > slides.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = slides.length }
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slides[slideIndex - 1].style.display = "block";
+            dots[slideIndex - 1].className += " active";
+        }
+
+        pause = () => {
+            clearInterval(myTimer);
+        }
+
+        resume = () => {
+            clearInterval(myTimer);
+            myTimer = setInterval(function () { plusSlides(slideIndex) }, 4000);
+        }
+    </script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>
