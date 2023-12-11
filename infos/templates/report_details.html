@@ -10,20 +10,22 @@
 {% if report.user and report.user == user %}
 <div class="divider"></div>
 
-<p>
-    <strong>Status: </strong>
-    {% if report.status == "AP" %}
-    Aprovado &#9989;
-    {% elif report.status == "RE" %}
-    Recusado &#10060;
-    {% else %}
-    Aguardando Validação
-    {% endif %}
-</p>
-
-{% if report.status == "RE" %}
-<p><strong>Feedback dos moderadores: </strong>{{ report.feedback }}</p>
-{% endif %}
+<div class="w-11/12 list-disc list-inside my-1">
+    <p>
+        <strong>Status: </strong>
+        {% if report.status == "AP" %}
+        Aprovado &#9989;
+        {% elif report.status == "RE" %}
+        Recusado &#10060;
+        {% else %}
+        Aguardando Validação
+        {% endif %}
+    </p>
+    
+    {% if report.status == "RE" %}
+    <p><strong>Feedback dos moderadores: </strong>{{ report.feedback }}</p>
+    {% endif %}    
+</div>
 
 {% endif %}
 {% endblock %}

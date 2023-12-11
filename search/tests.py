@@ -42,12 +42,24 @@ class TrigramTestCase(TestCase):
 
 class SearchTestCase(TestCase):
     def setUp(self) -> None:
-        Company.objects.create(name="Company 1")
-        Company.objects.create(name="Company 2")
-        Company.objects.create(name="Enterprise 1")
-        Company.objects.create(name="Enterprise 2")
-        Company.objects.create(name="Factory 1")
-        Company.objects.create(name="Factory X")
+        Company.objects.create(
+            name="Company 1", logo="company/logo/23/12/10/test_logo.png"
+        )
+        Company.objects.create(
+            name="Company 2", logo="company/logo/23/12/10/test_logo.png"
+        )
+        Company.objects.create(
+            name="Enterprise 1", logo="company/logo/23/12/10/test_logo.png"
+        )
+        Company.objects.create(
+            name="Enterprise 2", logo="company/logo/23/12/10/test_logo.png"
+        )
+        Company.objects.create(
+            name="Factory 1", logo="company/logo/23/12/10/test_logo.png"
+        )
+        Company.objects.create(
+            name="Factory X", logo="company/logo/23/12/10/test_logo.png"
+        )
         self.client = Client()
         return super().setUp()
 
@@ -130,12 +142,24 @@ class SearchTestCase(TestCase):
 
 class ExplorerTestCase(TestCase):
     def setUp(self) -> None:
-        self.company_1 = Company.objects.create(name="Company 1")
-        self.company_2 = Company.objects.create(name="Company 2")
-        self.enterprise_1 = Company.objects.create(name="Enterprise 1")
-        Company.objects.create(name="Enterprise 2")
-        Company.objects.create(name="Factory 1")
-        Company.objects.create(name="Factory X")
+        self.company_1 = Company.objects.create(
+            name="Company 1", logo="company/logo/23/12/10/test_logo.png"
+        )
+        self.company_2 = Company.objects.create(
+            name="Company 2", logo="company/logo/23/12/10/test_logo.png"
+        )
+        self.enterprise_1 = Company.objects.create(
+            name="Enterprise 1", logo="company/logo/23/12/10/test_logo.png"
+        )
+        Company.objects.create(
+            name="Enterprise 2", logo="company/logo/23/12/10/test_logo.png"
+        )
+        Company.objects.create(
+            name="Factory 1", logo="company/logo/23/12/10/test_logo.png"
+        )
+        Company.objects.create(
+            name="Factory X", logo="company/logo/23/12/10/test_logo.png"
+        )
         self.company_1.reports.create(
             title="Report1",
             content="",
@@ -175,7 +199,11 @@ class ExplorerTestCase(TestCase):
     def test_explorer_update(self) -> None:
         response = self.client.get(path="/search/explorer")
         self.assertEqual(response.context["company_list"].count(), 6)
-        self.companies.append(Company.objects.create(name="Factory T"))
+        self.companies.append(
+            Company.objects.create(
+                name="Factory T", logo="company/logo/23/12/10/test_logo.png"
+            )
+        )
         self.companies.sort(key=lambda company: company.name)
         response = self.client.get(path="/search/explorer")
         self.assertEqual(response.context["company_list"].count(), 7)
