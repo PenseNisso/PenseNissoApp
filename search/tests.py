@@ -107,12 +107,11 @@ class SearchTestCase(TestCase):
 
     def test_empty_query(self) -> None:
         response = self.client.get(path="/search/", data={"search": ""})
-        self.assertEqual(
-            response.context["company_list"].count(), Company.objects.count()
-        )
+        self.assertIn("Realize uma pesquisa!", str(response.content))
         print("Teste Search-Query-4: Busca retornou todos os objetos.")
 
     def test_null_query(self) -> None:
+        self.client.session.flush()
         response = self.client.get(path="/search/")
         self.assertIn("Realize uma pesquisa!", str(response.content))
         print("Teste Search-Query-5: Busca retornou mensagem de erro.")
@@ -324,5 +323,4 @@ class ExplorerTestCase(TestCase):
             )
         )
 
-        print([(c.compute_score(), c.name, c.reports.all()) for c in company_list])
         print("Teste Search-Explorer-13: Ordenação aplicada com sucesso.")

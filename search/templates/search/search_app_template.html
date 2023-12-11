@@ -2,7 +2,10 @@
 
 {% block content %}
     <div class="flex flex-column justify-center items-center bg-blue-600 text-white w-full h-10 text-center my-6">
-        <h1 class="text-2xl font-bold"><ion-icon name="compass"></ion-icon> Explorador de Empresas</h1>
+        <h1 class="text-2xl font-bold"><ion-icon name="compass"></ion-icon> 
+            {% block page_title %}
+            {% endblock page_title %}
+        </h1>
     </div>
     <div class="flex flex-col space-y-4 w-full px-5">  
         {% block filter_box %}
@@ -15,14 +18,8 @@
                 </h1>
             </div>
             <ul class="flex flex-col gap-5 mt-5 px-4">
-                {% for company in company_list %}
-                    <li >
-                        <a class="btn h-20 bg-blue-700 bg-opacity-20 hover:bg-blue-700 hover:bg-opacity-50 flex flex-row justify-between" href="{% url 'company:company' company.id %}" class="empresa">
-                            <div class="flex flex-row items-center gap-4 text-xl"><img class="w-10 h-10"src="{{company.logo.url}} " /> {{ company.name }}</div>  
-                            <div><ion-icon name="arrow-forward"></ion-icon></div>
-                        </a>
-                    </li>
-                {% endfor %}
+                {% block list %}
+                {% endblock list %}
             </ul>
         </div>
     </div>

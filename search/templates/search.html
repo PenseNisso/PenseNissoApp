@@ -1,8 +1,14 @@
 {% extends "search/search_app_template.html" %}
 
 {% block title %}
-- Busca - "{{ query }}"
+    {% if query is not None %}
+        - Busca - "{{ query }}"                        
+    {% else %}
+        - Busca
+    {% endif %}
 {% endblock title %}
+
+{% block page_title %}Busca{% endblock page_title %}
 
 {% block search_header %}
     {% if query is not None %}
@@ -11,3 +17,27 @@
         Realize uma pesquisa!
     {% endif %}
 {% endblock search_header %}
+
+{% block filter_box %}
+    {% if query is not None and query%}
+        <form action="{% url 'search:search' %}" method="get">
+            {% csrf_token %}
+            <div>{{ form_filter }}</div>
+            <div>{{ form_sorting }}</div>
+            <input type="submit" value="Aplicar filtros">
+        </form>
+    {% endif %}
+{% endblock filter_box %}
+
+{% block list %}
+    {% if query is not None %}
+        {% for company in company_list %}
+            <li >
+                <a class="btn h-20 bg-blue-700 bg-opacity-20 hover:bg-blue-700 hover:bg-opacity-50 flex flex-row justify-between" href="{% url 'company:company' company.id %}" class="empresa">
+                    <div class="flex flex-row items-center gap-4 text-xl"><img class="w-10 h-10"src="{{company.logo.url}} " /> {{ company.name }}</div>  
+                    <div><ion-icon name="arrow-forward"></ion-icon></div>
+                </a>
+            </li>
+        {% endfor %}
+    {% endif %}
+{% endblock list %}
