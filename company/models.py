@@ -23,6 +23,29 @@ class Company(models.Model):
         score = 5 - min(sub_score, 5)
 
         return round(score, 2)
+    
+    def compute_score_users(self,) -> float | str:
+        rates = self.user_ratings.all()
+        if len(rates) == 0:
+            score_users = "--"
+        else:
+            sub_score_users = 0
+            for rate in rates:
+                sub_score_users += rate.score
+            score_users = round(sub_score_users/len(rates), 2)
+        return score_users
+
+
 
     class Meta:
         verbose_name_plural = "Companies"
+
+
+class Rate(models.Model):
+    company = models.ForeignKey(
+        "company.Company", on_delete=models.CASCADE, related_name="user_ratings"
+    )
+    user = models.ForeignKey(
+        "user.User", on_delete=models.CASCADE, related_name="rated_companies"
+    )
+    score = models.DecimalField(max_digits=3, decimal_places=2)
