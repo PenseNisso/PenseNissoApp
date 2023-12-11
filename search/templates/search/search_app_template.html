@@ -17,13 +17,8 @@
         <div>
         <div>
             <ul>
-                {% for company in company_list %}
-                    <li>
-                        <a href="{% url 'company:company' company.id %}" class="empresa">
-                            {{ company.name }}
-                        </a>
-                    </li>
-                {% endfor %}
+                {% block list %}
+                {% endblock list %}
             </ul>
         </div>
     </center>

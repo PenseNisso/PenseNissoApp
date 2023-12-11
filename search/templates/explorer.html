@@ -15,3 +15,13 @@
         <input type="submit" value="Aplicar filtros">
     </form>
 {% endblock filter_box %}
+
+{% block list %}
+    {% for company in company_list %}
+    <li>
+        <a href="{% url 'company:company' company.id %}" class="empresa">
+            {{ company.name }}
+        </a>
+    </li>
+    {% endfor %}
+{% endblock list %}

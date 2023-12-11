@@ -1,7 +1,11 @@
 {% extends "search/search_app_template.html" %}
 
 {% block title %}
-- Busca - "{{ query }}"
+    {% if query is not None %}
+        - Busca - "{{ query }}"                        
+    {% else %}
+        - Busca
+    {% endif %}
 {% endblock title %}
 
 {% block search_header %}
@@ -11,3 +15,26 @@
         Realize uma pesquisa!
     {% endif %}
 {% endblock search_header %}
+
+{% block filter_box %}
+    {% if query is not None and query%}
+        <form action="{% url 'search:search' %}" method="get">
+            {% csrf_token %}
+            <div>{{ form_filter }}</div>
+            <div>{{ form_sorting }}</div>
+            <input type="submit" value="Aplicar filtros">
+        </form>
+    {% endif %}
+{% endblock filter_box %}
+
+{% block list %}
+    {% if query is not None %}
+        {% for company in company_list %}
+        <li>
+            <a href="{% url 'company:company' company.id %}" class="empresa">
+                {{ company.name }}
+            </a>
+        </li>
+        {% endfor %}
+    {% endif %}
+{% endblock list %}
