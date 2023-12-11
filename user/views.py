@@ -1,22 +1,18 @@
 from typing import Any
 
-from django.contrib.auth.mixins import (
-    LoginRequiredMixin,
-    PermissionRequiredMixin,
-    UserPassesTestMixin,
-)
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import (LoginRequiredMixin,
+                                        PermissionRequiredMixin,
+                                        UserPassesTestMixin)
 from django.contrib.auth.views import PasswordChangeView
 from django.http import HttpResponse
-from django.shortcuts import reverse
+from django.shortcuts import redirect, reverse
 from django.views.generic import DetailView, FormView, ListView, UpdateView
 
 from infos.models import Report
 
 from .forms import CreateUserForm, ValidateReportForm
 from .models import User
-
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
 
 
 class Register(FormView):
