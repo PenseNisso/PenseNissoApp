@@ -2,7 +2,7 @@ from typing import Any
 
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, FormView, ListView
 
 from infos.models import Lawsuit, News, Report
 
@@ -72,3 +72,7 @@ class LawsuitsList(InfosList):
     model = Lawsuit
     info_type = "Processos"
     redirect_page = "infos:lawsuitdetail"
+
+
+class CompanyFormView(FormView):
+    pass
