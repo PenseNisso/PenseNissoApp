@@ -4,11 +4,9 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('infos', '0007_alter_report_user'),
-        ('infos', '0007_report_feedback'),
+        ("infos", "0007_alter_report_user"),
+        ("infos", "0007_report_feedback"),
     ]
 
-    operations = [
-    ]
+    operations = []
