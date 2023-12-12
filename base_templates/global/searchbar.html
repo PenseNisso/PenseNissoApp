@@ -1,0 +1,22 @@
+<form action="{% url 'search:search' %}" method="get">
+    {% csrf_token %}
+    <input type="search" id="search" name="search" placeholder="Pesquisar empresas..." class="input" required />
+    <script>
+        var tags = [
+            {% for company in companies %}
+        "{{ company.name }}",
+            {% endfor %} 
+                        ];
+        $(function () {
+            $("#search").autocomplete({
+                minLength: 2,
+                source: function (request, response) {
+                    var results = $.ui.autocomplete.filter(tags, request.term);
+                    response(results.slice(0, 10));
+                    console.log(results);
+                }
+            });
+        }); 
+    </script>
+    <input type="submit" value="Pesquisar">
+</form>

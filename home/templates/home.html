@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pense Nisso</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/carousel.css' %}">
+</head>
+
+<body style="background: linear-gradient(180deg, rgba(34, 81, 202, 0.20) 0%, rgba(34, 81, 202, 0.00) 73.96%);">
+    {% include "global/header.html" %}
+    <main class="min-h-screen max-w-2xl xl:max-w-4xl flex flex-col justify-center items-center mx-auto space-y-16">
+        <!-- Logo do Pense Nisso -->
+        <section class="w-full flex flex-row space-x-5 justify-center items-center mt-10">
+            <img class="w-36 h-36" src="{% static 'images/pensenisso.png' %}">
+            <h1 class="text-6xl font-bold" style="text-shadow: 0px 5px 5px rgba(0, 0, 0, 0.35)">Pense<br>Nisso</h1>
+        </section>
+
+        {% include "global/searchbar.html" %}
+
+        <!-- Carrossel de Notícias -->
+        <section class="w-10/12 h-full xl:w-7/12">
+            <h2 class="text-xl font-bold mb-1.5">Últimas Notícias:</h2>
+            <div class="w-full relative m-auto">
+                <div class="carousel carousel-center w-full p-4 space-x-4 rounded-box">
+                    {% for news in recent_news %}
+                    <div class="carousel-item relative w-10/12 h-52 xl:w-3/4 xl:h-64">
+                        <a href="{% url 'infos:newsdetail' news.id %}" class="w-full h-full">
+                            <img src="{{ news.image.url }}" class="object-cover w-full h-full">
+                            <div
+                                class="absolute bottom-0 w-full p-2 bg-neutral-700 bg-opacity-70 text-center text-white">
+                                <p class="font-bold leading-tight text-justify hyphens-auto text-sm xl:text-normal"
+                                    lang="pt-br">
+                                    {{ news.title }}
+                                </p>
+                                <p class="text-opacity-75 text-xs mt-1 xl:text-sm xl:my-1">Leia e saiba mais!</p>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <a class="prev" onclick='plusSlides(-1)'>&#10094;</a>
+                <a class="next" onclick='plusSlides(1)'>&#10095;</a>
+            </div>
+
+            <div class="text-center">
+                {% for news in recent_news %}
+                <span class="dot" onclick="currentSlide({{ forloop.counter }})"></span>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    {% include "global/footer.html" %}
+
+    <script src="{% static 'js/carousel.js' %}"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>
