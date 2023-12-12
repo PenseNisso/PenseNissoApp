@@ -3,11 +3,12 @@ from typing import Any
 from django.contrib.auth import get_user
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, FormView, ListView, TemplateView
 
 from infos.models import Lawsuit, News, Report
 
-from .models import Company, Rate
+from .forms import CompanySuggestion
+from .models import Company, CompanySuggestionModel, Rate 
 
 
 class CompanyView(DetailView):
@@ -99,3 +100,27 @@ class LawsuitsList(InfosList):
     model = Lawsuit
     info_type = "Processos"
     redirect_page = "infos:lawsuitdetail"
+
+
+class SuggestionSucessView(TemplateView):
+    template_name = "companies/forms/confirmation.html"
+
+
+class CompanyFormView(FormView):
+    form_class = CompanySuggestion
+    success_url = "suggest/confirmation"
+    template_name = "companies/forms/company_suggestion.html"
+
+    def form_valid(self, form: CompanySuggestion) -> HttpResponse:
+        data = form.cleaned_data
+        current_user = get_user(self.request)
+        suggestion = CompanySuggestionModel(
+            name=data["name"],
+            field_of_operation=data["field_of_operation"],
+            description=data["description"],
+            link=data["link"],
+            user=current_user if current_user.is_authenticated else None,
+        )
+
+        suggestion.save()
+        return super().form_valid(form)
