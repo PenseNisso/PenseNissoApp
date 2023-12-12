@@ -7,7 +7,7 @@ from django.utils.timezone import now
 from infos.models import Lawsuit, News, Report, ReportCategory
 from user.models import User
 
-from .models import Company
+from .models import Company, Rate
 
 
 class CompanyModelTest(TestCase):
@@ -26,6 +26,9 @@ class CompanyModelTest(TestCase):
             gravity="1",
             date=now() - timedelta(days=15),
         )
+        self.user1 = User.objects.create(username="testuser1", password="123457")
+        self.user2 = User.objects.create(username="testuser2", password="123456")
+        self.rate = Rate.objects.create(company=self.company, user=self.user1, score=5)
 
     def test_company_str(self):
         self.assertEqual(str(self.company), "Test Company")
@@ -47,7 +50,16 @@ class CompanyModelTest(TestCase):
         )
         self.assertEquals(self.company.compute_score(), 3.89)
         print("Teste Company-Model-3: Score atualizado com sucesso")
-
+    
+    def test_rating(self):
+        self.assertEquals(self.company.compute_score_users(), 5)
+        print("Teste Company-Model-4: Rate computado com sucesso")
+    
+    def test_new_rating(self):
+        Rate.objects.create(company=self.company, user=self.user2, score=4)
+        self.assertEquals(self.company.compute_score_users(), 4.5)
+        print("Teste Company-Model-5: Rate atualizado com sucesso")
+    
 
 class CompanyViewTest(TestCase):
     def setUp(self):
