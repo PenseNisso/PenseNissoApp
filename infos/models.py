@@ -69,6 +69,7 @@ class News(InfoBase):
     )
     author = models.CharField(max_length=50)
     date = models.DateField()
+    image = models.ImageField(upload_to="news_banners")
 
     class Meta:
         verbose_name_plural = "News"
