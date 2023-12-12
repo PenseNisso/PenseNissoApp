@@ -21,10 +21,16 @@ from django.shortcuts import render
 from django.urls import include, path
 from home.views import HomeView
 
+def about_us(request):
+    return render(request, "global/about_us.html")
+def privacy_policy(request):
+    return render(request, "global/privacy_policy.html")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", HomeView.as_view(), name="home"),
+    path("about_us", about_us, name="about_us"),
+    path("privacy_policy", privacy_policy, name="privacy_policy"),
     path("empresas/", include("company.urls")),
     path("info/", include("infos.urls", namespace="infos")),
     path("users/", include("user.urls", namespace="user")),
