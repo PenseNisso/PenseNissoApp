@@ -8,7 +8,7 @@ from django.views.generic import DetailView, FormView, ListView, TemplateView
 from infos.models import Lawsuit, News, Report
 
 from .forms import CompanySuggestion
-from .models import Company, CompanySuggestionModel
+from .models import Company, Rate, CompanySuggestionModel
 
 
 class CompanyView(DetailView):

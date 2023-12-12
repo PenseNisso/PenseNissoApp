@@ -41,3 +41,13 @@ class CompanySuggestionModel(models.Model):
         blank=True,
         related_name="suggestions_sent",
     )
+
+
+class Rate(models.Model):
+    company = models.ForeignKey(
+        "company.Company", on_delete=models.CASCADE, related_name="user_ratings"
+    )
+    user = models.ForeignKey(
+        "user.User", on_delete=models.CASCADE, related_name="rated_companies"
+    )
+    score = models.IntegerField()

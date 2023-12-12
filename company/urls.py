@@ -1,11 +1,11 @@
 from django.urls import path
 
 from .views import (
-    CompanyFormView,
     CompanyView,
     LawsuitsList,
     NewsList,
     ReportsList,
+    change_rate,
     favorite_company,
     SuggestionSucessView,
 )

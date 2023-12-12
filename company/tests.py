@@ -7,7 +7,7 @@ from django.utils.timezone import now
 from infos.models import Lawsuit, News, Report, ReportCategory
 from user.models import User
 
-from .models import Company, CompanySuggestionModel
+from .models import Company, Rate, CompanySuggestionModel
 from .forms import CompanySuggestion
 
 
