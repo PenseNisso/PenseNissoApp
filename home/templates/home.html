@@ -16,7 +16,7 @@
 
 <body style="background: linear-gradient(180deg, rgba(34, 81, 202, 0.20) 0%, rgba(34, 81, 202, 0.00) 73.96%);">
     {% include "global/header.html" %}
-    <main class="max-w-2xl xl:max-w-4xl flex flex-col justify-center items-center mx-auto space-y-16">
+    <main class="min-h-screen max-w-2xl xl:max-w-4xl flex flex-col justify-center items-center mx-auto space-y-16">
         <!-- Logo do Pense Nisso -->
         <section class="w-full flex flex-row space-x-5 justify-center items-center mt-10">
             <img class="w-36 h-36" src="{% static 'images/pensenisso.png' %}">
@@ -26,7 +26,7 @@
         {% include "global/searchbar.html" %}
 
         <!-- Carrossel de Notícias -->
-        <section class="w-10/12 xl:w-7/12">
+        <section class="w-10/12 h-full xl:w-7/12">
             <h2 class="text-xl font-bold mb-1.5">Últimas Notícias:</h2>
             <div class="w-full relative m-auto">
                 <div class="carousel carousel-center w-full p-4 space-x-4 rounded-box">
@@ -58,6 +58,8 @@
             </div>
         </section>
     </main>
+
+    {% include "global/footer.html" %}
 
     <script src="{% static 'js/carousel.js' %}"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
