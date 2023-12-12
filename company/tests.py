@@ -1,13 +1,14 @@
 from datetime import timedelta
 
-from django.test import TestCase
+from django.test import Client, TestCase
 from django.urls import reverse
 from django.utils.timezone import now
 
 from infos.models import Lawsuit, News, Report, ReportCategory
 from user.models import User
 
-from .models import Company
+from .models import Company, CompanySuggestionModel
+from .forms import CompanySuggestion
 
 
 class CompanyModelTest(TestCase):
@@ -255,3 +256,62 @@ class InfoListTest(TestCase):
         response = self.client.get(reverse("company:lawsuits", args=[self.company.id]))
         self.assertIn(lawsuit, response.context.get("infos"))
         print("Teste Company-InfoList-10: Processos atualizados com sucesso.")
+
+
+class SuggestionTestCase(TestCase):
+    def setUp(self) -> None:
+        self.client = Client()
+
+    def test_suggestion_request(self):
+        data = {
+            "name": "testes",
+            "field_of_operation": "testes",
+            "link": "https://teste.com",
+            "description": "teste teste",
+        }
+        response = self.client.post(reverse("company:suggest"), data=data)
+        print(response.templates)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("company:suggest_success"))
+        print("Teste Company-Suggestion-1: Sugestão enviada com sucesso.")
+
+    def test_validation_name_in_form(self):
+        form = CompanySuggestion(
+            data={
+                "name": None,
+                "field_of_operation": "testes",
+                "link": "https://teste.com",
+                "description": "teste teste",
+            }
+        )
+        form.is_valid()
+        self.assertEquals(list(form.errors.keys())[0], "name")
+        print("Teste Company-Suggestion-2: Nome inválido negado com sucesso.")
+
+    def test_validation_field_of_operation_in_form(self):
+        form = CompanySuggestion(
+            data={
+                "name": "testes",
+                "field_of_operation": None,
+                "link": "https://teste.com",
+                "description": "teste teste",
+            }
+        )
+        form.is_valid()
+        self.assertEquals(list(form.errors.keys())[0], "field_of_operation")
+        print(
+            "Teste Company-Suggestion-3: Área de atuação inválida negada com sucesso."
+        )
+
+    def test_suggestion_linked_to_user(self):
+        user = User.objects.create_user(username="Test User", password="testpassword")
+        suggestion = CompanySuggestionModel.objects.create(
+            name="Test Suggestion",
+            field_of_operation="Test",
+            description="Test Description",
+            link="https://teste.com",
+            user=user,
+        )
+        user.refresh_from_db()
+        self.assertIn(suggestion, user.suggestions_sent.all())
+        print("Teste Company-Suggestion-4: Denúncia associada ao usuário com sucesso.")

@@ -26,3 +26,18 @@ class Company(models.Model):
 
     class Meta:
         verbose_name_plural = "Companies"
+
+
+class CompanySuggestionModel(models.Model):
+    name = models.CharField(max_length=100)
+    field_of_operation = models.CharField(max_length=50)
+    link = models.URLField(max_length=30, null=True)
+    description = models.TextField(max_length=400, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(
+        "user.User",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="suggestions_sent",
+    )
