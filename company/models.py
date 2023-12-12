@@ -24,7 +24,7 @@ class Company(models.Model):
 
         return round(score, 2)
     
-    def compute_score_users(self,) -> float | str:
+    def compute_score_users(self) -> "float | str":
         rates = self.user_ratings.all()
         if len(rates) == 0:
             score_users = "--"
@@ -34,8 +34,6 @@ class Company(models.Model):
                 sub_score_users += rate.score
             score_users = round(sub_score_users/len(rates), 2)
         return score_users
-
-
 
     class Meta:
         verbose_name_plural = "Companies"

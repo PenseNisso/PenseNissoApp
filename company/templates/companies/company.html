@@ -1,5 +1,4 @@
 {% extends "global/base.html" %} {% block title %} - Empresa {% endblock %}
-{% load widget_tweaks %}
 {%block content %}
 
 <div class="flex flex-column justify-center items-center bg-blue-600 text-white w-full h-10 text-center my-6">
@@ -41,9 +40,9 @@
     <div class="grid h-20 flex-grow place-items-center">  
       <div class="stat-title text-xl">Nota Usuários</div>
       <div class="stat-value text-xl
-      {% if score > 3.75 %}
+      {% if score_users > 3.75 %}
        bg-green-400 
-      {% elif score > 2.5 %}
+      {% elif score_users > 2.5 %}
        bg-yellow-400 
       {% else %}
        bg-red-400 
@@ -51,7 +50,6 @@
       bg-opacity-40 rounded-xl p-2">
         {{score_users}}/5
       </div>
-      
       
       {% if user.is_authenticated %}
         {% if user in user_ratings %}
@@ -61,12 +59,6 @@
           <form method="post">
             {% csrf_token %}
 
-            <!-- {% for field in form.visible_fields %}
-              {% render_field field class="mask mask-star-2 bg-orange-400" %}
-            {% endfor %} -->
-            
-
-            <!-- sm -->
             <div class="rating rating-sm">
               <input type="radio" name="rate" class="mask mask-star-2 bg-orange-400" value="1"/>
               <input type="radio" name="rate" class="mask mask-star-2 bg-orange-400" value="2" checked />

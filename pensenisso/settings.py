@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     "comparator",
     "crispy_forms",
     "crispy_tailwind",
-    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

@@ -4,9 +4,7 @@ from django.contrib.auth import get_user
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import DetailView, ListView
-from django.views.generic.edit import FormView
 
-from . import forms
 from infos.models import Lawsuit, News, Report
 
 from .models import Company, Rate
@@ -15,9 +13,8 @@ from .models import Company, Rate
 class CompanyView(DetailView):
     template_name = "companies/company.html"
     model = Company
-    # form_class = forms.EvaluateForm
 
-    def get_context_data(self, form="defaullt", **kwargs: Any) -> "dict[str, Any]":
+    def get_context_data(self, **kwargs: Any) -> "dict[str, Any]":
         context = super().get_context_data(**kwargs)
         object = self.get_object()
 
@@ -34,24 +31,13 @@ class CompanyView(DetailView):
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         self.object = self.get_object()
         query = self.request.POST.get("rate")
-        context = self.get_context_data(form="default", **kwargs)
+        context = self.get_context_data(**kwargs)
         print(request.user)
         rate = Rate(company=context["company"], user=request.user, score=int(query))
         
         rate.save()
-        return super().render_to_response(context)
-    
-    # def form_valid(self, form: forms.EvaluateForm) -> HttpResponse:
-    #     self.object = self.get_object()
+        return super().render_to_response(self.get_context_data(**kwargs))
 
-    #     data = form.cleaned_data
-    #     current_user = get_user(self.request)
-    #     company = super().get_context_data()["company"]
-    #     print("------------------------------------------", super().get_context_data())
-    #     rate = Rate(company=company, user=current_user, score=data["score"])
-
-    #     rate.save()
-    #     return self.render_to_response(self.get_context_data(form=form))
 
 def change_rate(request: HttpRequest, company_id: int) -> HttpResponse:
     company = get_object_or_404(Company, pk=company_id)
