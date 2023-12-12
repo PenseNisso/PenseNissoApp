@@ -1,6 +1,8 @@
 {% extends "global/base.html" %} {% block title %} - Empresa {% endblock %}
 {%block content %}
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
+
 <div class="flex flex-column justify-center items-center bg-blue-600 text-white w-full h-10 text-center my-6">
   <h1 class="text-2xl font-bold">{{ company.name }}</h1>
 </div>
@@ -19,6 +21,7 @@
       <a href="{% url 'user:register' %}" class="btn"><ion-icon class="text-yellow-700" name="star-outline"></ion-icon>Favoritar</a>
       {% endif %}
     </div>
+
     <div class="mx-10 divider divider-horizontal"></div>
     <div class="grid h-20 flex-grow place-items-center">
       <div class="stat-title text-xl">Nota</div>
@@ -33,7 +36,62 @@
       bg-opacity-40 rounded-xl p-2">
         {{score}}/5
       </div>
+
+    
+      <p class="flex items-center text-sm text-gray-500 dark:text-gray-400"> Critérios de avaliação do site <button data-popover-target="popover-description" data-popover-placement="bottom-end" type="button"><svg class="w-4 h-4 ms-2 text-gray-400 hover:text-gray-500" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path></svg><span class="sr-only">Show information</span></button></p>
+      <div data-popover id="popover-description" role="tooltip" class="absolute z-10 invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 w-72 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400">
+          <div class="p-3 space-y-2">
+              <h3 class="font-semibold text-gray-900 dark:text-white">Critérios de Avaliação</h3>
+              <p>O Pense Nisso e sua equipe de moderação acredita no uso da tecnologia para divulgar informação segura e confiável. Para complementar o alcance e praticidade de nosa plataforma desenvolvemos um sistema de avaliação de empresas próprio baseado em alguns parâmetros de nossa base de dados para melhor atender nossos usuários. </p>
+              <h3 class="font-semibold text-gray-900 dark:text-white">Cálculo da Nota</h3>
+              <p>O cálculo envolvido nesse sistema de notas leva em consideração uma relação exponencial entre a nota e as denúncias que recebemos a todo momento. Levando em conta não somente a quantidade de denúnicas, mas também a gravidade e o tempo desde quando ocorreram.</p>
+        </svg></a>
+          </div>
+          <div data-popper-arrow></div>
+      </div>
+
+
     </div>
+
+    <div class="mx-3 divider-horizontal"></div>
+    <div class="grid h-20 flex-grow place-items-center">  
+      <div class="stat-title text-xl">Nota Usuários</div>
+      <div class="stat-value text-xl
+      {% if score_users > 3.75 %}
+       bg-green-400 
+      {% elif score_users > 2.5 %}
+       bg-yellow-400 
+      {% else %}
+       bg-red-400 
+      {% endif %}
+      bg-opacity-40 rounded-xl p-2">
+        {{score_users}}/5
+      </div>
+      
+      {% if user.is_authenticated %}
+        {% if user in user_ratings %}
+          <p>você já avaliou esta empresa</p>
+          <a class="btn" href="{% url "company:change" company.id%}">Mudar Avaliação</a>
+        {% else %}
+          <form method="post">
+            {% csrf_token %}
+
+            <div class="rating rating-sm">
+              <input type="radio" name="rate" class="mask mask-star-2 bg-orange-400" value="1"/>
+              <input type="radio" name="rate" class="mask mask-star-2 bg-orange-400" value="2" checked />
+              <input type="radio" name="rate" class="mask mask-star-2 bg-orange-400" value="3"/>
+              <input type="radio" name="rate" class="mask mask-star-2 bg-orange-400" value="4"/>
+              <input type="radio" name="rate" class="mask mask-star-2 bg-orange-400" value="5"/>
+            </div>
+          
+            <input type="submit" value="Avaliar" class="btn normal-case bg-slate-300">
+          </form>
+        {% endif %}  
+          
+      {% endif %}
+
+    </div>
+    
   </div>
 
 <div class="description px-4 py-2 w-80 bg-blue-700 bg-opacity-20 rounded-[10px] my-6">

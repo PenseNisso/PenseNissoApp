@@ -8,7 +8,7 @@ from django.views.generic import DetailView, FormView, ListView, TemplateView
 from infos.models import Lawsuit, News, Report
 
 from .forms import CompanySuggestion
-from .models import Company, Rate, CompanySuggestionModel
+from .models import Company, CompanySuggestionModel, Rate 
 
 
 class CompanyView(DetailView):
@@ -17,9 +17,35 @@ class CompanyView(DetailView):
 
     def get_context_data(self, **kwargs: Any) -> "dict[str, Any]":
         context = super().get_context_data(**kwargs)
-        context["score"] = self.get_object().compute_score()
+        object = self.get_object()
+
+        rates = object.user_ratings.all()
+        user_ratings = []
+        for rate in rates:
+            user_ratings.append(rate.user)
+
+        context["user_ratings"] = user_ratings
+        context["score_users"] = object.compute_score_users()
+        context["score"] = object.compute_score()
         return context
 
+    def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        self.object = self.get_object()
+        query = self.request.POST.get("rate")
+        context = self.get_context_data(**kwargs)
+        print(request.user)
+        rate = Rate(company=context["company"], user=request.user, score=int(query))
+        
+        rate.save()
+        return super().render_to_response(self.get_context_data(**kwargs))
+
+
+def change_rate(request: HttpRequest, company_id: int) -> HttpResponse:
+    company = get_object_or_404(Company, pk=company_id)
+    rates = company.user_ratings.filter(user=request.user)
+    rates.delete()
+
+    return redirect("company:company", pk=company_id)
 
 def favorite_company(request: HttpRequest, company_id: int) -> HttpResponse:
     company = get_object_or_404(Company, pk=company_id)
