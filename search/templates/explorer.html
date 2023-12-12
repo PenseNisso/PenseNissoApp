@@ -4,13 +4,33 @@
 - Explorador de Empresas
 {% endblock title %}
 
+{% block page_title %}Explorador de Empresas{% endblock page_title %}
+
 {% block search_header %}
 {% endblock search_header %}
 
 {% block filter_box %}
-    <form action="{% url 'search:explorer' %}" method="get">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Aplicar filtros">
-    </form>
+        <details class="collapse collapse-arrow bg-base-200">
+            <summary class="collapse-title text-m font-medium ml-2"><ion-icon class="mr-2"name="filter"></ion-icon> Filtrar e Ordenar por:</summary>
+            <div class="collapse-content"> 
+                <form class="flex flex-col gap-4"action="{% url 'search:explorer' %}" method="get">
+                    {% csrf_token %}
+                    <div class="flex flex-col justify-between md:flex-row md:gap-2">{{ form_filter }}</div>
+                    <div>{{ form_sorting }}</div>
+                    <input class="btn bg-blue-600 hover:bg-blue-700 w-fit text-white" type="submit" value="Aplicar Filtros">
+                </form>
+            </div>
+        </details>
+        <hr>
 {% endblock filter_box %}
+
+{% block list %}
+    {% for company in company_list %}
+    <li >
+        <a class="btn h-20 bg-blue-700 bg-opacity-20 hover:bg-blue-700 hover:bg-opacity-50 flex flex-row justify-between" href="{% url 'company:company' company.id %}" class="empresa">
+            <div class="flex flex-row items-center gap-4 text-xl"><img class="w-10 h-10"src="{{company.logo.url}} " /> {{ company.name }}</div>  
+            <div><ion-icon name="arrow-forward"></ion-icon></div>
+        </a>
+    </li>
+    {% endfor %}
+{% endblock list %}

@@ -1,27 +1,26 @@
 {% extends "global/base.html" %}
 
 {% block content %}
-    <center>
-        <div class="search">
-            <h1>
-                {% block search_header %}
-                {% endblock %}
-            </h1>
-        </div>
+    <div class="flex flex-column justify-center items-center bg-blue-600 text-white w-full h-10 text-center my-6">
+        <h1 class="text-2xl font-bold"><ion-icon name="compass"></ion-icon> 
+            {% block page_title %}
+            {% endblock page_title %}
+        </h1>
+    </div>
+    <div class="flex flex-col space-y-4 w-full px-5">  
+        {% block filter_box %}
+        {% endblock filter_box %}
         <div>
-            {% block filter_box %}
-            {% endblock filter_box %}
-        </div>
-        <div>
-            <ul>
-                {% for company in company_list %}
-                    <li>
-                        <a href="{% url 'company:company' company.id %}" class="empresa">
-                            {{ company.name }}
-                        </a>
-                    </li>
-                {% endfor %}
+            <div class="search mt-3 text-xl font-medium">
+                <h1>
+                    {% block search_header %}
+                    {% endblock %}
+                </h1>
+            </div>
+            <ul class="flex flex-col gap-5 mt-5 px-4">
+                {% block list %}
+                {% endblock list %}
             </ul>
         </div>
-    </center>
+    </div>
 {% endblock content %}

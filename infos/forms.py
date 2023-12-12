@@ -12,6 +12,7 @@ STRING_DESCRIPTION = "Descrição da denúncia:"
 STRING_CONTACT = "Podemos entrar em contato para obter mais informações?"
 STRING_CATEGORY = "Escolha uma categoria de denúncia"
 STRING_EMPTY_CATEGORY = "Selecione uma categoria"
+STRING_DATE = "Data da ocorrência:"
 
 
 class ReportForm(forms.Form):
@@ -29,6 +30,7 @@ class ReportForm(forms.Form):
     )
     link = forms.URLField(label=STRING_LINK)
     description = forms.CharField(label=STRING_DESCRIPTION, max_length=300)
+    date = forms.DateField(label=STRING_DATE)
     contact_permission = forms.BooleanField(
         label=STRING_CONTACT, required=False, initial=False
     )
