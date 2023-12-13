@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import widgets
 
 from company.models import Company
 
@@ -29,8 +30,14 @@ class ReportForm(forms.Form):
         empty_label=STRING_EMPTY_CATEGORY,
     )
     link = forms.URLField(label=STRING_LINK)
-    description = forms.CharField(label=STRING_DESCRIPTION, max_length=300)
-    date = forms.DateField(label=STRING_DATE)
+    description = forms.CharField(
+        label=STRING_DESCRIPTION,
+        max_length=300,
+        widget=forms.Textarea(attrs={"cols": "45", "rows": "8"}),
+    )
+    date = forms.DateField(
+        label=STRING_DATE, widget=widgets.DateInput(attrs={"type": "date"})
+    )
     contact_permission = forms.BooleanField(
         label=STRING_CONTACT, required=False, initial=False
     )

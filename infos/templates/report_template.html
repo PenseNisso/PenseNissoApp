@@ -1,15 +1,18 @@
 {% extends "global/base.html" %}
 
 {% block content %}
-<center>
-    <h1>
-        Denuncie uma Empresa
+<div class="flex flex-column justify-center items-center bg-red-400 text-white w-full h-10 text-center my-6">
+    <h1 class="text-2xl font-bold">
+        <ion-icon name="megaphone"></ion-icon> Denuncie
     </h1>
-    <p>
-        {% block errors %}
-        {% endblock %}
-    </p>
+</div>
+
+<p>
+    {% block errors %}
+    {% endblock %}
+</p>
+<div class="flex flex-col justify-start">
     {% block form_content %}
     {% endblock %}
-</center>
+</div>
 {% endblock %}
