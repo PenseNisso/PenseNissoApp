@@ -117,8 +117,19 @@
   <p>{{ company.description }}</p>
 </div>
 
-<div class="w-10/12 top-report px-4 py-2 w-80 bg-red-200 rounded-[10px] my-6">
-  <h3 class="flex flex-row items-center gap-2 text-lg font-bold"><ion-icon class="text-red-600" name="alert-circle"></ion-icon> Principal Denuncia</h3>
+<div class="w-10/12 top-report px-4 py-2 w-80 bg-red-200 rounded-[10px] my-6 flex flex-row items-center space-x-2.5 cursor-pointer"
+        {% if main_report %}onclick="window.location.href='{% url 'infos:reportdetail' main_report.id %}'{% endif %}">
+  <div class="grow w-full">
+    <h3 class="flex flex-row items-center gap-2 text-lg font-bold"><ion-icon class="text-red-600" name="alert-circle"></ion-icon> Principal Denuncia</h3>
+    {% if main_report %}
+    <p>{{ main_report.content|truncatechars:100 }}</p>
+    {% else %}
+    <p class="text-sm">Essa empresa ainda não tem denúncias!</p>
+    {% endif %}
+  </div>
+  {% if main_report %}
+    <ion-icon name="arrow-forward-outline" class="flex-none"></ion-icon>
+  {% endif %}
 </div>
 
 <div class="w-10/12">

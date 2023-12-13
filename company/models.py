@@ -3,6 +3,7 @@ import math
 from django.db import models
 from django.utils.timezone import now
 
+from infos.models import Report
 
 class Company(models.Model):
     name = models.CharField(max_length=100)
@@ -14,15 +15,21 @@ class Company(models.Model):
     def __str__(self):
         return self.name
 
-    def compute_score(self) -> float:
+    def compute_score(self) -> "float | int":
         reports = self.reports.filter(status="AP")
         sub_score = 0
+        self.main_report = None
+        greater_report_score = float('-inf')
         for report in reports:
             age = (now().date() - report.date).days / 365
-            sub_score += math.exp(-2 * age / int(report.gravity))
-        score = 5 - min(sub_score, 5)
+            report_score = math.exp(-2 * age / int(report.gravity))
+            if report_score > greater_report_score:
+                greater_report_score = report_score
+                self.main_report = report
+            sub_score += report_score
+        score = round(5 - min(sub_score, 5), 2)
 
-        return round(score, 2)
+        return score if score - int(score) != 0 else int(score)
 
     def compute_score_users(self) -> "float | str":
         rates = self.user_ratings.all()

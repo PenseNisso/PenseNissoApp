@@ -17,16 +17,17 @@ class CompanyView(DetailView):
 
     def get_context_data(self, **kwargs: Any) -> "dict[str, Any]":
         context = super().get_context_data(**kwargs)
-        object = self.get_object()
+        obj = self.get_object()
 
-        rates = object.user_ratings.all()
+        rates = obj.user_ratings.all()
         user_ratings = []
         for rate in rates:
             user_ratings.append(rate.user)
 
         context["user_ratings"] = user_ratings
-        context["score_users"] = object.compute_score_users()
-        context["score"] = object.compute_score()
+        context["score_users"] = obj.compute_score_users()
+        context["score"] = obj.compute_score()
+        context["main_report"] = obj.main_report
         return context
 
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
