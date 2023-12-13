@@ -111,8 +111,15 @@
   </ul>
 </div>
 
-<div>
-  <button onclick="window.location.href = '{% url 'infos:report' %}'">Denunciar</button>
+<div class="w-full flex flex-row justify-evenly">
+  <button onclick="window.location.href='{% url 'infos:report' %}'"
+    class="bg-red-600 bg-opacity-60 w-1/3 py-1.5 px-3 font-bold rounded-md cursor-pointer hover:scale-[1.035] mt-2">
+    <ion-icon name="megaphone"></ion-icon> Denunciar
+  </button>
+  <button onclick="window.location.href='{% url 'comparator:comparator' %}'"
+    class="bg-blue-700 bg-opacity-30 w-1/3 py-1.5 px-3 font-bold rounded-md cursor-pointer hover:scale-[1.035] mt-2">
+    <ion-icon name="git-compare"></ion-icon> Compare
+  </button>
 </div>
 
 {% endblock %}
