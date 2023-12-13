@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import (
     UserPassesTestMixin,
 )
 from django.contrib.auth.views import PasswordChangeView
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, reverse
 from django.views.generic import DetailView, FormView, ListView, UpdateView
 
@@ -61,6 +61,10 @@ class ReportValidation(
     model = Report
     form_class = ValidateReportForm
     permission_required = "infos.change_report"
+
+    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
 
     def get_success_url(self) -> str:
         return reverse("user:pendingreports")
@@ -129,6 +133,10 @@ class CompanyValidation(
         suggestion = self.get_object()
         initial.update({"name": suggestion.name, "description": suggestion.description})
         return initial
+
+    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
 
     def get_success_url(self) -> str:
         return reverse("user:pendingsuggestions")
