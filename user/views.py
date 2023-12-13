@@ -1,17 +1,20 @@
 from typing import Any
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import (LoginRequiredMixin,
-                                        PermissionRequiredMixin,
-                                        UserPassesTestMixin)
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    PermissionRequiredMixin,
+    UserPassesTestMixin,
+)
 from django.contrib.auth.views import PasswordChangeView
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, reverse
 from django.views.generic import DetailView, FormView, ListView, UpdateView
 
+from company.models import Company, CompanySuggestionModel
 from infos.models import Report
 
-from .forms import CreateUserForm, ValidateReportForm
+from .forms import CreateUserForm, ValidateReportForm, ValidateSuggestionForm
 from .models import User
 
 
@@ -59,6 +62,10 @@ class ReportValidation(
     form_class = ValidateReportForm
     permission_required = "infos.change_report"
 
+    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+
     def get_success_url(self) -> str:
         return reverse("user:pendingreports")
 
@@ -100,6 +107,56 @@ class ChangePassword(LoginRequiredMixin, UserPassesTestMixin, PasswordChangeView
 
     def get_success_url(self) -> str:
         return reverse("user:login")
+
+
+class PendingSuggestionList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    template_name = "suggestion_list.html"
+    model = CompanySuggestionModel
+    permission_required = "company.add_company"
+
+    def get_context_data(self, **kwargs: Any) -> "dict[str, Any]":
+        context = super().get_context_data(**kwargs)
+        context["suggestion_list"] = CompanySuggestionModel.objects.filter(status="NV")
+        return context
+
+
+class CompanyValidation(
+    LoginRequiredMixin, PermissionRequiredMixin, FormView, DetailView
+):
+    template_name = "company_validation.html"
+    model = CompanySuggestionModel
+    form_class = ValidateSuggestionForm
+    permission_required = "company.add_company"
+
+    def get_initial(self) -> "dict[str, Any]":
+        initial = super().get_initial()
+        suggestion = self.get_object()
+        initial.update({"name": suggestion.name, "description": suggestion.description})
+        return initial
+
+    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+
+    def get_success_url(self) -> str:
+        return reverse("user:pendingsuggestions")
+
+    def form_valid(self, form: Any) -> HttpResponse:
+        data = form.cleaned_data
+        suggestion = self.get_object()
+        if data.get("action") == "1":
+            suggestion.status = "AP"
+
+            company = Company(
+                name=data.get("name"),
+                description=data.get("description"),
+                logo=data.get("logo"),
+            )
+            company.save()
+        else:
+            suggestion.status = "RE"
+        suggestion.save(update_fields=["status"])
+        return super().form_valid(form)
 
 
 @login_required

@@ -1,9 +1,18 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 
-from .views import (ChangePassword, EditProfile, ListaUsuarios,
-                    PendingReportList, Register, ReportValidation, UserPage,
-                    account_redirect)
+from .views import (
+    ChangePassword,
+    EditProfile,
+    ListaUsuarios,
+    PendingReportList,
+    Register,
+    ReportValidation,
+    UserPage,
+    account_redirect,
+    CompanyValidation,
+    PendingSuggestionList
+)
 
 app_name = "user"
 
@@ -30,4 +39,14 @@ urlpatterns = [
     ),
     path("profile/<int:pk>/edit/", EditProfile.as_view(), name="editprofile"),
     path("profile", account_redirect, name="account-redirect"),
+    path(
+        "moderation/pending_suggestions/",
+        PendingSuggestionList.as_view(),
+        name="pendingsuggestions",
+    ),
+    path(
+        "moderation/pending_suggestions/<int:pk>",
+        CompanyValidation.as_view(),
+        name="suggestionvalidation",
+    ),
 ]
