@@ -1,11 +1,12 @@
 from django.contrib.auth.models import Permission
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
 
-from company.models import Company
+from company.models import Company, CompanySuggestionModel
 from infos.models import Report
 
-from .forms import ValidateReportForm
+from .forms import ValidateReportForm, ValidateSuggestionForm
 from .models import User
 
 
@@ -214,3 +215,134 @@ class ReportValidationTest(TestCase):
             response.context.get("infos"),
         )
         print("Teste User-ReportValidation-9: Denúncia recusada com sucesso.")
+
+
+class SuggestionValidationTest(TestCase):
+    def setUp(self) -> None:
+        self.user = User.objects.create_user(
+            username="Test User", password="userpassword"
+        )
+        self.moderator = User.objects.create_user(
+            username="Test Moderator", password="moderatorpassword"
+        )
+        self.moderator.user_permissions.add(
+            Permission.objects.get(codename="add_company")
+        )
+        self.suggestion = CompanySuggestionModel.objects.create(
+            name="Test Suggestion",
+            field_of_operation="Test FoP",
+            link="https://teste.com",
+            description="Teste Description",
+            status="NV",
+        )
+
+    def test_pending_view_status_code(self):
+        self.client.login(username="Test User", password="userpassword")
+        response = self.client.get(reverse("user:pendingsuggestions"))
+        self.assertEqual(response.status_code, 403)
+        self.client.login(username="Test Moderator", password="moderatorpassword")
+        response = self.client.get(reverse("user:pendingsuggestions"))
+        self.assertEqual(response.status_code, 200)
+        print("Teste User-SuggestionValidation-1: Acesso restringido com sucesso.")
+
+    def test_validation_view_status_code(self):
+        self.client.login(username="Test User", password="userpassword")
+        response = self.client.get(
+            reverse("user:suggestionvalidation", args=[self.suggestion.id])
+        )
+        self.assertEquals(response.status_code, 403)
+        self.client.login(username="Test Moderator", password="moderatorpassword")
+        response = self.client.get(
+            reverse("user:suggestionvalidation", args=[self.suggestion.id])
+        )
+        self.assertEquals(response.status_code, 200)
+        print("Teste User-SuggestionValidation-2: Acesso restringido com sucesso.")
+
+    def test_pending_view_context(self):
+        CompanySuggestionModel.objects.create(
+            name="Test Suggestion 2",
+            field_of_operation="Test FoP",
+            link="https://teste.com",
+            description="Teste Description",
+            status="AP",
+        )
+        CompanySuggestionModel.objects.create(
+            name="Test Suggestion 3",
+            field_of_operation="Test FoP",
+            link="https://teste.com",
+            description="Teste Description",
+            status="RE",
+        )
+        self.client.login(username="Test Moderator", password="moderatorpassword")
+        response = self.client.get(reverse("user:pendingsuggestions"))
+        self.assertSequenceEqual(
+            response.context.get("suggestion_list"), [self.suggestion]
+        )
+        print(
+            "Teste User-SuggestionValidation-3: Variáveis de contexto verificadas com sucesso."
+        )
+
+    def test_validation_suggestion_valid(self):
+        form = ValidateSuggestionForm(
+            {
+                "action": "1",
+                "description": ".",
+                "logo": "company/logo/21/09/16/test_logo.png",
+            }
+        )
+        form.is_valid()
+        self.assertDictEqual(form.errors, {})
+        print("Teste User-SuggestionValidation-4: Feedback enviado com sucesso.")
+
+    def test_validation_action_in_form(self):
+        form = ValidateSuggestionForm(
+            {
+                "description": ".",
+                "logo": "company/logo/21/09/16/test_logo.png",
+            }
+        )
+        form.is_valid()
+        self.assertIn("action", form.errors)
+        print("Teste User-SuggestionValidation-5: Ação inválida negada com sucesso.")
+
+    def test_can_approve_suggestion(self):
+        self.client.login(username="Test Moderator", password="moderatorpassword")
+        self.client.post(
+            reverse("user:suggestionvalidation", args=[self.suggestion.id]),
+            data={
+                "action": "1",
+                "description": ".",
+                "logo": SimpleUploadedFile(
+                    name="pensenisso.png",
+                    content=open("base_static/images/pensenisso.png", "rb").read(),
+                    content_type="image/png",
+                ),
+            },
+        )
+        # check if the suggestion's status was changed successfully
+        self.suggestion.refresh_from_db()
+        self.assertEquals(self.suggestion.status, "AP")
+        # check if the suggestion is no longer on pending suggestions list
+        response = self.client.get(reverse("user:pendingsuggestions"))
+        self.assertNotIn(self.suggestion, response.context.get("suggestion_list"))
+        # check if the suggestion appears on company explorer
+        response = self.client.get(reverse("search:explorer"))
+        self.assertEquals(len(response.context.get("company_list")), 1)
+        print("Teste User-SuggestionValidation-6: Empresa adicionada com sucesso.")
+
+    def test_can_deny_suggestion(self):
+        self.client.login(username="Test Moderator", password="moderatorpassword")
+        self.client.post(
+            reverse("user:suggestionvalidation", args=[self.suggestion.id]),
+            data={"action": "0"},
+        )
+        # check if the suggestion's status was changed successfully
+        self.suggestion.refresh_from_db()
+        self.assertEquals(self.suggestion.status, "RE")
+        # check if the suggestion is no longer on pending suggestions list
+        response = self.client.get(reverse("user:pendingsuggestions"))
+        self.assertNotIn(self.suggestion, response.context.get("suggestion_list"))
+        # check if the suggestion doesn't appear on company explorer
+        response = self.client.get(reverse("search:explorer"))
+        self.assertEquals(len(response.context.get("company_list")), 0)
+        print("Teste User-SuggestionValidation-7: Sugestão recusada com sucesso.")
