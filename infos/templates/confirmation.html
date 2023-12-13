@@ -1,6 +1,12 @@
+{% extends "global/base.html" %} {% block title %} - Denúncia Enviada {% endblock %}
+{% block content %}
+
+<div class="flex flex-column justify-center items-center bg-red-400 text-white w-full h-10 text-center my-6">
+    <h1 class="text-2xl font-bold">Denúncia enviada!</h1>
+</div>
+
 <p>
     Obrigado por submeter sua denúncia! Sua ajuda é muito importante para nós!
 </p>
-<p>
-    <a href="{% url 'infos:report' %}">Enviar outra denúncia</a>
-</p>
+<a href="{% url 'infos:report' %}" class="underline text-blue-500 visited:text-purple-600 mt-2.5">Enviar outra denúncia</a>
+{% endblock content %}

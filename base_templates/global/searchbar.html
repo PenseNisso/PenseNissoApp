@@ -1,6 +1,8 @@
-<form action="{% url 'search:search' %}" method="get">
+<form action="{% url 'search:search' %}" method="get"
+    class="flex justify-center items-center bg-zinc-200 rounded-xl pr-3">
     {% csrf_token %}
-    <input type="search" id="search" name="search" placeholder="Pesquisar empresas..." class="input" required />
+    <input type="search" id="search" name="search" placeholder="Pesquisar empresas..."
+        class="input bg-zinc-200 font-semibold placeholder-neutral-500" required />
     <script>
         var tags = [
             {% for company in companies %}
@@ -18,5 +20,5 @@
             });
         }); 
     </script>
-    <input type="submit" value="Pesquisar">
+    <button type="submit" class="cursor-pointer text-2xl"><ion-icon name="search-sharp"></ion-icon></button>
 </form>

@@ -3,6 +3,18 @@
 
 {% block metadata %}
 <li><strong>Data: </strong>{{ object.date|date:"d/m/Y" }}</li>
+<li>
+    <strong>Gravidade: </strong>
+    {% if report.gravity == "1" %}
+    <span class="text-lime-600">Leve</span>
+    {% elif report.gravity == "2" %}
+    <span class="text-yellow-500">Moderada</span>
+    {% elif report.gravity == "3" %}
+    <span class="text-orange-600">Grave</span>
+    {% else %}
+    <span class="text-red-700">Gravíssima</span>
+    {% endif %}
+</li>
 <li><strong>Fonte(s): </strong>{{ object.links|join:", "|urlize|url_fix }}</li>
 {% endblock %}
 
@@ -21,10 +33,10 @@
         Aguardando Validação
         {% endif %}
     </p>
-    
+
     {% if report.status == "RE" %}
     <p><strong>Feedback dos moderadores: </strong>{{ report.feedback }}</p>
-    {% endif %}    
+    {% endif %}
 </div>
 
 {% endif %}
