@@ -10,7 +10,7 @@
         {% csrf_token %}
         {{ form|crispy }}
         <div class="flex flex-nowrap justify-center space-x-10 mt-2 w-full">
-            <input class="text-white my-3 btn bg-red-500 hover:bg-red-600"type="submit" value="Enviar Denúncia">
+            <input class="text-white my-3 btn w-full bg-red-500 hover:bg-red-600" type="submit" value="Enviar Denúncia">
         </div>
     </form>
 {% endblock %}
