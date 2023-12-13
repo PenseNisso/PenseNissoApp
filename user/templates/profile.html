@@ -15,15 +15,13 @@
 
     <div class="w-full md:w-60 flex flex-col space-y-6 justify-center md:justify-start mb-5">
         <a href="{% url 'user:editprofile' request.user.id %}">
-            <button
-                class="bg-blue-700 bg-opacity-30 w-full py-1.5 px-3 font-semibold rounded-md cursor-pointer hover:scale-[1.035]
+            <button class="bg-blue-700 bg-opacity-30 w-full py-1.5 px-3 font-semibold rounded-md cursor-pointer hover:scale-[1.035]
                 flex flex-row items-center justify-center gap-1">
                 <ion-icon name="pencil"></ion-icon> Editar Perfil
             </button>
         </a>
         <a href="{% url 'user:logout' %}">
-            <button
-                class="bg-red-700 bg-opacity-30 w-full py-1.5 px-3 font-semibold rounded-md cursor-pointer hover:scale-[1.035]
+            <button class="bg-red-700 bg-opacity-30 w-full py-1.5 px-3 font-semibold rounded-md cursor-pointer hover:scale-[1.035]
                 flex flex-row items-center justify-center gap-1">
                 <ion-icon name="log-out"></ion-icon> Sair da Conta
             </button>
@@ -41,20 +39,28 @@
             </ul>
         </div>
 
-        {% if request.user|has_group:"Moderator" %} 
-            <div>
-                <h2 class="text-xl font-bold mb-3">Área de Moderador</h2>
-                <ul>
-                    <li>
-                        <a href="{% url 'user:pendingreports' %}">
-                            <button
-                                class="bg-blue-700 bg-opacity-30 py-3 w-fit py-1.5 px-3 font-semibold rounded-md cursor-pointer hover:scale-[1.035]">
-                                Denúncias Não Verificadas
-                            </button>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+        {% if request.user|has_group:"Moderator" %}
+        <div>
+            <h2 class="text-xl font-bold mb-3">Área de Moderador</h2>
+            <ul class="w-full flex flex-col max-xl:space-y-6 xl:flex-row xl:justify-between">
+                <li>
+                    <a href="{% url 'user:pendingreports' %}">
+                        <button
+                            class="bg-blue-700 bg-opacity-30 py-3 w-fit py-1.5 px-3 font-semibold rounded-md cursor-pointer hover:scale-[1.035]">
+                            Denúncias Não Verificadas
+                        </button>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'user:pendingsuggestions' %}">
+                        <button
+                            class="bg-blue-700 bg-opacity-30 py-3 w-fit py-1.5 px-3 font-semibold rounded-md cursor-pointer hover:scale-[1.035]">
+                            Sugestões de Empresas Não Verificadas
+                        </button>
+                    </a>
+                </li>
+            </ul>
+        </div>
         {% endif %}
 
         <div>
