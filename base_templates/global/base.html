@@ -16,16 +16,15 @@
 
 <body>
     {% include "./header.html" %}
-    <div class="min-h-screen max-w-2xl xl:max-w-4xl flex flex-col items-center mx-auto">
-        <ul>
+    <main class="min-h-screen max-w-2xl xl:max-w-4xl flex flex-col items-center mx-auto">
+        <section class="z-10">
             {% include "./searchbar.html" %}
-        </ul>
-        
-        <div class="w-full h-full flex flex-col justify-center items-center mx-auto">
+        </section>
+        <section class="w-full h-full flex flex-col justify-center items-center mx-auto">
             {% block content %}
             {% endblock %}
-        </div>
-    </div>
+        </section>
+    </main>
     {% include "./footer.html" %}
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
