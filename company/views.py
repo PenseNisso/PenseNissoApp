@@ -34,7 +34,7 @@ class CompanyView(DetailView):
         context = self.get_context_data(**kwargs)
         print(request.user)
         rate = Rate(company=context["company"], user=request.user, score=int(query))
-        
+
         rate.save()
         return super().render_to_response(self.get_context_data(**kwargs))
 
@@ -45,6 +45,7 @@ def change_rate(request: HttpRequest, company_id: int) -> HttpResponse:
     rates.delete()
 
     return redirect("company:company", pk=company_id)
+
 
 def favorite_company(request: HttpRequest, company_id: int) -> HttpResponse:
     company = get_object_or_404(Company, pk=company_id)

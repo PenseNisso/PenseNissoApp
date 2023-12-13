@@ -23,7 +23,7 @@ class Company(models.Model):
         score = 5 - min(sub_score, 5)
 
         return round(score, 2)
-    
+
     def compute_score_users(self) -> "float | str":
         rates = self.user_ratings.all()
         if len(rates) == 0:
@@ -32,7 +32,7 @@ class Company(models.Model):
             sub_score_users = 0
             for rate in rates:
                 sub_score_users += rate.score
-            score_users = round(sub_score_users/len(rates), 2)
+            score_users = round(sub_score_users / len(rates), 2)
         return score_users
 
     class Meta:
