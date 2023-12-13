@@ -36,12 +36,15 @@ class ValidateSuggestionForm(forms.Form):
         label="Ação:",
         widget=forms.RadioSelect,
     )
+    name = forms.CharField(label="Nome da Empresa (se aprovada):", max_length=100)
     description = forms.CharField(
         label="Descrição da Empresa (se aprovada):",
         widget=forms.Textarea(attrs={"cols": "45", "rows": "8"}),
-        required=False,
     )
-    logo = forms.ImageField(label="Logo da Empresa (se aprovada):", required=False)
+    logo = forms.ImageField(
+        label="Logo da Empresa (se aprovada):",
+        initial="company/logo_not_found.png",
+    )
 
     class Meta:
-        fields = ("action", "description", "logo")
+        fields = ("action", "name", "description", "logo")

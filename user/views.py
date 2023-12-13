@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import (
 from django.contrib.auth.views import PasswordChangeView
 from django.http import HttpResponse
 from django.shortcuts import redirect, reverse
-from django.views.generic import CreateView, DetailView, FormView, ListView, UpdateView
+from django.views.generic import DetailView, FormView, ListView, UpdateView
 
 from company.models import Company, CompanySuggestionModel
 from infos.models import Report
@@ -124,6 +124,12 @@ class CompanyValidation(
     form_class = ValidateSuggestionForm
     permission_required = "company.add_company"
 
+    def get_initial(self) -> "dict[str, Any]":
+        initial = super().get_initial()
+        suggestion = self.get_object()
+        initial.update({"name": suggestion.name, "description": suggestion.description})
+        return initial
+
     def get_success_url(self) -> str:
         return reverse("user:pendingsuggestions")
 
@@ -134,7 +140,7 @@ class CompanyValidation(
             suggestion.status = "AP"
 
             company = Company(
-                name=suggestion.name,
+                name=data.get("name"),
                 description=data.get("description"),
                 logo=data.get("logo"),
             )

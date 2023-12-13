@@ -286,6 +286,7 @@ class SuggestionValidationTest(TestCase):
         form = ValidateSuggestionForm(
             {
                 "action": "1",
+                "name": ".",
                 "description": ".",
                 "logo": "company/logo/21/09/16/test_logo.png",
             }
@@ -297,6 +298,7 @@ class SuggestionValidationTest(TestCase):
     def test_validation_action_in_form(self):
         form = ValidateSuggestionForm(
             {
+                "name": ".",
                 "description": ".",
                 "logo": "company/logo/21/09/16/test_logo.png",
             }
@@ -305,12 +307,39 @@ class SuggestionValidationTest(TestCase):
         self.assertIn("action", form.errors)
         print("Teste User-SuggestionValidation-5: Ação inválida negada com sucesso.")
 
+    def test_validation_name_in_form(self):
+        form = ValidateSuggestionForm(
+            {
+                "action": "1",
+                "description": ".",
+                "logo": "company/logo/21/09/16/test_logo.png",
+            }
+        )
+        form.is_valid()
+        self.assertIn("name", form.errors)
+        print("Teste User-SuggestionValidation-6: Nome inválido negado com sucesso.")
+
+    def test_validation_description_in_form(self):
+        form = ValidateSuggestionForm(
+            {
+                "action": "1",
+                "name": ".",
+                "logo": "company/logo/21/09/16/test_logo.png",
+            }
+        )
+        form.is_valid()
+        self.assertIn("description", form.errors)
+        print(
+            "Teste User-SuggestionValidation-7: Descrição inválida negada com sucesso."
+        )
+
     def test_can_approve_suggestion(self):
         self.client.login(username="Test Moderator", password="moderatorpassword")
         self.client.post(
             reverse("user:suggestionvalidation", args=[self.suggestion.id]),
             data={
                 "action": "1",
+                "name": ".",
                 "description": ".",
                 "logo": SimpleUploadedFile(
                     name="pensenisso.png",
@@ -328,13 +357,13 @@ class SuggestionValidationTest(TestCase):
         # check if the suggestion appears on company explorer
         response = self.client.get(reverse("search:explorer"))
         self.assertEquals(len(response.context.get("company_list")), 1)
-        print("Teste User-SuggestionValidation-6: Empresa adicionada com sucesso.")
+        print("Teste User-SuggestionValidation-8: Empresa adicionada com sucesso.")
 
     def test_can_deny_suggestion(self):
         self.client.login(username="Test Moderator", password="moderatorpassword")
         self.client.post(
             reverse("user:suggestionvalidation", args=[self.suggestion.id]),
-            data={"action": "0"},
+            data={"action": "0", "name": ".", "description": "."},
         )
         # check if the suggestion's status was changed successfully
         self.suggestion.refresh_from_db()
@@ -345,4 +374,4 @@ class SuggestionValidationTest(TestCase):
         # check if the suggestion doesn't appear on company explorer
         response = self.client.get(reverse("search:explorer"))
         self.assertEquals(len(response.context.get("company_list")), 0)
-        print("Teste User-SuggestionValidation-7: Sugestão recusada com sucesso.")
+        print("Teste User-SuggestionValidation-9: Sugestão recusada com sucesso.")
