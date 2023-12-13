@@ -134,10 +134,15 @@
     class="bg-red-600 bg-opacity-60 w-1/3 py-1.5 px-3 font-bold rounded-md cursor-pointer hover:scale-[1.035] mt-2">
     <ion-icon name="megaphone"></ion-icon> Denunciar
   </button>
-  <button onclick="window.location.href='{% url 'comparator:comparator' %}'"
-    class="bg-blue-700 bg-opacity-30 w-1/3 py-1.5 px-3 font-bold rounded-md cursor-pointer hover:scale-[1.035] mt-2">
-    <ion-icon name="git-compare"></ion-icon> Compare
-  </button>
+  <form class="w-1/3 flex items-center justify-center bg-blue-700 bg-opacity-30 w-1/3 py-1.5 px-3 font-bold rounded-md cursor-pointer hover:scale-[1.035] mt-2" 
+        method="post" action="{% url 'comparator:comparator' %}">
+    {% csrf_token %}
+    <input type="hidden" name="company" value="{{company.name}}">
+    <button onclick="window.location.href='{% url 'comparator:comparator' %}'"
+    class="self-center">
+      <ion-icon name="git-compare"></ion-icon> Compare
+    </button>
+  </form>
 </div>
 
 {% endblock %}
