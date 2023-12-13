@@ -1,5 +1,6 @@
 {% extends "global/base.html" %} {% block title %} - Sugerir Empresa {% endblock %}
 {% block content %}
+{% load crispy_forms_tags %}
 
 <div class="flex flex-column justify-center items-center bg-blue-600 text-white w-full h-10 text-center my-6">
     <h1 class="text-2xl font-bold">Sugerir uma empresa</h1>
@@ -8,8 +9,10 @@
 <div>
   <form action="/empresas/suggest" method="post">
       {% csrf_token %}
-      {{ form }}
-      <input type="submit" value="Enviar">
+      {{ form|crispy }}
+      <div class="flex flex-nowrap justify-center space-x-10 mt-4 w-full">
+        <input class="bg-blue-700 bg-opacity-30 py-1.5 px-6 font-semibold cursor-pointer rounded-md hover:scale-[1.035]" type="submit" value="Enviar">
+      </div>
   </form>
 </div>
 

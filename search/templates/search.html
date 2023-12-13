@@ -20,12 +20,18 @@
 
 {% block filter_box %}
     {% if query is not None and query%}
-        <form action="{% url 'search:search' %}" method="get">
-            {% csrf_token %}
-            <div>{{ form_filter }}</div>
-            <div>{{ form_sorting }}</div>
-            <input type="submit" value="Aplicar filtros">
-        </form>
+    <details class="collapse collapse-arrow bg-base-200">
+        <summary class="collapse-title text-m font-medium ml-2"><ion-icon class="mr-2"name="filter"></ion-icon> Filtrar e Ordenar por:</summary>
+        <div class="collapse-content"> 
+            <form class="flex flex-col gap-4"action="{% url 'search:search' %}" method="get">
+                {% csrf_token %}
+                <div class="flex flex-col justify-between md:flex-row md:gap-2">{{ form_filter }}</div>
+                <div>{{ form_sorting }}</div>
+                <input class="btn bg-blue-600 hover:bg-blue-700 w-fit text-white" type="submit" value="Aplicar Filtros">
+            </form>
+        </div>
+    </details>
+    <hr>
     {% endif %}
 {% endblock filter_box %}
 
