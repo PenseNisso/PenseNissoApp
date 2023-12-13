@@ -1,6 +1,7 @@
 from typing import Any
 
-from django.db.models import Count, Q, Value
+from django.db.models import Count, Q
+from django.db.models.functions import Lower
 from django.db.models.query import QuerySet
 from django.http import HttpRequest, HttpResponse
 from django.views.generic import ListView
@@ -34,7 +35,7 @@ class SearchView(ListView):
 
     def apply_sorting(self, set, option: str):
         if option == "alphabetical_descending":
-            set = set.order_by("-name")
+            set = set.order_by(Lower("name").desc())
         elif option == "most_reports":
             set = set.order_by("-count_reports")
         elif option == "least_reports":
@@ -44,14 +45,14 @@ class SearchView(ListView):
         elif option == "lowest_score":
             set = sorted(set, key=lambda company: company.compute_score())
         else:
-            set = set.order_by("name")
+            set = set.order_by(Lower("name"))
         return set
 
     def filter_queryset(
         self, set, filters: "list[AbstractFilter]", sorting_option: str
     ):
         object_list = (
-            set.annotate(count_reports=Count("reports"))
+            set.annotate(count_reports=Count("reports", filter=Q(reports__status="AP")))
             .annotate(count_lawsuits=Count("lawsuits"))
             .annotate(count_news=Count("news"))
             .filter(self.apply_filters(filters))
