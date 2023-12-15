@@ -5,6 +5,7 @@ from company.models import Company
 
 from .fields import CompanyModelChoiceField, ReportCategoryModelChoiceField
 from .models import ReportCategory
+import datetime
 
 STRING_COMPANY = "Empresa envolvida:"
 STRING_EMPTY_COMPANY = "Selecione uma empresa"
@@ -15,6 +16,12 @@ STRING_CATEGORY = "Escolha uma categoria de denúncia"
 STRING_EMPTY_CATEGORY = "Selecione uma categoria"
 STRING_DATE = "Data da ocorrência:"
 
+def valid_date(value):
+    if value > datetime.date.today():
+        raise forms.ValidationError("A data não pode ser maior que a data atual!")
+    elif value < datetime.date(1970, 1, 1):
+        raise forms.ValidationError("A data não pode ser menor que 01/01/1970!")
+    return value
 
 class ReportForm(forms.Form):
     template_name = "form/report_form_template.html"
@@ -36,7 +43,7 @@ class ReportForm(forms.Form):
         widget=forms.Textarea(attrs={"cols": "45", "rows": "8"}),
     )
     date = forms.DateField(
-        label=STRING_DATE, widget=widgets.DateInput(attrs={"type": "date"})
+        label=STRING_DATE, widget=widgets.DateInput(attrs={"type": "date"}), validators=[valid_date],
     )
     contact_permission = forms.BooleanField(
         label=STRING_CONTACT, required=False, initial=False
