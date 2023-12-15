@@ -11,13 +11,13 @@ class LengthValidator:
         size = len(password)
         if size < self.min_length:
             raise ValidationError(
-                _("This password must contain at least %(min_length)d characters."),
+                _("Sua senha deve conter no mínimo %(min_length)d caracteres."),
                 code="password_too_short",
                 params={"min_length": self.min_length},
             )
         if size > self.max_length:
             raise ValidationError(
-                _("This password must contain at most %(max_length)d characters."),
+                _("Sua senha deve conter no máximo %(max_length)d caracteres."),
                 code="password_too_long",
                 params={"max_length": self.max_length},
             )
@@ -30,7 +30,7 @@ class LengthValidator:
 
 class CaseValidator:
     def validate(self, password: str, user=None):
-        uppercase = [ch.isupper() for ch in password]
+        uppercase = [ch.isupper() for ch in password if ch.isalpha()]
         if not any(uppercase):
             raise ValidationError(
                 _("Essa senha não contém nenhuma letra maiúscula."),
