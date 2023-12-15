@@ -130,13 +130,13 @@ class SearchTestCase(TestCase):
         )
 
     def test_gibberish(self) -> None:
-        response = self.client.get(path="/search/", data={"search": "coamptrajsy"})
+        response = self.client.get(path="/search/", data={"search": "entemansmdnasd"})
         self.assertSequenceEqual(
             response.context["company_list"],
             [],
         )
         print(
-            "Teste Search-Query-7: Busca retornou resultados esperados (coamptrajsy -> [])."
+            "Teste Search-Query-7: Busca retornou resultados esperados (entemansmdnasd -> [])."
         )
 
 
