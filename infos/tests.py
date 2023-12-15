@@ -134,7 +134,7 @@ class ReportTestCase(TestCase):
         )
         form.is_valid()
         self.assertDictEqual(form.errors, {})
-        print("Teste Infos-Report-8: Data válida aceita com sucesso.")
+        print("Teste Infos-Report-8: Data do dia atual aceita com sucesso.")
 
     def test_validation_date_after_today(self):
         form = ReportForm(
@@ -164,7 +164,7 @@ class ReportTestCase(TestCase):
         )
         form.is_valid()
         self.assertDictEqual(form.errors, {})
-        print("Teste Infos-Report-8: Data válida aceita com sucesso.")
+        print("Teste Infos-Report-10: Data de 1970 aceita com sucesso.")
 
     def test_validation_date_before_1970(self):
         form = ReportForm(
@@ -179,7 +179,7 @@ class ReportTestCase(TestCase):
         )
         form.is_valid()
         self.assertEquals(list(form.errors.keys())[0], "date")
-        print("Teste Infos-Report-9: Data depois do dia atual negada com sucesso.")
+        print("Teste Infos-Report-11: Data antes de 1970 negada com sucesso.")
 
 class InfoDetailTestCase(TestCase):
     def setUp(self) -> None:
