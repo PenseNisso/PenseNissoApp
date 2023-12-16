@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -120,6 +121,65 @@ class ReportTestCase(TestCase):
         self.assertIn(report, user.reports_sent.all())
         print("Teste Infos-Report-7: Denúncia associada ao usuário com sucesso.")
 
+    def test_validation_date_today(self):
+        form = ReportForm(
+            data={
+                "company": self.company,
+                "category": self.category,
+                "link": "https://teste.com",
+                "description": "a",
+                "contact_permission": True,
+                "date": datetime.now(),
+            }
+        )
+        form.is_valid()
+        self.assertDictEqual(form.errors, {})
+        print("Teste Infos-Report-8: Data do dia atual aceita com sucesso.")
+
+    def test_validation_date_after_today(self):
+        form = ReportForm(
+            data={
+                "company": self.company,
+                "category": self.category,
+                "link": "https://teste.com",
+                "description": "a",
+                "contact_permission": True,
+                "date": datetime.now() + timedelta(days=1),
+            }
+        )
+        form.is_valid()
+        self.assertEquals(list(form.errors.keys())[0], "date")
+        print("Teste Infos-Report-9: Data depois do dia atual negada com sucesso.")
+
+    def test_validation_date_1970(self):
+        form = ReportForm(
+            data={
+                "company": self.company,
+                "category": self.category,
+                "link": "https://teste.com",
+                "description": "a",
+                "contact_permission": True,
+                "date": "1970-01-01",
+            }
+        )
+        form.is_valid()
+        self.assertDictEqual(form.errors, {})
+        print("Teste Infos-Report-10: Data de 1970 aceita com sucesso.")
+
+    def test_validation_date_before_1970(self):
+        form = ReportForm(
+            data={
+                "company": self.company,
+                "category": self.category,
+                "link": "https://teste.com",
+                "description": "a",
+                "contact_permission": True,
+                "date": "1969-12-31",
+            }
+        )
+        form.is_valid()
+        self.assertEquals(list(form.errors.keys())[0], "date")
+        print("Teste Infos-Report-11: Data antes de 1970 negada com sucesso.")
 
 class InfoDetailTestCase(TestCase):
     def setUp(self) -> None:
