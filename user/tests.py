@@ -6,7 +6,7 @@ from django.urls import reverse
 from company.models import Company, CompanySuggestionModel
 from infos.models import Report
 
-from .forms import ValidateReportForm, ValidateSuggestionForm
+from .forms import CreateUserForm, ValidateReportForm, ValidateSuggestionForm
 from .models import User
 
 
@@ -87,7 +87,7 @@ class LogoutViewTest(TestCase):
 class ReportValidationTest(TestCase):
     def setUp(self) -> None:
         self.user = User.objects.create_user(
-            username="Test User", password="userpassword"
+            username="Test_User", password="userpassword"
         )
         self.moderator = User.objects.create_user(
             username="Test Moderator", password="moderatorpassword"
@@ -109,7 +109,7 @@ class ReportValidationTest(TestCase):
         )
 
     def test_pending_view_status_code(self):
-        self.client.login(username="Test User", password="userpassword")
+        self.client.login(username="Test_User", password="userpassword")
         response = self.client.get(reverse("user:pendingreports"))
         self.assertEqual(response.status_code, 403)
         self.client.login(username="Test Moderator", password="moderatorpassword")
@@ -118,7 +118,7 @@ class ReportValidationTest(TestCase):
         print("Teste User-ReportValidation-1: Acesso restringido com sucesso.")
 
     def test_validation_view_status_code(self):
-        self.client.login(username="Test User", password="userpassword")
+        self.client.login(username="Test_User", password="userpassword")
         response = self.client.get(
             reverse("user:reportvalidation", args=[self.report.id])
         )
@@ -220,7 +220,7 @@ class ReportValidationTest(TestCase):
 class SuggestionValidationTest(TestCase):
     def setUp(self) -> None:
         self.user = User.objects.create_user(
-            username="Test User", password="userpassword"
+            username="Test_User", password="userpassword"
         )
         self.moderator = User.objects.create_user(
             username="Test Moderator", password="moderatorpassword"
@@ -237,7 +237,7 @@ class SuggestionValidationTest(TestCase):
         )
 
     def test_pending_view_status_code(self):
-        self.client.login(username="Test User", password="userpassword")
+        self.client.login(username="Test_User", password="userpassword")
         response = self.client.get(reverse("user:pendingsuggestions"))
         self.assertEqual(response.status_code, 403)
         self.client.login(username="Test Moderator", password="moderatorpassword")
@@ -246,7 +246,7 @@ class SuggestionValidationTest(TestCase):
         print("Teste User-SuggestionValidation-1: Acesso restringido com sucesso.")
 
     def test_validation_view_status_code(self):
-        self.client.login(username="Test User", password="userpassword")
+        self.client.login(username="Test_User", password="userpassword")
         response = self.client.get(
             reverse("user:suggestionvalidation", args=[self.suggestion.id])
         )
@@ -375,3 +375,121 @@ class SuggestionValidationTest(TestCase):
         response = self.client.get(reverse("search:explorer"))
         self.assertEquals(len(response.context.get("company_list")), 0)
         print("Teste User-SuggestionValidation-9: Sugestão recusada com sucesso.")
+
+
+class PasswordValidationTest(TestCase):
+    def test_password_too_short(self):
+        data = {
+            "username": "Test_User",
+            "email": "a@a.com",
+            "password1": "Pas123@",
+            "password2": "Pas123@",
+        }
+        form = CreateUserForm(data)
+        self.assertFalse(form.is_valid())
+        self.assertEquals(
+            form["password2"].errors, ["Sua senha deve conter no mínimo 8 caracteres."]
+        )
+        print(
+            "Teste User-PasswordValidation-1: Senha muito curta recusada com sucesso."
+        )
+
+    def test_password_min_length(self):
+        data = {
+            "username": "Test_User",
+            "email": "a@a.com",
+            "password1": "Pass123@",
+            "password2": "Pass123@",
+        }
+        form = CreateUserForm(data)
+        self.assertTrue(form.is_valid())
+        self.assertEquals(form["password2"].errors, [])
+        print("Teste User-PasswordValidation-2: Senha correta aceita com sucesso.")
+
+    def test_password_max_length(self):
+        data = {
+            "username": "Test_User",
+            "email": "a@a.com",
+            "password1": "Passwordsareactuallyover@tedandIdon'tthinkayneeed1",
+            "password2": "Passwordsareactuallyover@tedandIdon'tthinkayneeed1",
+        }
+        form = CreateUserForm(data)
+        self.assertTrue(form.is_valid())
+        self.assertEquals(form["password2"].errors, [])
+        print("Teste User-PasswordValidation-3: Senha correta aceita com sucesso.")
+
+    def test_password_too_long(self):
+        data = {
+            "username": "Test_User",
+            "email": "a@a.com",
+            "password1": "Passwordsareactuallyover@tedandIdon'tthinkayneeeed1",
+            "password2": "Passwordsareactuallyover@tedandIdon'tthinkayneeeed1",
+        }
+        form = CreateUserForm(data)
+        self.assertFalse(form.is_valid())
+        self.assertEquals(
+            form["password2"].errors, ["Sua senha deve conter no máximo 50 caracteres."]
+        )
+        print(
+            "Teste User-PasswordValidation-4: Senha longa demais recusada com sucesso."
+        )
+
+    def test_password_has_uppercase(self):
+        data = {
+            "username": "Test_User",
+            "email": "a@a.com",
+            "password1": "password123@",
+            "password2": "password123@",
+        }
+        form = CreateUserForm(data)
+        self.assertFalse(form.is_valid())
+        self.assertEquals(
+            form["password2"].errors, ["Essa senha não contém nenhuma letra maiúscula."]
+        )
+        print(
+            "Teste User-PasswordValidation-5: Senha sem letra maiúscula recusada com sucesso."
+        )
+
+    def test_password_has_lowercase(self):
+        data = {
+            "username": "Test_User",
+            "email": "a@a.com",
+            "password1": "PASSWORD123@",
+            "password2": "PASSWORD123@",
+        }
+        form = CreateUserForm(data)
+        self.assertFalse(form.is_valid())
+        self.assertEquals(
+            form["password2"].errors, ["Essa senha não contém nenhuma letra minúscula."]
+        )
+        print(
+            "Teste User-PasswordValidation-6: Senha sem letra minúscula recusada com sucesso."
+        )
+
+    def test_password_has_number(self):
+        data = {
+            "username": "Test_User",
+            "email": "a@a.com",
+            "password1": "Password@",
+            "password2": "Password@",
+        }
+        form = CreateUserForm(data)
+        self.assertFalse(form.is_valid())
+        self.assertEquals(form["password2"].errors, ["Essa senha não contém números."])
+        print("Teste User-PasswordValidation-7: Senha sem número recusada com sucesso.")
+
+    def test_password_has_special_character(self):
+        data = {
+            "username": "Test_User",
+            "email": "a@a.com",
+            "password1": "Passphrase123",
+            "password2": "Passphrase123",
+        }
+        form = CreateUserForm(data)
+        self.assertFalse(form.is_valid())
+        self.assertEquals(
+            form["password2"].errors, ["Essa senha não contém caracteres especiais."]
+        )
+        print(
+            "Teste User-PasswordValidation-8: Senha sem caractere especial recusada com sucesso."
+        )
